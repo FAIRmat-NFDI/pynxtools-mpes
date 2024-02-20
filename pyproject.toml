@@ -30,5 +30,18 @@ dependencies = [
     "pynxtools>=0.0.10"
 ]
 
+[project.urls]
+"Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
+"Bug Tracker" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes/issues"
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "ruff",
+    "pytest",
+    "types-pyyaml",
+    "pip-tools",
+]
+
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
