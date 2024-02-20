@@ -179,7 +179,7 @@ REPLACE_NESTED = {
     "source_TYPE[source]/Pump": "source_TYPE[source_pump]",
     "beam_TYPE[beam]/Probe": "beam_TYPE[beam_probe]",
     "beam_TYPE[beam]/Pump": "beam_TYPE[beam_pump]",
-    "sample_history": "sample_history/notes/description",
+    "sample_history": "sample_history/notes",
     "ELECTRONANALYSER[electronanalyser]/RESOLUTION[momentum_resolution]": (
         "ELECTRONANALYSER[electronanalyser]/momentum_resolution"
     ),
