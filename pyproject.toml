@@ -7,6 +7,8 @@ name = "pynxtools-mpes"
 dynamic = ["version"]
 authors = [
     { name = "Florian Dobener", email = "florian.dobener@physik.hu-berlin.de" },
+    { name = "Abeer Aurora", email = "arora@fhi-berlin.mpg.de" },
+    { name = "Laurenz Rettig", email = "rettig@fhi-berlin.mpg.de" },
 ]
 description = ""
 readme = "README.md"
@@ -16,6 +18,8 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
 ]
