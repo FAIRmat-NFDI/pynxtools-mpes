@@ -204,3 +204,4 @@ cython_debug/
 build/
 nexusparser.egg-info/PKG-INFO
 .python-version
+!tests/data/Ref_nexus_mpes.log
