@@ -19,9 +19,10 @@
 import errno
 import os
 from functools import reduce
-from typing import Any, Tuple
+from typing import Any, Tuple, Union
 
 import h5py
+import numpy as np
 import xarray as xr
 import yaml
 from pynxtools.dataconverter.readers.base.reader import BaseReader
@@ -48,90 +49,75 @@ DEFAULT_UNITS = {
     "ky": "1/A",
 }
 
+def recursive_parse_metadata(
+    node: Union[h5py.Group, h5py.Dataset],
+) -> dict:
+    """Recurses through an hdf5 file, and parse it into a dictionary.
 
-def res_to_xarray(res, bin_names, bin_axes, metadata=None):
-    """creates a BinnedArray (xarray subclass) out of the given np.array
-    Parameters:
-        res: np.array
-            nd array of binned data
-        bin_names (list): list of names of the binned axes
-        bin_axes (list): list of np.arrays with the values of the axes
+    Args:
+        node (Union[h5py.Group, h5py.Dataset]): hdf5 group or dataset to parse into
+            dictionary.
+
     Returns:
-        ba: BinnedArray (xarray)
-            an xarray-like container with binned data, axis, and all
-            available metadata
+        dict: Dictionary of elements in the hdf5 path contained in node
     """
-    dims = bin_names
-    coords = {}
-    for name, vals in zip(bin_names, bin_axes):
-        coords[name] = vals
+    if isinstance(node, h5py.Group):
+        dictionary = {}
+        for key, value in node.items():
+            dictionary[key] = recursive_parse_metadata(value)
 
-    xres = xr.DataArray(res, dims=dims, coords=coords)
-
-    for name in bin_names:
+    else:
+        entry = node[...]
         try:
-            xres[name].attrs["unit"] = DEFAULT_UNITS[name]
-        except KeyError:
-            pass
+            dictionary = entry.item()
+            if isinstance(dictionary, (bytes, bytearray)):
+                dictionary = dictionary.decode()
+        except ValueError:
+            dictionary = entry
 
-    xres.attrs["units"] = "counts"
-    xres.attrs["long_name"] = "photoelectron counts"
-
-    if metadata is not None:
-        xres.attrs["metadata"] = metadata
-
-    return xres
+    return dictionary
 
 
-def h5_to_xarray(faddr, mode="r"):
-    """Rear xarray data from formatted hdf5 file
+def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
+    """Read xarray data from formatted hdf5 file
+
     Args:
         faddr (str): complete file name (including path)
-        mode (str): hdf5 read/write mode
+        mode (str, optional): hdf5 read/write mode. Defaults to "r".
+
+    Raises:
+        ValueError: Raised if data or axes are not found in the file.
+
     Returns:
-        xarray (xarray.DataArray): output xarra data
+        xr.DataArray: output xarra data
     """
     with h5py.File(faddr, mode) as h5_file:
         # Reading data array
         try:
-            data = h5_file["binned"]["BinnedData"]
-        except KeyError:
-            print("Wrong Data Format, data not found")
-            raise
+            data = np.asarray(h5_file["binned"]["BinnedData"])
+        except KeyError as exc:
+            raise ValueError(
+                f"Wrong Data Format, the BinnedData were not found. The error was{exc}.",
+            ) from exc
 
         # Reading the axes
-        axes = []
+        bin_axes = []
         bin_names = []
 
         try:
             for axis in h5_file["axes"]:
-                axes.append(h5_file["axes"][axis])
+                bin_axes.append(h5_file["axes"][axis])
                 bin_names.append(h5_file["axes"][axis].attrs["name"])
-        except KeyError:
-            print("Wrong Data Format, axes not found")
-            raise
+        except KeyError as exc:
+            raise ValueError(
+                f"Wrong Data Format, the axes were not found. The error was {exc}",
+            ) from exc
 
         # load metadata
+        metadata = None
         if "metadata" in h5_file:
-
-            def recursive_parse_metadata(node):
-                if isinstance(node, h5py.Group):
-                    dictionary = {}
-                    for key, value in node.items():
-                        dictionary[key] = recursive_parse_metadata(value)
-
-                else:
-                    dictionary = node[...]
-                    try:
-                        dictionary = dictionary.item()
-                        if isinstance(dictionary, (bytes, bytearray)):
-                            dictionary = dictionary.decode()
-                    except ValueError:
-                        pass
-
-                return dictionary
-
             metadata = recursive_parse_metadata(h5_file["metadata"])
+
         # Segment to change Vset to V in lens voltages
         if "file" in metadata.keys():
             for k in list(metadata["file"]):
@@ -140,7 +126,27 @@ def h5_to_xarray(faddr, mode="r"):
                     metadata["file"][key] = metadata["file"][k]
                     del metadata["file"][k]
 
-        xarray = res_to_xarray(data, bin_names, axes, metadata)
+        coords = {}
+        for name, vals in zip(bin_names, bin_axes):
+            coords[name] = vals
+
+        xarray = xr.DataArray(data, dims=bin_names, coords=coords)
+
+        for axis in range(len(bin_axes)):
+            try:
+                xarray[bin_names[axis]].attrs["unit"] = h5_file["axes"][f"ax{axis}"].attrs["unit"]
+            except (KeyError, TypeError):
+                 xarray[bin_names[axis]].attrs["unit"] =  DEFAULT_UNITS[bin_names[axis]]
+        try:
+            xarray.attrs["units"] = h5_file["binned"]["BinnedData"].attrs["units"]
+            xarray.attrs["long_name"] = h5_file["binned"]["BinnedData"].attrs["long_name"]
+        except (KeyError, TypeError):
+            xarray.attrs["units"] = "counts"
+            xarray.attrs["long_name"] = "photoelectron counts"
+
+        if metadata is not None:
+            xarray.attrs["metadata"] = metadata
+
         return xarray
 
 
