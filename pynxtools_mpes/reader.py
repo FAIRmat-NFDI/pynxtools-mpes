@@ -97,7 +97,7 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
             data = np.asarray(h5_file["binned"]["BinnedData"])
         except KeyError as exc:
             raise ValueError(
-                f"Wrong Data Format, the BinnedData were not found. The error was{exc}.",
+                f"Wrong Data Format, the BinnedData was not found.",
             ) from exc
 
         # Reading the axes
@@ -110,7 +110,7 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
                 bin_names.append(h5_file["axes"][axis].attrs["name"])
         except KeyError as exc:
             raise ValueError(
-                f"Wrong Data Format, the axes were not found. The error was {exc}",
+                f"Wrong Data Format, the axes were not found.",
             ) from exc
 
         # load metadata
