@@ -49,6 +49,7 @@ DEFAULT_UNITS = {
     "ky": "1/A",
 }
 
+
 def recursive_parse_metadata(
     node: Union[h5py.Group, h5py.Dataset],
 ) -> dict:
@@ -134,12 +135,16 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
 
         for axis in range(len(bin_axes)):
             try:
-                xarray[bin_names[axis]].attrs["unit"] = h5_file["axes"][f"ax{axis}"].attrs["unit"]
+                xarray[bin_names[axis]].attrs["unit"] = h5_file["axes"][
+                    f"ax{axis}"
+                ].attrs["unit"]
             except (KeyError, TypeError):
-                 xarray[bin_names[axis]].attrs["unit"] =  DEFAULT_UNITS[bin_names[axis]]
+                xarray[bin_names[axis]].attrs["unit"] = DEFAULT_UNITS[bin_names[axis]]
         try:
             xarray.attrs["units"] = h5_file["binned"]["BinnedData"].attrs["units"]
-            xarray.attrs["long_name"] = h5_file["binned"]["BinnedData"].attrs["long_name"]
+            xarray.attrs["long_name"] = h5_file["binned"]["BinnedData"].attrs[
+                "long_name"
+            ]
         except (KeyError, TypeError):
             xarray.attrs["units"] = "counts"
             xarray.attrs["long_name"] = "photoelectron counts"
