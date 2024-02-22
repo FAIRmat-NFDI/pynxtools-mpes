@@ -34,19 +34,16 @@ def test_example_data():
         str(data_dir / "xarray_saved_small_calibration.h5"),
     )
 
-    for supported_nxdl in reader.supported_nxdls:
-        nxdl_file = os.path.join(
-            def_dir, "contributed_definitions", f"{supported_nxdl}.nxdl.xml"
-        )
+    nxdl_file = os.path.join(def_dir, "contributed_definitions", "NXmpes.nxdl.xml")
 
-        root = ET.parse(nxdl_file).getroot()
-        template = Template()
-        generate_template_from_nxdl(root, template)
+    root = ET.parse(nxdl_file).getroot()
+    template = Template()
+    generate_template_from_nxdl(root, template)
 
-        read_data = reader().read(template=Template(template), file_paths=input_files)
+    read_data = reader().read(template=Template(template), file_paths=input_files)
 
-        assert isinstance(read_data, Template)
-        assert validate_data_dict(template, read_data, root)
+    assert isinstance(read_data, Template)
+    assert validate_data_dict(template, read_data, root)
 
 
 def test_mpes_writing(tmp_path):

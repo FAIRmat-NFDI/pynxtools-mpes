@@ -293,7 +293,7 @@ class MPESReader(BaseReader):
     # pylint: disable=too-few-public-methods
 
     # Whitelist for the NXDLs that the reader supports and can process
-    supported_nxdls = ["NXmpes"]
+    supported_nxdls = ["NXmpes", "NXmpes_arpes"]
 
     def read(  # pylint: disable=too-many-branches
         self,
@@ -355,6 +355,12 @@ class MPESReader(BaseReader):
                                 f"[info]: Path {key} not found. "
                                 f"Skipping the entry.",
                             )
+
+                # after filling, resolve links again:
+                if isinstance(template[key], str) and template[key].startswith(
+                    "@link:"
+                ):
+                    template[key] = {"link": template[key][6:]}
 
             else:
                 # Fills in the fixed metadata
