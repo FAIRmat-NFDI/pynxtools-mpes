@@ -51,7 +51,7 @@ version_scheme = "no-guess-dev"
 local_scheme = "node-and-date"
 
 [tool.ruff]
-include = ["pynxtools/*.py", "tests/*.py"]
+include = ["pynxtools_mpes/*.py", "tests/*.py"]
 select = [
     "E", # pycodestyle
     "W", # pycodestyle
