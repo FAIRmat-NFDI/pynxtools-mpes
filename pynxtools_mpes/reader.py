@@ -25,7 +25,7 @@ import h5py
 import numpy as np
 import xarray as xr
 import yaml
-from pynxtools.dataconverter.readers.base.reader import BaseReader
+from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
 from pynxtools.dataconverter.readers.utils import (
     FlattenSettings,
     flatten_and_replace,
@@ -241,7 +241,7 @@ def fill_data_indices_in_config(config_file_dict, x_array_loaded):
             config_file_dict.pop(key)
 
 
-class MPESReader(BaseReader):
+class MPESReader(MultiFormatReader):
     """MPES-specific reader class"""
 
     # pylint: disable=too-few-public-methods
