@@ -361,12 +361,10 @@ class MPESReader(BaseReader):
                                 f"Skipping the entry.",
                             )
 
-                # after filling, resolve links again:
-                if isinstance(template[key], str) and template[key].startswith(
+                if isinstance(template.get(key), str) and template[key].startswith(
                     "@link:"
                 ):
                     template[key] = {"link": template[key][6:]}
-
             else:
                 # Fills in the fixed metadata
                 template[key] = value
