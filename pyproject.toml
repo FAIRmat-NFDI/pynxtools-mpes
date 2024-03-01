@@ -42,6 +42,9 @@ dev = [
     "types-pyyaml",
     "pip-tools",
 ]
+igor = [
+    "igor2",
+]
 
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
