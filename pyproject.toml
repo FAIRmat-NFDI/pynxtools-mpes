@@ -47,6 +47,9 @@ docs = [
     "pymdown-extensions",
     "mkdocs-click"
 ]
+igor = [
+    "igor2",
+]
 
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
