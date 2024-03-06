@@ -181,6 +181,7 @@ CONVERT_DICT = {
     "momentum_resolution": "RESOLUTION[momentum_resolution]/resolution",
     "temporal_resolution": "RESOLUTION[temporal_resolution]/resolution",
     "spatial_resolution": "RESOLUTION[spatial_resolution]/resolution",
+    "angular_resolution": "RESOLUTION[angular_resolution]/resolution",
     "sample_temperature": "temperature_sensor/value",
 }
 
@@ -191,11 +192,17 @@ REPLACE_NESTED = {
     "beam_TYPE[beam]/Probe": "beam_TYPE[beam_probe]",
     "beam_TYPE[beam]/Pump": "beam_TYPE[beam_pump]",
     "sample_history": "sample_history/notes",
+    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[energy_resolution]": (
+        "ELECTRONANALYSER[electronanalyser]/energy_resolution"
+    ),
     "ELECTRONANALYSER[electronanalyser]/RESOLUTION[momentum_resolution]": (
         "ELECTRONANALYSER[electronanalyser]/momentum_resolution"
     ),
     "ELECTRONANALYSER[electronanalyser]/RESOLUTION[spatial_resolution]": (
         "ELECTRONANALYSER[electronanalyser]/spatial_resolution"
+    ),
+    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[angular_resolution]": (
+        "ELECTRONANALYSER[electronanalyser]/angular_resolution"
     ),
     "SAMPLE[sample]/gas_pressure": "INSTRUMENT[instrument]/pressure_gauge/value",
     "SAMPLE[sample]/temperature": (
