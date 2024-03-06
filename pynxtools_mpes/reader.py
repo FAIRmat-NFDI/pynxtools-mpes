@@ -183,6 +183,7 @@ CONVERT_DICT = {
     "spatial_resolution": "RESOLUTION[spatial_resolution]/resolution",
     "angular_resolution": "RESOLUTION[angular_resolution]/resolution",
     "sample_temperature": "temperature_sensor/value",
+    "drain_current": "drain_current_amperemeter/value",
 }
 
 REPLACE_NESTED = {
