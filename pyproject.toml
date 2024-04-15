@@ -51,8 +51,7 @@ version_scheme = "no-guess-dev"
 local_scheme = "node-and-date"
 
 [tool.ruff]
-include = ["pynxtools/*.py", "tests/*.py"]
-exclude = ["pynxtools/definitions"]
+include = ["pynxtools_mpes/*.py", "tests/*.py"]
 line-length = 88
 indent-width = 4
 
