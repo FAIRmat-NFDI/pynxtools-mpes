@@ -36,9 +36,7 @@ click==8.1.7
     #   pip-tools
     #   pynxtools
 cloudpickle==3.0.0
-    # via
-    #   dask
-    #   hyperspy
+    # via dask
 comm==0.2.1
     # via ipykernel
 contourpy==1.2.0
@@ -47,12 +45,10 @@ cycler==0.12.1
     # via matplotlib
 dask[array]==2024.2.0
     # via
-    #   dask
     #   hyperspy
     #   kikuchipy
     #   orix
     #   pyxem
-    #   rosettasciio
 debugpy==1.8.1
     # via ipykernel
 decorator==5.1.1
@@ -112,7 +108,6 @@ h5py==3.10.0
     #   pynxtools
     #   pynxtools-mpes (pyproject.toml)
     #   pyxem
-    #   rosettasciio
     #   silx
 hdf5plugin==4.4.0
     # via fabio
@@ -280,7 +275,6 @@ numpy==1.26.4
     #   pynxtools
     #   pyxem
     #   radioactivedecay
-    #   rosettasciio
     #   scikit-image
     #   scikit-learn
     #   scipy
@@ -330,9 +324,7 @@ pillow==10.0.1
     #   nionswift
     #   scikit-image
 pint==0.23
-    # via
-    #   hyperspy
-    #   rosettasciio
+    # via hyperspy
 pip-tools==7.4.0
     # via pynxtools-mpes (pyproject.toml)
 platformdirs==4.2.0
@@ -346,7 +338,6 @@ ply==3.11
     # via pycifrw
 pooch==1.8.0
     # via
-    #   hyperspy
     #   kikuchipy
     #   orix
 prettytable==3.10.0
@@ -390,7 +381,6 @@ python-dateutil==2.8.2
     #   jupyter-client
     #   matplotlib
     #   pandas
-    #   rosettasciio
 pytz==2024.1
     # via
     #   nionswift
@@ -407,7 +397,6 @@ pyyaml==6.0.1
     #   kikuchipy
     #   pynxtools
     #   pynxtools-mpes (pyproject.toml)
-    #   rosettasciio
 pyzmq==25.1.2
     # via
     #   ipykernel
@@ -423,7 +412,7 @@ requests==2.31.0
     #   requests-cache
 requests-cache==1.2.0
     # via pynxtools
-ruff==0.2.2
+ruff==0.3.4
     # via pynxtools-mpes (pyproject.toml)
 scikit-image==0.22.0
     # via
