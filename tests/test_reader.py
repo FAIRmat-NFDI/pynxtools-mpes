@@ -14,8 +14,8 @@ from pynxtools.dataconverter.helpers import (
     validate_data_dict,
 )
 from pynxtools.dataconverter.template import Template
+from pynxtools.definitions.dev_tools.utils.nxdl_utils import get_nexus_definitions_path
 from pynxtools.nexus import nexus  # noqa: E402 # noqa: E402
-from pynxtools.nexus.nxdl_utils import get_nexus_definitions_path
 
 from pynxtools_mpes.reader import MPESReader
 
