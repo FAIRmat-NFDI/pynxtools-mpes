@@ -173,10 +173,10 @@ CONVERT_DICT = {
     "Instrument": "INSTRUMENT[instrument]",
     "Analyzer": "ELECTRONANALYSER[electronanalyser]",
     "Manipulator": "MANIPULATOR[manipulator]",
-    "Beam": "beam_TYPE[beam]",
+    "Beam": "beamTYPE[beam]",
     "unit": "@units",
     "Sample": "SAMPLE[sample]",
-    "Source": "source_TYPE[source]",
+    "Source": "sourceTYPE[source]",
     "User": "USER[user]",
     "energy_resolution": "energy_resolution/resolution",
     "momentum_resolution": "RESOLUTION[momentum_resolution]/resolution",
@@ -189,10 +189,10 @@ CONVERT_DICT = {
 
 REPLACE_NESTED = {
     "SAMPLE[sample]/chemical_formula": "SAMPLE[sample]/SUBSTANCE[substance]/molecular_formula_hill",
-    "source_TYPE[source]/Probe": "source_TYPE[source_probe]",
-    "source_TYPE[source]/Pump": "source_TYPE[source_pump]",
-    "beam_TYPE[beam]/Probe": "beam_TYPE[beam_probe]",
-    "beam_TYPE[beam]/Pump": "beam_TYPE[beam_pump]",
+    "source_TYPE[source]/Probe": "sourceTYPE[source_probe]",
+    "source_TYPE[source]/Pump": "sourceTYPE[source_pump]",
+    "beam_TYPE[beam]/Probe": "beamTYPE[beam_probe]",
+    "beam_TYPE[beam]/Pump": "beamTYPE[beam_pump]",
     "sample_history": "sample_history/notes",
     "ELECTRONANALYSER[electronanalyser]/RESOLUTION[energy_resolution]": (
         "ELECTRONANALYSER[electronanalyser]/energy_resolution"

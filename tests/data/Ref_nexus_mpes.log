@@ -78,13 +78,14 @@ DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/data):
 DEBUG - 
                  The default NXdata field containing a view on the measured data.
                  This NXdata field contains a collection of the main relevant fields (axes).
-                 In NXmpes, it is required to provide an energy axis.
                  If you want to provide additional views on your data, you can additionally use
                  the generic NXdata group of NXentry.
-                 The other data fields inside this NXdata group should be named according to conventions
-                 to ensure compatibility. We recommened the following field names
-                 for common data fields:
                  
+                 In NXmpes, it is recommended to provide an energy axis.
+                 
+                 Fields should be named according to the following convention:
+                 
+                 - **energy**: Calibrated energy (kinetic or binding energy). Unit category: NX_ENERGY (e.g., eV).
                  - **kx**: Calibrated x axis in k-space. Unit category: NX_ANY (e.g., 1/Angström).
                  - **ky**: Calibrated y axis in k-space. Unit category: NX_ANY (1/Angström).
                  - **kz**: Calibrated z axis in k-space. Unit category: NX_ANY (1/Angström).
@@ -317,9 +318,7 @@ DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/data
 NXentry.nxdl.xml:/DATA
 NXdata.nxdl.xml:
-DEBUG - NXmpes.nxdl.xml:/ENTRY/data@energy_indices - [NX_CHAR]
-DEBUG - <<RECOMMENDED>>
-DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/data/energy_indices):
+DEBUG - @energy_indices - IS NOT IN SCHEMA
 DEBUG - 
 DEBUG - ===== ATTRS (//entry/data@kx_indices)
 DEBUG - value: 0 
@@ -429,16 +428,10 @@ DEBUG - classpath: ['NXentry', 'NXdata', 'NX_NUMBER']
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/data/energy
 NXdata.nxdl.xml:/AXISNAME
-DEBUG - <<REQUIRED>>
+DEBUG - <<RECOMMENDED>>
 DEBUG - Dataset referenced as NXdata AXIS #2
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/data/energy):
 DEBUG - 
-                     Calibrated energy axis.
-                     
-                     This could be a link to either
-                     /entry/process/energy_calibration/calibrated_axis or
-                     /entry/process/energy_correction/calibrated_axis.
-                
 DEBUG - documentation (NXdata.nxdl.xml:/AXISNAME):
 DEBUG - 
              Dimension scale defining an axis of the data.
@@ -454,22 +447,17 @@ DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/data/energy
 NXdata.nxdl.xml:/AXISNAME
 DEBUG - NXmpes.nxdl.xml:/ENTRY/data/energy@type - [NX_CHAR]
-DEBUG - <<REQUIRED>>
-DEBUG - enumeration (NXmpes.nxdl.xml:/ENTRY/data/energy/type):
-DEBUG - -> kinetic
-DEBUG - -> binding
+DEBUG - <<RECOMMENDED>>
 DEBUG - Dataset referenced as NXdata AXIS #2
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/data/energy/type):
 DEBUG - 
-                         The energy can be either stored as kinetic or as binding energy.
-                    
 DEBUG - ===== ATTRS (//entry/data/energy@units)
 DEBUG - value: eV 
 DEBUG - classpath: ['NXentry', 'NXdata', 'NX_NUMBER']
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/data/energy
 NXdata.nxdl.xml:/AXISNAME
-DEBUG - NXmpes.nxdl.xml:/ENTRY/data/energy@units [NX_ENERGY]
+DEBUG - NXmpes.nxdl.xml:/ENTRY/data/energy@units - REQUIRED, but undefined unit category
 DEBUG - NXdata.nxdl.xml:/AXISNAME@units - REQUIRED, but undefined unit category
 DEBUG - ===== FIELD (//entry/data/kx): <HDF5 dataset "kx": shape (10,), type "<f8">
 DEBUG - value: [-1.5        -1.16666667 -0.83333333 -0.5        -0.16666667  0.16666667 ...
@@ -638,7 +626,7 @@ NXinstrument.nxdl.xml:
 DEBUG - <<REQUIRED>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT):
 DEBUG - 
-                 Description of the MPES spectrometer and its individual parts.
+                 Description of the photoemission spectrometer and its individual parts.
                  
                  This concept is related to term `12.58`_ of the ISO 18115-1:2023 standard.
                  
@@ -669,9 +657,16 @@ DEBUG -
 DEBUG - ===== GROUP (//entry/instrument/beam_probe [NXmpes::/NXentry/NXinstrument/NXbeam]): <HDF5 group "/entry/instrument/beam_probe" (7 members)>
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE
 NXinstrument.nxdl.xml:/BEAM
 NXbeam.nxdl.xml:
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE):
+DEBUG - 
+                     Properties of the photon beam at a given location.
+                     Should be named with the same appendix as sourceTYPE, e.g.,
+                     for `source_probe` it should refer to `beam_probe`.
+                
 DEBUG - documentation (NXinstrument.nxdl.xml:/BEAM):
 DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:):
@@ -696,37 +691,55 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_probe@NX_class)
 DEBUG - value: NXbeam 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE
 NXinstrument.nxdl.xml:/BEAM
 NXbeam.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/associated_source): <HDF5 dataset "associated_source": shape (), type "|O">
 DEBUG - value: b'/entry/instrument/source_probe' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
-DEBUG - NOT IN SCHEMA
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_CHAR']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/associated_source
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/associated_source):
 DEBUG - 
+                         The source that emitted this beam.
+                         Should be named with the same appendix, e.g.,
+                         for `beam_probe` it should refer to `source_probe`.
+                         This should be specified if an associated source exists.
+                         
+                         Example:
+                           * /entry/instrument/beam_probe = /entry/instrument/source_probe
+                    
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/distance): <HDF5 dataset "distance": shape (), type "<f8">
 DEBUG - value: 0.0 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
-NXbeam.nxdl.xml:/distance
-DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXbeam.nxdl.xml:/distance):
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance):
 DEBUG - 
-             Distance from sample. Note, it is recommended to use NXtransformations instead.
-        
+                         Distance between the point where the current NXbeam instance is evaluating
+                         the beam properties and the point where the beam interacts with the sample.
+                         For photoemission, the latter is the point where the the centre of the beam
+                         touches the sample surface.
+                    
 DEBUG - ===== ATTRS (//entry/instrument/beam_probe/distance@units)
 DEBUG - value: mm 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
-NXbeam.nxdl.xml:/distance
-DEBUG - NXbeam.nxdl.xml:/distance@units [NX_LENGTH]
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance@units [NX_LENGTH]
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/extent): <HDF5 dataset "extent": shape (2,), type "<f8">
 DEBUG - value: [ 80. 190.] 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent
 NXbeam.nxdl.xml:/extent
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/extent):
 DEBUG - 
              Size of the beam entering this component. Note this represents
@@ -736,14 +749,19 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_probe/extent@units)
 DEBUG - value: µm 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent
 NXbeam.nxdl.xml:/extent
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent@units - REQUIRED, but undefined unit category
 DEBUG - NXbeam.nxdl.xml:/extent@units [NX_LENGTH]
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/incident_energy): <HDF5 dataset "incident_energy": shape (), type "<f8">
 DEBUG - value: 21.7 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy
 NXbeam.nxdl.xml:/incident_energy
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_energy):
 DEBUG - 
              Energy carried by each particle of the beam on entering the beamline component.
@@ -767,14 +785,19 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_probe/incident_energy@units)
 DEBUG - value: eV 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy
 NXbeam.nxdl.xml:/incident_energy
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy@units [NX_ENERGY]
 DEBUG - NXbeam.nxdl.xml:/incident_energy@units [NX_ENERGY]
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/incident_energy_spread): <HDF5 dataset "incident_energy_spread": shape (), type "<f8">
 DEBUG - value: 0.11 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread
 NXbeam.nxdl.xml:/incident_energy_spread
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_energy_spread):
 DEBUG - 
              The energy spread FWHM for the corresponding energy(ies) in incident_energy. In the case of shot-to-shot variation in
@@ -786,14 +809,19 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_probe/incident_energy_spread@units)
 DEBUG - value: eV 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread
 NXbeam.nxdl.xml:/incident_energy_spread
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread@units [NX_ENERGY]
 DEBUG - NXbeam.nxdl.xml:/incident_energy_spread@units [NX_ENERGY]
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/incident_polarization): <HDF5 dataset "incident_polarization": shape (4,), type "<f8">
 DEBUG - value: [1. 1. 0. 0.] 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization
 NXbeam.nxdl.xml:/incident_polarization
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_polarization):
 DEBUG - 
              Incident polarization as a Stokes vector
@@ -803,7 +831,9 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_probe/incident_polarization@units)
 DEBUG - value: V^2/mm^2 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization
 NXbeam.nxdl.xml:/incident_polarization
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization@units [NX_ANY]
 DEBUG - NXbeam.nxdl.xml:/incident_polarization@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/instrument/beam_probe/pulse_duration): <HDF5 dataset "pulse_duration": shape (), type "<f8">
 DEBUG - value: 20.0 
@@ -824,9 +854,16 @@ DEBUG - NXbeam.nxdl.xml:/pulse_duration@units [NX_TIME]
 DEBUG - ===== GROUP (//entry/instrument/beam_pump [NXmpes::/NXentry/NXinstrument/NXbeam]): <HDF5 group "/entry/instrument/beam_pump" (11 members)>
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE
 NXinstrument.nxdl.xml:/BEAM
 NXbeam.nxdl.xml:
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE):
+DEBUG - 
+                     Properties of the photon beam at a given location.
+                     Should be named with the same appendix as sourceTYPE, e.g.,
+                     for `source_probe` it should refer to `beam_probe`.
+                
 DEBUG - documentation (NXinstrument.nxdl.xml:/BEAM):
 DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:):
@@ -851,15 +888,27 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_pump@NX_class)
 DEBUG - value: NXbeam 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE
 NXinstrument.nxdl.xml:/BEAM
 NXbeam.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/associated_source): <HDF5 dataset "associated_source": shape (), type "|O">
 DEBUG - value: b'/entry/instrument/source_pump' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam']
-DEBUG - NOT IN SCHEMA
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_CHAR']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/associated_source
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/associated_source):
 DEBUG - 
+                         The source that emitted this beam.
+                         Should be named with the same appendix, e.g.,
+                         for `beam_probe` it should refer to `source_probe`.
+                         This should be specified if an associated source exists.
+                         
+                         Example:
+                           * /entry/instrument/beam_probe = /entry/instrument/source_probe
+                    
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/average_power): <HDF5 dataset "average_power": shape (), type "<f8">
 DEBUG - value: 444.0 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
@@ -878,26 +927,32 @@ NXbeam.nxdl.xml:/average_power
 DEBUG - NXbeam.nxdl.xml:/average_power@units [NX_POWER]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/distance): <HDF5 dataset "distance": shape (), type "<f8">
 DEBUG - value: 0.0 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
-NXbeam.nxdl.xml:/distance
-DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXbeam.nxdl.xml:/distance):
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance):
 DEBUG - 
-             Distance from sample. Note, it is recommended to use NXtransformations instead.
-        
+                         Distance between the point where the current NXbeam instance is evaluating
+                         the beam properties and the point where the beam interacts with the sample.
+                         For photoemission, the latter is the point where the the centre of the beam
+                         touches the sample surface.
+                    
 DEBUG - ===== ATTRS (//entry/instrument/beam_pump/distance@units)
 DEBUG - value: mm 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
-NXbeam.nxdl.xml:/distance
-DEBUG - NXbeam.nxdl.xml:/distance@units [NX_LENGTH]
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/distance@units [NX_LENGTH]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/extent): <HDF5 dataset "extent": shape (2,), type "<f8">
 DEBUG - value: [155. 367.] 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent
 NXbeam.nxdl.xml:/extent
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/extent):
 DEBUG - 
              Size of the beam entering this component. Note this represents
@@ -907,7 +962,9 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_pump/extent@units)
 DEBUG - value: µm 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent
 NXbeam.nxdl.xml:/extent
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/extent@units - REQUIRED, but undefined unit category
 DEBUG - NXbeam.nxdl.xml:/extent@units [NX_LENGTH]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/fluence): <HDF5 dataset "fluence": shape (), type "<f8">
 DEBUG - value: 1.3 
@@ -929,8 +986,11 @@ DEBUG - ===== FIELD (//entry/instrument/beam_pump/incident_energy): <HDF5 datase
 DEBUG - value: 1.2 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy
 NXbeam.nxdl.xml:/incident_energy
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_energy):
 DEBUG - 
              Energy carried by each particle of the beam on entering the beamline component.
@@ -954,14 +1014,19 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_pump/incident_energy@units)
 DEBUG - value: eV 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy
 NXbeam.nxdl.xml:/incident_energy
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy@units [NX_ENERGY]
 DEBUG - NXbeam.nxdl.xml:/incident_energy@units [NX_ENERGY]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/incident_energy_spread): <HDF5 dataset "incident_energy_spread": shape (), type "<f8">
 DEBUG - value: 0.05 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread
 NXbeam.nxdl.xml:/incident_energy_spread
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_energy_spread):
 DEBUG - 
              The energy spread FWHM for the corresponding energy(ies) in incident_energy. In the case of shot-to-shot variation in
@@ -973,14 +1038,19 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_pump/incident_energy_spread@units)
 DEBUG - value: eV 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread
 NXbeam.nxdl.xml:/incident_energy_spread
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_energy_spread@units [NX_ENERGY]
 DEBUG - NXbeam.nxdl.xml:/incident_energy_spread@units [NX_ENERGY]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/incident_polarization): <HDF5 dataset "incident_polarization": shape (4,), type "<i8">
 DEBUG - value: [1 1 0 0] 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization
 NXbeam.nxdl.xml:/incident_polarization
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization):
+DEBUG - 
 DEBUG - documentation (NXbeam.nxdl.xml:/incident_polarization):
 DEBUG - 
              Incident polarization as a Stokes vector
@@ -990,7 +1060,9 @@ DEBUG - ===== ATTRS (//entry/instrument/beam_pump/incident_polarization@units)
 DEBUG - value: V^2/mm^2 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXbeam', 'NX_NUMBER']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization
 NXbeam.nxdl.xml:/incident_polarization
+DEBUG - NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/beamTYPE/incident_polarization@units [NX_ANY]
 DEBUG - NXbeam.nxdl.xml:/incident_polarization@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/instrument/beam_pump/incident_wavelength): <HDF5 dataset "incident_wavelength": shape (), type "<f8">
 DEBUG - value: 1030.0 
@@ -2190,7 +2262,7 @@ DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NX_CHAR']
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/description
 NXelectronanalyser.nxdl.xml:/description
-DEBUG - <<REQUIRED>>
+DEBUG - <<RECOMMENDED>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/description):
 DEBUG - 
 DEBUG - documentation (NXelectronanalyser.nxdl.xml:/description):
@@ -2377,17 +2449,13 @@ DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/energy_resolution
 NXelectronanalyser.nxdl.xml:/energy_resolution
 NXresolution.nxdl.xml:
-DEBUG - <<RECOMMENDED>>
+DEBUG - <<OPTIONAL>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/energy_resolution):
 DEBUG - 
 DEBUG - documentation (NXelectronanalyser.nxdl.xml:/energy_resolution):
 DEBUG - 
              Energy resolution of the analyser with the current setting. May be linked from an
              NXcalibration.
-             
-             This concept is related to term `10.24`_ of the ISO 18115-1:2023 standard.
-             
-             .. _10.24: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.24
         
 DEBUG - documentation (NXresolution.nxdl.xml:):
 DEBUG - 
@@ -2435,6 +2503,12 @@ DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/energy
 DEBUG - 
 DEBUG - documentation (NXelectronanalyser.nxdl.xml:/energy_resolution/resolution):
 DEBUG - 
+                 Minimum distinguishable energy separation in the energy spectra.
+                 
+                 This concept is related to term `10.24`_ of the ISO 18115-1:2023 standard.
+                 
+                 .. _10.24: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.24
+            
 DEBUG - documentation (NXresolution.nxdl.xml:/resolution):
 DEBUG - 
              The resolution of the physical quantity.
@@ -2500,13 +2574,16 @@ DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NXenergydi
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/ENERGYDISPERSION/pass_energy
 NXenergydispersion.nxdl.xml:/pass_energy
-DEBUG - <<REQUIRED>>
+DEBUG - <<RECOMMENDED>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/ELECTRONANALYSER/ENERGYDISPERSION/pass_energy):
 DEBUG - 
+                             Either `pass_energy` or `drift_energy` must be supplied. `pass_energy` should be used when working
+                             with hemispherical analysers.
+                        
 DEBUG - documentation (NXenergydispersion.nxdl.xml:/pass_energy):
 DEBUG - 
-             Energy of the electrons on the mean path of the analyser. Pass energy for
-             hemispherics, drift energy for tofs.
+             Mean kinetic energy of the electrons in the energy-dispersive portion of the analyser.
+             This term should be used for hemispherical analysers.
              
              This concept is related to term `12.63`_ of the ISO 18115-1:2023 standard.
              
@@ -2605,14 +2682,6 @@ NXelectronanalyser.nxdl.xml:/momentum_resolution
 NXresolution.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
-DEBUG - ===== ATTRS (//entry/instrument/electronanalyser/momentum_resolution@units)
-DEBUG - value: 1/angstrom 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NXresolution']
-DEBUG - classes:
-NXelectronanalyser.nxdl.xml:/momentum_resolution
-NXresolution.nxdl.xml:
-DEBUG - @units - IS NOT IN SCHEMA
-DEBUG - 
 DEBUG - ===== FIELD (//entry/instrument/electronanalyser/momentum_resolution/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
 DEBUG - value: b'momentum' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NXresolution', 'NX_CHAR']
@@ -2689,9 +2758,9 @@ DEBUG - documentation (NXelectronanalyser.nxdl.xml:/spatial_resolution):
 DEBUG - 
              Spatial resolution of the electron analyser (Airy disk radius)
              
-             This concept is related to term `10.15 ff.`_ of the ISO 18115-1:2023 standard.
+             This concept is related to term `10.14`_ of the ISO 18115-1:2023 standard.
              
-             .. _10.15 ff.: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.15
+             .. _10.14: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.15
         
 DEBUG - documentation (NXresolution.nxdl.xml:):
 DEBUG - 
@@ -3168,18 +3237,10 @@ DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/energy_resolution
 NXinstrument.nxdl.xml:/RESOLUTION
 NXresolution.nxdl.xml:
-DEBUG - <<RECOMMENDED>>
+DEBUG - <<OPTIONAL>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/energy_resolution):
 DEBUG - 
-                     Overall energy resolution of the MPES instrument
-                     
-                     This concept is related to term `10.7 ff.`_ of the ISO 18115-1:2023 standard.
-                     
-                     .. _10.7 ff.: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.7
-                     
-                     This concept is related to term `10.24`_ of the ISO 18115-1:2023 standard.
-                     
-                     .. _10.24: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.24
+                     Overall energy resolution of the photoemission instrument.
                 
 DEBUG - documentation (NXinstrument.nxdl.xml:/RESOLUTION):
 DEBUG - 
@@ -3221,6 +3282,12 @@ NXresolution.nxdl.xml:/resolution
 DEBUG - <<REQUIRED>>
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/energy_resolution/resolution):
 DEBUG - 
+                         Minimum distinguishable energy separation in the energy spectra.
+                         
+                         This concept is related to term `10.24`_ of the ISO 18115-1:2023 standard.
+                         
+                         .. _10.24: https://www.iso.org/obp/ui/en/#iso:std:iso:18115:-1:ed-3:v1:en:term:10.24
+                    
 DEBUG - documentation (NXresolution.nxdl.xml:/resolution):
 DEBUG - 
              The resolution of the physical quantity.
@@ -4008,40 +4075,22 @@ DEBUG -
              The physical quantity of the resolution, e.g.,
              energy, momentum, time, etc.
         
-DEBUG - ===== GROUP (//entry/instrument/momentum_resolution/resolution [NXmpes::/NXentry/NXinstrument/NXresolution/NXresolution]): <HDF5 group "/entry/instrument/momentum_resolution/resolution" (3 members)>
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
+DEBUG - ===== FIELD (//entry/instrument/momentum_resolution/resolution): <HDF5 dataset "resolution": shape (), type "<f8">
+DEBUG - value: 0.08 
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution', 'NX_FLOAT']
+DEBUG - classes:
+NXresolution.nxdl.xml:/resolution
+DEBUG - <<OPTIONAL>>
+DEBUG - documentation (NXresolution.nxdl.xml:/resolution):
 DEBUG - 
-DEBUG - ===== ATTRS (//entry/instrument/momentum_resolution/resolution@NX_class)
-DEBUG - value: NXresolution 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
+             The resolution of the physical quantity.
+        
 DEBUG - ===== ATTRS (//entry/instrument/momentum_resolution/resolution@units)
 DEBUG - value: 1/angstrom 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
-DEBUG - ===== FIELD (//entry/instrument/momentum_resolution/resolution/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
-DEBUG - value: b'momentum' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
-DEBUG - ===== FIELD (//entry/instrument/momentum_resolution/resolution/resolution): <HDF5 dataset "resolution": shape (), type "<f8">
-DEBUG - value: 0.08 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
-DEBUG - ===== ATTRS (//entry/instrument/momentum_resolution/resolution/resolution@units)
-DEBUG - value: 1/angstrom 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
-DEBUG - ===== FIELD (//entry/instrument/momentum_resolution/resolution/type): <HDF5 dataset "type": shape (), type "|O">
-DEBUG - value: b'estimated' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution', 'NX_FLOAT']
+DEBUG - classes:
+NXresolution.nxdl.xml:/resolution
+DEBUG - NXresolution.nxdl.xml:/resolution@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/instrument/momentum_resolution/type): <HDF5 dataset "type": shape (), type "|O">
 DEBUG - value: b'estimated' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXresolution', 'NX_CHAR']
@@ -4177,9 +4226,23 @@ DEBUG - NXsensor.nxdl.xml:/value@units [NX_ANY]
 DEBUG - ===== GROUP (//entry/instrument/source_probe [NXmpes::/NXentry/NXinstrument/NXsource]): <HDF5 group "/entry/instrument/source_probe" (6 members)>
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE
 NXinstrument.nxdl.xml:/SOURCE
 NXsource.nxdl.xml:
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE):
+DEBUG - 
+                     A source used to generate a beam. Properties refer strictly to parameters of the
+                     source, not of the output beam. For example, the energy of the source is not the
+                     optical power of the beam, but the energy of the electron beam in a synchrotron
+                     or similar.
+                     
+                     Note that the uppercase notation in sourceTYPE means that multiple sources can
+                     be provided. The uppercase part can be substituted with any string that consists
+                     of alphanumeric characters, including both uppercase and lowercase letters from A to Z
+                     and numerical digits from 0 to 9. For example, in pump-probe experiments, it is possible
+                     to have both a `source_probe` and a `source_pump`.
+                
 DEBUG - documentation (NXinstrument.nxdl.xml:/SOURCE):
 DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:):
@@ -4193,15 +4256,26 @@ DEBUG - ===== ATTRS (//entry/instrument/source_probe@NX_class)
 DEBUG - value: NXsource 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE
 NXinstrument.nxdl.xml:/SOURCE
 NXsource.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/instrument/source_probe/associated_beam): <HDF5 dataset "associated_beam": shape (), type "|O">
 DEBUG - value: b'/entry/instrument/beam_probe' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
-DEBUG - NOT IN SCHEMA
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/associated_beam
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/associated_beam):
 DEBUG - 
+                         A reference to a beam emitted by this source.
+                         Should be named with the same appendix, e.g.,
+                         for `source_probe` it should refer to `beam_probe`.
+                         
+                         Example:
+                           * /entry/instrument/source_probe = /entry/instrument/beam_probe
+                    
 DEBUG - ===== FIELD (//entry/instrument/source_probe/frequency): <HDF5 dataset "frequency": shape (), type "<f8">
 DEBUG - value: 500.0 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_FLOAT']
@@ -4235,8 +4309,11 @@ DEBUG - ===== FIELD (//entry/instrument/source_probe/name): <HDF5 dataset "name"
 DEBUG - value: b'HHG @ TR-ARPES @ FHI' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/name
 NXsource.nxdl.xml:/name
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/name):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/name):
 DEBUG - 
              Name of source
@@ -4245,6 +4322,7 @@ DEBUG - ===== FIELD (//entry/instrument/source_probe/probe): <HDF5 dataset "prob
 DEBUG - value: b'photon' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/probe
 NXsource.nxdl.xml:/probe
 DEBUG - <<OPTIONAL>>
 DEBUG - enumeration (NXsource.nxdl.xml:/probe):
@@ -4257,6 +4335,8 @@ DEBUG - -> ultraviolet
 DEBUG - -> visible light
 DEBUG - -> positron
 DEBUG - -> proton
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/probe):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/probe):
 DEBUG - 
              type of radiation probe (pick one from the enumerated list and spell exactly)
@@ -4265,8 +4345,22 @@ DEBUG - ===== FIELD (//entry/instrument/source_probe/type): <HDF5 dataset "type"
 DEBUG - value: b'HHG laser' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type
 NXsource.nxdl.xml:/type
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - enumeration (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type):
+DEBUG - -> Synchrotron X-ray Source
+DEBUG - -> Rotating Anode X-ray
+DEBUG - -> Fixed Tube X-ray
+DEBUG - -> UV Laser
+DEBUG - -> Free-Electron Laser
+DEBUG - -> Optical Laser
+DEBUG - -> UV Plasma Source
+DEBUG - -> Metal Jet X-ray
+DEBUG - -> HHG laser
+DEBUG - -> UV lamp
+DEBUG - -> Monochromatized electron source
+DEBUG - -> other
 DEBUG - enumeration (NXsource.nxdl.xml:/type):
 DEBUG - -> Spallation Neutron Source
 DEBUG - -> Pulsed Reactor Neutron Source
@@ -4281,6 +4375,8 @@ DEBUG - -> Optical Laser
 DEBUG - -> Ion Source
 DEBUG - -> UV Plasma Source
 DEBUG - -> Metal Jet X-ray
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/type):
 DEBUG - 
              type of radiation source (pick one from the enumerated list and spell exactly)
@@ -4288,9 +4384,23 @@ DEBUG -
 DEBUG - ===== GROUP (//entry/instrument/source_pump [NXmpes::/NXentry/NXinstrument/NXsource]): <HDF5 group "/entry/instrument/source_pump" (6 members)>
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE
 NXinstrument.nxdl.xml:/SOURCE
 NXsource.nxdl.xml:
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE):
+DEBUG - 
+                     A source used to generate a beam. Properties refer strictly to parameters of the
+                     source, not of the output beam. For example, the energy of the source is not the
+                     optical power of the beam, but the energy of the electron beam in a synchrotron
+                     or similar.
+                     
+                     Note that the uppercase notation in sourceTYPE means that multiple sources can
+                     be provided. The uppercase part can be substituted with any string that consists
+                     of alphanumeric characters, including both uppercase and lowercase letters from A to Z
+                     and numerical digits from 0 to 9. For example, in pump-probe experiments, it is possible
+                     to have both a `source_probe` and a `source_pump`.
+                
 DEBUG - documentation (NXinstrument.nxdl.xml:/SOURCE):
 DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:):
@@ -4304,15 +4414,26 @@ DEBUG - ===== ATTRS (//entry/instrument/source_pump@NX_class)
 DEBUG - value: NXsource 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE
 NXinstrument.nxdl.xml:/SOURCE
 NXsource.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/instrument/source_pump/associated_beam): <HDF5 dataset "associated_beam": shape (), type "|O">
 DEBUG - value: b'/entry/instrument/beam_pump' 
-DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource']
-DEBUG - NOT IN SCHEMA
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/associated_beam
+DEBUG - <<REQUIRED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/associated_beam):
 DEBUG - 
+                         A reference to a beam emitted by this source.
+                         Should be named with the same appendix, e.g.,
+                         for `source_probe` it should refer to `beam_probe`.
+                         
+                         Example:
+                           * /entry/instrument/source_probe = /entry/instrument/beam_probe
+                    
 DEBUG - ===== FIELD (//entry/instrument/source_pump/frequency): <HDF5 dataset "frequency": shape (), type "<f8">
 DEBUG - value: 500.0 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_FLOAT']
@@ -4346,8 +4467,11 @@ DEBUG - ===== FIELD (//entry/instrument/source_pump/name): <HDF5 dataset "name":
 DEBUG - value: b'OPCPA @ TR-ARPES @ FHI' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/name
 NXsource.nxdl.xml:/name
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/name):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/name):
 DEBUG - 
              Name of source
@@ -4356,6 +4480,7 @@ DEBUG - ===== FIELD (//entry/instrument/source_pump/probe): <HDF5 dataset "probe
 DEBUG - value: b'visible light' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/probe
 NXsource.nxdl.xml:/probe
 DEBUG - <<OPTIONAL>>
 DEBUG - enumeration (NXsource.nxdl.xml:/probe):
@@ -4368,6 +4493,8 @@ DEBUG - -> ultraviolet
 DEBUG - -> visible light
 DEBUG - -> positron
 DEBUG - -> proton
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/probe):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/probe):
 DEBUG - 
              type of radiation probe (pick one from the enumerated list and spell exactly)
@@ -4376,8 +4503,22 @@ DEBUG - ===== FIELD (//entry/instrument/source_pump/type): <HDF5 dataset "type":
 DEBUG - value: b'Optical Laser' 
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXsource', 'NX_CHAR']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type
 NXsource.nxdl.xml:/type
-DEBUG - <<OPTIONAL>>
+DEBUG - <<REQUIRED>>
+DEBUG - enumeration (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type):
+DEBUG - -> Synchrotron X-ray Source
+DEBUG - -> Rotating Anode X-ray
+DEBUG - -> Fixed Tube X-ray
+DEBUG - -> UV Laser
+DEBUG - -> Free-Electron Laser
+DEBUG - -> Optical Laser
+DEBUG - -> UV Plasma Source
+DEBUG - -> Metal Jet X-ray
+DEBUG - -> HHG laser
+DEBUG - -> UV lamp
+DEBUG - -> Monochromatized electron source
+DEBUG - -> other
 DEBUG - enumeration (NXsource.nxdl.xml:/type):
 DEBUG - -> Spallation Neutron Source
 DEBUG - -> Pulsed Reactor Neutron Source
@@ -4392,6 +4533,8 @@ DEBUG - -> Optical Laser
 DEBUG - -> Ion Source
 DEBUG - -> UV Plasma Source
 DEBUG - -> Metal Jet X-ray
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/INSTRUMENT/sourceTYPE/type):
+DEBUG - 
 DEBUG - documentation (NXsource.nxdl.xml:/type):
 DEBUG - 
              type of radiation source (pick one from the enumerated list and spell exactly)
@@ -4458,41 +4601,46 @@ DEBUG - documentation (NXresolution.nxdl.xml:/type):
 DEBUG - 
              The process by which the resolution was determined.
         
-DEBUG - ===== GROUP (//entry/process [NXmpes::/NXentry/NXprocess]): <HDF5 group "/entry/process" (5 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess']
+DEBUG - ===== GROUP (//entry/process [NXmpes::/NXentry/NXprocess_mpes]): <HDF5 group "/entry/process" (5 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes']
 DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/PROCESS
-NXentry.nxdl.xml:/PROCESS
-NXprocess.nxdl.xml:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES
+NXprocess_mpes.nxdl.xml:
 DEBUG - <<RECOMMENDED>>
-DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS):
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES):
 DEBUG - 
                  Document an event of data processing, reconstruction, or analysis for this data.
-                 Describe the appropriate axis calibrations for your experiment using one or more
-                 of the following NXcalibrations
+                 The appropriate axis calibrations for a given experiment should be described using
+                 one or more of the following NXcalibrations. The individual calibrations for a given
+                 `AXISNAME` in `data` should be called `AXISNAME_calibration`.
             
-DEBUG - documentation (NXentry.nxdl.xml:/PROCESS):
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:):
 DEBUG - 
-DEBUG - documentation (NXprocess.nxdl.xml:):
-DEBUG - 
-         Document an event of data processing, reconstruction, or analysis for this data.
+         :ref:`NXprocess_mpes` describes events of data processing, reconstruction,
+         or analysis for photoemission-related data.
+          
+         It extends the NXprocess class and provides a glossary of explicitly named processes
+         and their metadata which are typical for photoemission data.
+         
+         For now, the extension of NXprocess is performed by simply copying all existing groups, fields,
+         and attibute from NXprocess. In the future, it is envisioned that this extension can be solved by
+         base class inheritance.
     
 DEBUG - ===== ATTRS (//entry/process@NX_class)
-DEBUG - value: NXprocess 
-DEBUG - classpath: ['NXentry', 'NXprocess']
+DEBUG - value: NXprocess_mpes 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes']
 DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/PROCESS
-NXentry.nxdl.xml:/PROCESS
-NXprocess.nxdl.xml:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES
+NXprocess_mpes.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
-DEBUG - ===== GROUP (//entry/process/distortion [NXmpes::/NXentry/NXprocess/NXdistortion]): <HDF5 group "/entry/process/distortion" (5 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion']
+DEBUG - ===== GROUP (//entry/process/distortion [NXmpes::/NXentry/NXprocess_mpes/NXdistortion]): <HDF5 group "/entry/process/distortion" (5 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion']
 DEBUG - classes:
-NXprocess.nxdl.xml:/DISTORTION
+NXprocess_mpes.nxdl.xml:/DISTORTION
 NXdistortion.nxdl.xml:
 DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXprocess.nxdl.xml:/DISTORTION):
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/DISTORTION):
 DEBUG - 
              Describes the operations of image distortion correction
         
@@ -4502,15 +4650,15 @@ DEBUG -
     
 DEBUG - ===== ATTRS (//entry/process/distortion@NX_class)
 DEBUG - value: NXdistortion 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion']
 DEBUG - classes:
-NXprocess.nxdl.xml:/DISTORTION
+NXprocess_mpes.nxdl.xml:/DISTORTION
 NXdistortion.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/distortion/cdeform_field): <HDF5 dataset "cdeform_field": shape (512, 512), type "<f8">
 DEBUG - value: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
 DEBUG - classes:
 NXdistortion.nxdl.xml:/cdeform_field
 DEBUG - <<OPTIONAL>>
@@ -4521,7 +4669,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/distortion/original_centre): <HDF5 dataset "original_centre": shape (2,), type "<f8">
 DEBUG - value: [203. 215.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
 DEBUG - classes:
 NXdistortion.nxdl.xml:/original_centre
 DEBUG - <<OPTIONAL>>
@@ -4532,7 +4680,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/distortion/original_points): <HDF5 dataset "original_points": shape (6, 2), type "<f8">
 DEBUG - value: [166. 283.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
 DEBUG - classes:
 NXdistortion.nxdl.xml:/original_points
 DEBUG - <<OPTIONAL>>
@@ -4543,7 +4691,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/distortion/rdeform_field): <HDF5 dataset "rdeform_field": shape (512, 512), type "<f8">
 DEBUG - value: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
 DEBUG - classes:
 NXdistortion.nxdl.xml:/rdeform_field
 DEBUG - <<OPTIONAL>>
@@ -4554,7 +4702,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/distortion/symmetry): <HDF5 dataset "symmetry": shape (), type "<i8">
 DEBUG - value: 6 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXdistortion', 'NX_INT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_INT']
 DEBUG - classes:
 NXdistortion.nxdl.xml:/symmetry
 DEBUG - <<OPTIONAL>>
@@ -4566,25 +4714,23 @@ DEBUG -
              
                .. _symmetry-guided distortion correction: https://www.sciencedirect.com/science/article/abs/pii/S0304399118303474?via%3Dihub
         
-DEBUG - ===== GROUP (//entry/process/energy_calibration [NXmpes::/NXentry/NXprocess/NXcalibration]): <HDF5 group "/entry/process/energy_calibration" (4 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - ===== GROUP (//entry/process/energy_calibration [NXmpes::/NXentry/NXprocess_mpes/NXcalibration]): <HDF5 group "/entry/process/energy_calibration" (5 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/PROCESS/energy_calibration
-NXprocess.nxdl.xml:/CALIBRATION
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration
+NXprocess_mpes.nxdl.xml:/energy_calibration
 NXcalibration.nxdl.xml:
 DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS/energy_calibration):
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration):
 DEBUG - 
-                     Calibration event on the energy axis.
-                     
-                     For XPS, the calibration should ideally be performed according to
-                     `ISO 15472:2010`_ specification.
-                     
-                     .. _ISO 15472:2010: https://www.iso.org/standard/74811.html
-                
-DEBUG - documentation (NXprocess.nxdl.xml:/CALIBRATION):
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/energy_calibration):
 DEBUG - 
-             Describes the operations of calibration procedures, e.g. axis calibrations.
+             Calibration event on the energy axis.
+             
+             For XPS, the calibration should ideally be performed according to
+             `ISO 15472:2010`_ specification.
+             
+             .. _ISO 15472:2010: https://www.iso.org/standard/74811.html
         
 DEBUG - documentation (NXcalibration.nxdl.xml:):
 DEBUG - 
@@ -4592,31 +4738,34 @@ DEBUG -
     
 DEBUG - ===== ATTRS (//entry/process/energy_calibration@NX_class)
 DEBUG - value: NXcalibration 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/PROCESS/energy_calibration
-NXprocess.nxdl.xml:/CALIBRATION
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration
+NXprocess_mpes.nxdl.xml:/energy_calibration
 NXcalibration.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/energy_calibration/calibrated_axis): <HDF5 dataset "calibrated_axis": shape (900,), type "<f8">
 DEBUG - value: [ 5.22069940e+01  5.10746894e+01  4.99673811e+01  4.88843387e+01 ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/PROCESS/energy_calibration/calibrated_axis
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/energy_calibration/calibrated_axis
 NXcalibration.nxdl.xml:/calibrated_axis
 DEBUG - <<RECOMMENDED>>
-DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS/energy_calibration/calibrated_axis):
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration/calibrated_axis):
 DEBUG - 
-                         This is the calibrated energy axis to be used for data plotting.
-                    
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/energy_calibration/calibrated_axis):
+DEBUG - 
+                 This is the calibrated energy axis to be used for data plotting.
+            
 DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
 DEBUG - ===== FIELD (//entry/process/energy_calibration/coefficients): <HDF5 dataset "coefficients": shape (3,), type "<f8">
 DEBUG - value: [ 6.33783929e-01  8.68180227e-07 -2.41647784e+01] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/coefficients
 DEBUG - <<OPTIONAL>>
@@ -4628,7 +4777,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/energy_calibration/fit_function): <HDF5 dataset "fit_function": shape (), type "|O">
 DEBUG - value: b'(a0/(x0-a1))**2 + a2' 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_CHAR']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/fit_function
 DEBUG - <<OPTIONAL>>
@@ -4651,7 +4800,7 @@ DEBUG -
         
 DEBUG - ===== FIELD (//entry/process/energy_calibration/original_axis): <HDF5 dataset "original_axis": shape (900,), type "<f8">
 DEBUG - value: [ 60027.77777778  60083.33333333  60138.88888889  60194.44444444 ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/original_axis
 DEBUG - <<OPTIONAL>>
@@ -4659,15 +4808,42 @@ DEBUG - documentation (NXcalibration.nxdl.xml:/original_axis):
 DEBUG - 
              Vector containing the data coordinates in the original uncalibrated axis
         
-DEBUG - ===== GROUP (//entry/process/kx_calibration [NXmpes::/NXentry/NXprocess/NXcalibration]): <HDF5 group "/entry/process/kx_calibration" (3 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - ===== FIELD (//entry/process/energy_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
+DEBUG - value: b'energy' 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
 DEBUG - classes:
-NXprocess.nxdl.xml:/CALIBRATION
+NXprocess_mpes.nxdl.xml:/energy_calibration/physical_quantity
+NXcalibration.nxdl.xml:/physical_quantity
+DEBUG - <<OPTIONAL>>
+DEBUG - enumeration (NXprocess_mpes.nxdl.xml:/energy_calibration/physical_quantity):
+DEBUG - -> energy
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/energy_calibration/physical_quantity):
+DEBUG - 
+DEBUG - documentation (NXcalibration.nxdl.xml:/physical_quantity):
+DEBUG - 
+             The physical quantity of the calibration, e.g.,
+             energy, momentum, time, etc.
+        
+DEBUG - ===== GROUP (//entry/process/kx_calibration [NXmpes::/NXentry/NXprocess_mpes/NXcalibration]): <HDF5 group "/entry/process/kx_calibration" (4 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration
+NXprocess_mpes.nxdl.xml:/kN_calibration
 NXcalibration.nxdl.xml:
 DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXprocess.nxdl.xml:/CALIBRATION):
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration):
 DEBUG - 
-             Describes the operations of calibration procedures, e.g. axis calibrations.
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration):
+DEBUG - 
+             Calibration event on a k-space axis.
+             
+             It is envisioned that the individual calibrations for each coordinate are
+             stored as kx_calibration, ky_calibration, kz_calibration, in accordance
+             with the axis name definitions in NXdata_mpes.
+             
+             It is also possible to have k_parallel_calibration and k_perp_calibration if
+             the momentum axes are defined as k_parallel and k_perp for the parallel and
+             perpendicular momenta, respectively.
         
 DEBUG - documentation (NXcalibration.nxdl.xml:):
 DEBUG - 
@@ -4675,25 +4851,34 @@ DEBUG -
     
 DEBUG - ===== ATTRS (//entry/process/kx_calibration@NX_class)
 DEBUG - value: NXcalibration 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
-NXprocess.nxdl.xml:/CALIBRATION
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration
+NXprocess_mpes.nxdl.xml:/kN_calibration
 NXcalibration.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/kx_calibration/calibrated_axis): <HDF5 dataset "calibrated_axis": shape (512,), type "<f8">
 DEBUG - value: [-2.68021375 -2.66974416 -2.65927458 -2.64880499 -2.63833541 -2.62786582 ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis
 NXcalibration.nxdl.xml:/calibrated_axis
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis):
+DEBUG - 
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis):
+DEBUG - 
+                 This is the calibrated k-space axis to be used for data plotting.
+            
 DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
 DEBUG - ===== FIELD (//entry/process/kx_calibration/offset): <HDF5 dataset "offset": shape (), type "<f8">
 DEBUG - value: 256.0 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/offset
 DEBUG - <<OPTIONAL>>
@@ -4702,9 +4887,25 @@ DEBUG -
              For linear calibration. Offset parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== FIELD (//entry/process/kx_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
+DEBUG - value: b'momentum' 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
+DEBUG - classes:
+NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity
+NXcalibration.nxdl.xml:/physical_quantity
+DEBUG - <<OPTIONAL>>
+DEBUG - enumeration (NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity):
+DEBUG - -> momentum
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity):
+DEBUG - 
+DEBUG - documentation (NXcalibration.nxdl.xml:/physical_quantity):
+DEBUG - 
+             The physical quantity of the calibration, e.g.,
+             energy, momentum, time, etc.
+        
 DEBUG - ===== FIELD (//entry/process/kx_calibration/scaling): <HDF5 dataset "scaling": shape (), type "<f8">
 DEBUG - value: 0.01046958495673419 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/scaling
 DEBUG - <<OPTIONAL>>
@@ -4713,15 +4914,26 @@ DEBUG -
              For linear calibration. Scaling parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
-DEBUG - ===== GROUP (//entry/process/ky_calibration [NXmpes::/NXentry/NXprocess/NXcalibration]): <HDF5 group "/entry/process/ky_calibration" (3 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - ===== GROUP (//entry/process/ky_calibration [NXmpes::/NXentry/NXprocess_mpes/NXcalibration]): <HDF5 group "/entry/process/ky_calibration" (4 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
-NXprocess.nxdl.xml:/CALIBRATION
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration
+NXprocess_mpes.nxdl.xml:/kN_calibration
 NXcalibration.nxdl.xml:
 DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXprocess.nxdl.xml:/CALIBRATION):
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration):
 DEBUG - 
-             Describes the operations of calibration procedures, e.g. axis calibrations.
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration):
+DEBUG - 
+             Calibration event on a k-space axis.
+             
+             It is envisioned that the individual calibrations for each coordinate are
+             stored as kx_calibration, ky_calibration, kz_calibration, in accordance
+             with the axis name definitions in NXdata_mpes.
+             
+             It is also possible to have k_parallel_calibration and k_perp_calibration if
+             the momentum axes are defined as k_parallel and k_perp for the parallel and
+             perpendicular momenta, respectively.
         
 DEBUG - documentation (NXcalibration.nxdl.xml:):
 DEBUG - 
@@ -4729,25 +4941,34 @@ DEBUG -
     
 DEBUG - ===== ATTRS (//entry/process/ky_calibration@NX_class)
 DEBUG - value: NXcalibration 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
-NXprocess.nxdl.xml:/CALIBRATION
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration
+NXprocess_mpes.nxdl.xml:/kN_calibration
 NXcalibration.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/ky_calibration/calibrated_axis): <HDF5 dataset "calibrated_axis": shape (512,), type "<f8">
 DEBUG - value: [-2.68021375 -2.66974416 -2.65927458 -2.64880499 -2.63833541 -2.62786582 ...
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis
 NXcalibration.nxdl.xml:/calibrated_axis
-DEBUG - <<OPTIONAL>>
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis):
+DEBUG - 
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis):
+DEBUG - 
+                 This is the calibrated k-space axis to be used for data plotting.
+            
 DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
 DEBUG - ===== FIELD (//entry/process/ky_calibration/offset): <HDF5 dataset "offset": shape (), type "<f8">
 DEBUG - value: 256.0 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/offset
 DEBUG - <<OPTIONAL>>
@@ -4756,9 +4977,25 @@ DEBUG -
              For linear calibration. Offset parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== FIELD (//entry/process/ky_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
+DEBUG - value: b'momentum' 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
+DEBUG - classes:
+NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity
+NXcalibration.nxdl.xml:/physical_quantity
+DEBUG - <<OPTIONAL>>
+DEBUG - enumeration (NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity):
+DEBUG - -> momentum
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/kN_calibration/physical_quantity):
+DEBUG - 
+DEBUG - documentation (NXcalibration.nxdl.xml:/physical_quantity):
+DEBUG - 
+             The physical quantity of the calibration, e.g.,
+             energy, momentum, time, etc.
+        
 DEBUG - ===== FIELD (//entry/process/ky_calibration/scaling): <HDF5 dataset "scaling": shape (), type "<f8">
 DEBUG - value: 0.01046958495673419 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
 DEBUG - classes:
 NXcalibration.nxdl.xml:/scaling
 DEBUG - <<OPTIONAL>>
@@ -4767,13 +5004,13 @@ DEBUG -
              For linear calibration. Scaling parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
-DEBUG - ===== GROUP (//entry/process/registration [NXmpes::/NXentry/NXprocess/NXregistration]): <HDF5 group "/entry/process/registration" (2 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration']
+DEBUG - ===== GROUP (//entry/process/registration [NXmpes::/NXentry/NXprocess_mpes/NXregistration]): <HDF5 group "/entry/process/registration" (2 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration']
 DEBUG - classes:
-NXprocess.nxdl.xml:/REGISTRATION
+NXprocess_mpes.nxdl.xml:/REGISTRATION
 NXregistration.nxdl.xml:
 DEBUG - <<OPTIONAL>>
-DEBUG - documentation (NXprocess.nxdl.xml:/REGISTRATION):
+DEBUG - documentation (NXprocess_mpes.nxdl.xml:/REGISTRATION):
 DEBUG - 
              Describes the operations of image registration
         
@@ -4783,15 +5020,15 @@ DEBUG -
     
 DEBUG - ===== ATTRS (//entry/process/registration@NX_class)
 DEBUG - value: NXregistration 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration']
 DEBUG - classes:
-NXprocess.nxdl.xml:/REGISTRATION
+NXprocess_mpes.nxdl.xml:/REGISTRATION
 NXregistration.nxdl.xml:
 DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/registration/depends_on): <HDF5 dataset "depends_on": shape (), type "|O">
 DEBUG - value: b'/entry/process/registration/tranformations/rot_z' 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NX_CHAR']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NX_CHAR']
 DEBUG - classes:
 NXregistration.nxdl.xml:/depends_on
 DEBUG - <<OPTIONAL>>
@@ -4800,8 +5037,8 @@ DEBUG -
              Specifies the position by pointing to the last transformation in the
              transformation chain in the NXtransformations group.
         
-DEBUG - ===== GROUP (//entry/process/registration/tranformations [NXmpes::/NXentry/NXprocess/NXregistration/NXtransformations]): <HDF5 group "/entry/process/registration/tranformations" (3 members)>
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations']
+DEBUG - ===== GROUP (//entry/process/registration/tranformations [NXmpes::/NXentry/NXprocess_mpes/NXregistration/NXtransformations]): <HDF5 group "/entry/process/registration/tranformations" (3 members)>
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations']
 DEBUG - classes:
 NXregistration.nxdl.xml:/TRANSFORMATIONS
 NXtransformations.nxdl.xml:
@@ -5045,7 +5282,7 @@ DEBUG -
 	
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations@NX_class)
 DEBUG - value: NXtransformations 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations']
 DEBUG - classes:
 NXregistration.nxdl.xml:/TRANSFORMATIONS
 NXtransformations.nxdl.xml:
@@ -5053,7 +5290,7 @@ DEBUG - @NX_class [NX_CHAR]
 DEBUG - 
 DEBUG - ===== FIELD (//entry/process/registration/tranformations/rot_z): <HDF5 dataset "rot_z": shape (), type "<f8">
 DEBUG - value: -1.0 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - <<OPTIONAL>>
@@ -5071,7 +5308,7 @@ DEBUG -
 		
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/rot_z@depends_on)
 DEBUG - value: trans_y 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@depends_on - [NX_CHAR]
@@ -5083,7 +5320,7 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/rot_z@offset)
 DEBUG - value: [256. 256.   0.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@offset - [NX_NUMBER]
@@ -5096,7 +5333,7 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/rot_z@transformation_type)
 DEBUG - value: rotation 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@transformation_type - [NX_CHAR]
@@ -5117,13 +5354,13 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/rot_z@units)
 DEBUG - value: degrees 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@units [NX_TRANSFORMATION]
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/rot_z@vector)
 DEBUG - value: [0. 0. 1.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@vector - [NX_NUMBER]
@@ -5140,7 +5377,7 @@ DEBUG -
 			
 DEBUG - ===== FIELD (//entry/process/registration/tranformations/trans_x): <HDF5 dataset "trans_x": shape (), type "<f8">
 DEBUG - value: 43.0 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - <<OPTIONAL>>
@@ -5158,7 +5395,7 @@ DEBUG -
 		
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_x@depends_on)
 DEBUG - value: . 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@depends_on - [NX_CHAR]
@@ -5170,7 +5407,7 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_x@transformation_type)
 DEBUG - value: translation 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@transformation_type - [NX_CHAR]
@@ -5191,13 +5428,13 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_x@units)
 DEBUG - value: pixels 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@units [NX_TRANSFORMATION]
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_x@vector)
 DEBUG - value: [1. 0. 0.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@vector - [NX_NUMBER]
@@ -5214,7 +5451,7 @@ DEBUG -
 			
 DEBUG - ===== FIELD (//entry/process/registration/tranformations/trans_y): <HDF5 dataset "trans_y": shape (), type "<f8">
 DEBUG - value: 55.0 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - <<OPTIONAL>>
@@ -5232,7 +5469,7 @@ DEBUG -
 		
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_y@depends_on)
 DEBUG - value: trans_x 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@depends_on - [NX_CHAR]
@@ -5244,7 +5481,7 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_y@transformation_type)
 DEBUG - value: translation 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@transformation_type - [NX_CHAR]
@@ -5265,13 +5502,13 @@ DEBUG -
 			
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_y@units)
 DEBUG - value: pixels 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@units [NX_TRANSFORMATION]
 DEBUG - ===== ATTRS (//entry/process/registration/tranformations/trans_y@vector)
 DEBUG - value: [0. 1. 0.] 
-DEBUG - classpath: ['NXentry', 'NXprocess', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration', 'NXtransformations', 'NX_NUMBER']
 DEBUG - classes:
 NXtransformations.nxdl.xml:/AXISNAME
 DEBUG - NXtransformations.nxdl.xml:/AXISNAME@vector - [NX_NUMBER]
@@ -5575,6 +5812,85 @@ DEBUG - classpath: ['NXentry', 'NXsample', 'NXenvironment', 'NXsensor', 'NX_FLOA
 DEBUG - classes:
 NXsensor.nxdl.xml:/value
 DEBUG - NXsensor.nxdl.xml:/value@units [NX_ANY]
+DEBUG - ===== GROUP (//entry/sample/history [NXmpes::/NXentry/NXsample/NXhistory]): <HDF5 group "/entry/sample/history" (1 members)>
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/SAMPLE/history
+NXsample.nxdl.xml:/history
+NXhistory.nxdl.xml:
+DEBUG - <<RECOMMENDED>>
+DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/SAMPLE/history):
+DEBUG - 
+                     A set of activities that occurred to the sample prior to/during photoemission
+                     experiment.
+                
+DEBUG - documentation (NXsample.nxdl.xml:/history):
+DEBUG - 
+             A set of physical processes that occurred to the sample prior/during experiment.
+        
+DEBUG - documentation (NXhistory.nxdl.xml:):
+DEBUG - 
+         A set of activities that occurred to a physical entity prior/during experiment.
+         
+         Ideally, a full report of the previous operations (or links to a chain of operations).
+         Alternatively, notes allow for additional descriptors in any format.
+    
+DEBUG - ===== ATTRS (//entry/sample/history@NX_class)
+DEBUG - value: NXhistory 
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/SAMPLE/history
+NXsample.nxdl.xml:/history
+NXhistory.nxdl.xml:
+DEBUG - @NX_class [NX_CHAR]
+DEBUG - 
+DEBUG - ===== GROUP (//entry/sample/history/notes [NXmpes::/NXentry/NXsample/NXhistory/NXnote]): <HDF5 group "/entry/sample/history/notes" (2 members)>
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory', 'NXnote']
+DEBUG - classes:
+NXhistory.nxdl.xml:/notes
+NXnote.nxdl.xml:
+DEBUG - <<OPTIONAL>>
+DEBUG - documentation (NXhistory.nxdl.xml:/notes):
+DEBUG - 
+             A descriptor to keep track of the treatment of the physical entity before or during the
+             experiment (NXnote allows to add pictures, audio, movies). Alternatively, a
+             reference to the location or a unique identifier or other metadata file. In the
+             case these are not available, free-text description.
+             This should only be used in case that there is no rigorous description
+             using the base classes above. This field can also be used to pull in any activities
+             that are not well described by an existing base class definition.
+        
+DEBUG - documentation (NXnote.nxdl.xml:):
+DEBUG - 
+		Any additional freeform information not covered by the other base classes.
+		
+		This class can be used to store additional information in a 
+		NeXus file e.g. pictures, movies, audio, additional text logs
+	
+DEBUG - ===== ATTRS (//entry/sample/history/notes@NX_class)
+DEBUG - value: NXnote 
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory', 'NXnote']
+DEBUG - classes:
+NXhistory.nxdl.xml:/notes
+NXnote.nxdl.xml:
+DEBUG - @NX_class [NX_CHAR]
+DEBUG - 
+DEBUG - ===== FIELD (//entry/sample/history/notes/description): <HDF5 dataset "description": shape (), type "|O">
+DEBUG - value: b'Cleaved' 
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory', 'NXnote', 'NX_CHAR']
+DEBUG - classes:
+NXnote.nxdl.xml:/description
+DEBUG - <<OPTIONAL>>
+DEBUG - documentation (NXnote.nxdl.xml:/description):
+DEBUG - Title of an image or other details of the note
+DEBUG - ===== FIELD (//entry/sample/history/notes/type): <HDF5 dataset "type": shape (), type "|O">
+DEBUG - value: b'text/plain' 
+DEBUG - classpath: ['NXentry', 'NXsample', 'NXhistory', 'NXnote', 'NX_CHAR']
+DEBUG - classes:
+NXnote.nxdl.xml:/type
+DEBUG - <<OPTIONAL>>
+DEBUG - documentation (NXnote.nxdl.xml:/type):
+DEBUG - Mime content type of note data field e.g. image/jpeg, text/plain, text/html
 DEBUG - ===== FIELD (//entry/sample/name): <HDF5 dataset "name": shape (), type "|O">
 DEBUG - value: b'MoTe2' 
 DEBUG - classpath: ['NXentry', 'NXsample', 'NX_CHAR']
@@ -5598,43 +5914,6 @@ DEBUG - documentation (NXsample.nxdl.xml:/preparation_date):
 DEBUG - 
              Date of preparation of the sample
         
-DEBUG - ===== GROUP (//entry/sample/sample_history [NXmpes::/NXentry/NXsample/NXsample_history]): <HDF5 group "/entry/sample/sample_history" (1 members)>
-DEBUG - classpath: ['NXentry', 'NXsample', 'NXsample_history']
-DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/SAMPLE/sample_history
-NXsample.nxdl.xml:/SAMPLE_HISTORY
-NXsample_history.nxdl.xml:
-DEBUG - <<RECOMMENDED>>
-DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/SAMPLE/sample_history):
-DEBUG - 
-                     A set of activities that occurred to the sample prior to/during photoemission
-                     experiment.
-                
-DEBUG - documentation (NXsample.nxdl.xml:/SAMPLE_HISTORY):
-DEBUG - 
-             A set of physical processes that occurred to the sample prior/during experiment.
-        
-DEBUG - documentation (NXsample_history.nxdl.xml:):
-DEBUG - 
-         A set of activities that occurred to  the sample prior/during experiment.
-         
-         Ideally, a full report of the previous operations (or links to a chain of operations).
-         Alternatively, notes allow for additional descriptors in any format.
-    
-DEBUG - ===== ATTRS (//entry/sample/sample_history@NX_class)
-DEBUG - value: NXsample_history 
-DEBUG - classpath: ['NXentry', 'NXsample', 'NXsample_history']
-DEBUG - classes:
-NXmpes.nxdl.xml:/ENTRY/SAMPLE/sample_history
-NXsample.nxdl.xml:/SAMPLE_HISTORY
-NXsample_history.nxdl.xml:
-DEBUG - @NX_class [NX_CHAR]
-DEBUG - 
-DEBUG - ===== FIELD (//entry/sample/sample_history/notes): <HDF5 dataset "notes": shape (), type "|O">
-DEBUG - value: b'Cleaved' 
-DEBUG - classpath: ['NXentry', 'NXsample', 'NXsample_history']
-DEBUG - NOT IN SCHEMA
-DEBUG - 
 DEBUG - ===== FIELD (//entry/sample/situation): <HDF5 dataset "situation": shape (), type "|O">
 DEBUG - value: b'vacuum' 
 DEBUG - classpath: ['NXentry', 'NXsample', 'NX_CHAR']
@@ -6649,13 +6928,13 @@ DEBUG - documentation (NXentry.nxdl.xml:/USER):
 DEBUG - 
 DEBUG - documentation (NXuser.nxdl.xml:):
 DEBUG - 
-		Contact information for a user.  
-		
-		The format allows more 
-		than one user with the same affiliation and contact information, 
-		but a second :ref:`NXuser` group should be used if they have different 
-		affiliations, etc.
-	
+         Contact information for a user.
+         
+         The format allows more
+         than one user with the same affiliation and contact information,
+         but a second :ref:`NXuser` group should be used if they have different
+         affiliations, etc.
+    
 DEBUG - ===== ATTRS (//entry/user@NX_class)
 DEBUG - value: NXuser 
 DEBUG - classpath: ['NXentry', 'NXuser']
@@ -6672,7 +6951,9 @@ DEBUG - classes:
 NXuser.nxdl.xml:/address
 DEBUG - <<OPTIONAL>>
 DEBUG - documentation (NXuser.nxdl.xml:/address):
-DEBUG - Address of user
+DEBUG - 
+             Address of user
+        
 DEBUG - ===== FIELD (//entry/user/affiliation): <HDF5 dataset "affiliation": shape (), type "|O">
 DEBUG - value: b'Fritz Haber Institute of the Max Planck Society' 
 DEBUG - classpath: ['NXentry', 'NXuser', 'NX_CHAR']
@@ -6686,7 +6967,9 @@ DEBUG -
                      performed.
                 
 DEBUG - documentation (NXuser.nxdl.xml:/affiliation):
-DEBUG - Affiliation of user
+DEBUG - 
+             Affiliation of user
+        
 DEBUG - ===== FIELD (//entry/user/email): <HDF5 dataset "email": shape (), type "|O">
 DEBUG - value: b'beaulieu@fhi-berlin.mpg.de' 
 DEBUG - classpath: ['NXentry', 'NXuser', 'NX_CHAR']
@@ -6694,7 +6977,9 @@ DEBUG - classes:
 NXuser.nxdl.xml:/email
 DEBUG - <<OPTIONAL>>
 DEBUG - documentation (NXuser.nxdl.xml:/email):
-DEBUG - Email of user
+DEBUG - 
+             Email of user
+        
 DEBUG - ===== FIELD (//entry/user/name): <HDF5 dataset "name": shape (), type "|O">
 DEBUG - value: b'Samuel Beaulieu' 
 DEBUG - classpath: ['NXentry', 'NXuser', 'NX_CHAR']
@@ -6707,7 +6992,9 @@ DEBUG -
                      Name of the user.
                 
 DEBUG - documentation (NXuser.nxdl.xml:/name):
-DEBUG - Name of user responsible for this entry
+DEBUG - 
+             Name of user responsible for this entry
+        
 DEBUG - ===== FIELD (//entry/user/role): <HDF5 dataset "role": shape (), type "|O">
 DEBUG - value: b'Principal Investigator' 
 DEBUG - classpath: ['NXentry', 'NXuser', 'NX_CHAR']
@@ -6716,10 +7003,10 @@ NXuser.nxdl.xml:/role
 DEBUG - <<OPTIONAL>>
 DEBUG - documentation (NXuser.nxdl.xml:/role):
 DEBUG - 
-			Role of user responsible for this entry.
-			Suggested roles are "local_contact", 
-			"principal_investigator", and "proposer"
-		
+             Role of user responsible for this entry.
+             Suggested roles are "local_contact",
+             "principal_investigator", and "proposer"
+        
 DEBUG - ========================
 DEBUG - === Default Plotable ===
 DEBUG - ========================
