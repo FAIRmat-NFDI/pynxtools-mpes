@@ -185,15 +185,16 @@ CONVERT_DICT = {
     "angular_resolution": "RESOLUTION[angular_resolution]/resolution",
     "sample_temperature": "temperature_sensor/value",
     "drain_current": "drain_current_amperemeter/value",
+    "photon_energy": "energy",
 }
 
 REPLACE_NESTED = {
     "SAMPLE[sample]/chemical_formula": "SAMPLE[sample]/SUBSTANCE[substance]/molecular_formula_hill",
-    "source_TYPE[source]/Probe": "sourceTYPE[source_probe]",
-    "source_TYPE[source]/Pump": "sourceTYPE[source_pump]",
-    "beam_TYPE[beam]/Probe": "beamTYPE[beam_probe]",
-    "beam_TYPE[beam]/Pump": "beamTYPE[beam_pump]",
-    "sample_history": "sample_history/notes",
+    "sourceTYPE[source]/Probe": "sourceTYPE[source_probe]",
+    "sourceTYPE[source]/Pump": "sourceTYPE[source_pump]",
+    "beamTYPE[beam]/Probe": "beamTYPE[beam_probe]",
+    "beamTYPE[beam]/Pump": "beamTYPE[beam_pump]",
+    "sample_history": "history/notes/description",
     "ELECTRONANALYSER[electronanalyser]/RESOLUTION[energy_resolution]": (
         "ELECTRONANALYSER[electronanalyser]/energy_resolution"
     ),
