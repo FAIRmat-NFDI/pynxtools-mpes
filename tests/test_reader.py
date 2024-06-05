@@ -9,18 +9,16 @@ from pathlib import Path
 
 import pynxtools.dataconverter.convert as dataconverter
 from pynxtools.dataconverter.convert import get_reader
-from pynxtools.dataconverter.helpers import (
-    generate_template_from_nxdl,
-    validate_data_dict,
-)
+from pynxtools.dataconverter.helpers import generate_template_from_nxdl
 from pynxtools.dataconverter.template import Template
+from pynxtools.dataconverter.validation import validate_dict_against
 from pynxtools.definitions.dev_tools.utils.nxdl_utils import get_nexus_definitions_path
 from pynxtools.nexus import nexus  # noqa: E402 # noqa: E402
 
 from pynxtools_mpes.reader import MPESReader
 
 
-def test_example_data():
+def test_example_data(caplog):
     """
     Test the example data for the stm reader
     """
@@ -44,7 +42,11 @@ def test_example_data():
     read_data = reader().read(template=Template(template), file_paths=input_files)
 
     assert isinstance(read_data, Template)
-    assert validate_data_dict(template, read_data, root)
+    with caplog.at_level(logging.WARNING):
+        assert validate_dict_against("NXmpes", read_data)
+
+    # Ensure there were no warning logs
+    assert not caplog.text
 
 
 def test_mpes_writing(tmp_path):
@@ -103,8 +105,7 @@ def test_shows_correct_warnings():
         template=Template(template), file_paths=tuple(input_files)
     )
 
-    assert validate_data_dict(template, read_data, root)
-    assert not list(read_data.undocumented.keys())
+    assert validate_dict_against("NXmpes", read_data)
 
 
 def test_eln_data(tmp_path):

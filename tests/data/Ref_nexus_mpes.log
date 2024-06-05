@@ -432,6 +432,12 @@ DEBUG - <<RECOMMENDED>>
 DEBUG - Dataset referenced as NXdata AXIS #2
 DEBUG - documentation (NXmpes.nxdl.xml:/ENTRY/data/energy):
 DEBUG - 
+                     Calibrated energy axis.
+                     
+                     This could be a link to either
+                     /entry/process/energy_calibration/calibrated_axis or
+                     /entry/process/energy_correction/calibrated_axis.
+                
 DEBUG - documentation (NXdata.nxdl.xml:/AXISNAME):
 DEBUG - 
              Dimension scale defining an axis of the data.
@@ -457,7 +463,7 @@ DEBUG - classpath: ['NXentry', 'NXdata', 'NX_NUMBER']
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/data/energy
 NXdata.nxdl.xml:/AXISNAME
-DEBUG - NXmpes.nxdl.xml:/ENTRY/data/energy@units - REQUIRED, but undefined unit category
+DEBUG - NXmpes.nxdl.xml:/ENTRY/data/energy@units [NX_ENERGY]
 DEBUG - NXdata.nxdl.xml:/AXISNAME@units - REQUIRED, but undefined unit category
 DEBUG - ===== FIELD (//entry/data/kx): <HDF5 dataset "kx": shape (10,), type "<f8">
 DEBUG - value: [-1.5        -1.16666667 -0.83333333 -0.5        -0.16666667  0.16666667 ...
@@ -2393,6 +2399,12 @@ DEBUG - documentation (NXdetector.nxdl.xml:/sensor_pixels):
 DEBUG - 
              Number of raw active elements in each dimension. Important for swept scans.
         
+DEBUG - ===== ATTRS (//entry/instrument/electronanalyser/detector/sensor_pixels@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NXdetector', 'NX_INT']
+DEBUG - classes:
+NXdetector.nxdl.xml:/sensor_pixels
+DEBUG - NXdetector.nxdl.xml:/sensor_pixels@units [NX_UNITLESS]
 DEBUG - ===== GROUP (//entry/instrument/electronanalyser/device_information [NXmpes::/NXentry/NXinstrument/NXelectronanalyser/NXfabrication]): <HDF5 group "/entry/instrument/electronanalyser/device_information" (2 members)>
 DEBUG - classpath: ['NXentry', 'NXinstrument', 'NXelectronanalyser', 'NXfabrication']
 DEBUG - classes:
@@ -4667,6 +4679,12 @@ DEBUG -
              Column deformation field for general non-rigid distortion corrections. 2D matrix
              holding the column information of the mapping of each original coordinate.
         
+DEBUG - ===== ATTRS (//entry/process/distortion/cdeform_field@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classes:
+NXdistortion.nxdl.xml:/cdeform_field
+DEBUG - NXdistortion.nxdl.xml:/cdeform_field@units [NX_UNITLESS]
 DEBUG - ===== FIELD (//entry/process/distortion/original_centre): <HDF5 dataset "original_centre": shape (2,), type "<f8">
 DEBUG - value: [203. 215.] 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
@@ -4678,6 +4696,12 @@ DEBUG -
              For symmetry-guided distortion correction. Here we record the coordinates of the
              symmetry centre point.
         
+DEBUG - ===== ATTRS (//entry/process/distortion/original_centre@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classes:
+NXdistortion.nxdl.xml:/original_centre
+DEBUG - NXdistortion.nxdl.xml:/original_centre@units [NX_UNITLESS]
 DEBUG - ===== FIELD (//entry/process/distortion/original_points): <HDF5 dataset "original_points": shape (6, 2), type "<f8">
 DEBUG - value: [166. 283.] 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
@@ -4689,6 +4713,12 @@ DEBUG -
              For symmetry-guided distortion correction. Here we record the coordinates of the
              relevant symmetry points.
         
+DEBUG - ===== ATTRS (//entry/process/distortion/original_points@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classes:
+NXdistortion.nxdl.xml:/original_points
+DEBUG - NXdistortion.nxdl.xml:/original_points@units [NX_UNITLESS]
 DEBUG - ===== FIELD (//entry/process/distortion/rdeform_field): <HDF5 dataset "rdeform_field": shape (512, 512), type "<f8">
 DEBUG - value: [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. ...
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
@@ -4700,6 +4730,12 @@ DEBUG -
              Row deformation field for general non-rigid distortion corrections. 2D matrix
              holding the row information of the mapping of each original coordinate.
         
+DEBUG - ===== ATTRS (//entry/process/distortion/rdeform_field@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_FLOAT']
+DEBUG - classes:
+NXdistortion.nxdl.xml:/rdeform_field
+DEBUG - NXdistortion.nxdl.xml:/rdeform_field@units [NX_UNITLESS]
 DEBUG - ===== FIELD (//entry/process/distortion/symmetry): <HDF5 dataset "symmetry": shape (), type "<i8">
 DEBUG - value: 6 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_INT']
@@ -4714,6 +4750,12 @@ DEBUG -
              
                .. _symmetry-guided distortion correction: https://www.sciencedirect.com/science/article/abs/pii/S0304399118303474?via%3Dihub
         
+DEBUG - ===== ATTRS (//entry/process/distortion/symmetry@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXdistortion', 'NX_INT']
+DEBUG - classes:
+NXdistortion.nxdl.xml:/symmetry
+DEBUG - NXdistortion.nxdl.xml:/symmetry@units [NX_UNITLESS]
 DEBUG - ===== GROUP (//entry/process/energy_calibration [NXmpes::/NXentry/NXprocess_mpes/NXcalibration]): <HDF5 group "/entry/process/energy_calibration" (5 members)>
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
@@ -4763,6 +4805,16 @@ DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
+DEBUG - ===== ATTRS (//entry/process/energy_calibration/calibrated_axis@units)
+DEBUG - value: eV 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/energy_calibration/calibrated_axis
+NXcalibration.nxdl.xml:/calibrated_axis
+DEBUG - NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/energy_calibration/calibrated_axis@units - REQUIRED, but undefined unit category
+DEBUG - NXprocess_mpes.nxdl.xml:/energy_calibration/calibrated_axis@units [NX_ENERGY]
+DEBUG - NXcalibration.nxdl.xml:/calibrated_axis@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/energy_calibration/coefficients): <HDF5 dataset "coefficients": shape (3,), type "<f8">
 DEBUG - value: [ 6.33783929e-01  8.68180227e-07 -2.41647784e+01] 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
@@ -4775,6 +4827,12 @@ DEBUG -
              to a set of features (peaks) at well defined energy positions to determine
              E(TOF). Here we can store the array of fit coefficients.
         
+DEBUG - ===== ATTRS (//entry/process/energy_calibration/coefficients@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/coefficients
+DEBUG - NXcalibration.nxdl.xml:/coefficients@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/energy_calibration/fit_function): <HDF5 dataset "fit_function": shape (), type "|O">
 DEBUG - value: b'(a0/(x0-a1))**2 + a2' 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
@@ -4808,6 +4866,12 @@ DEBUG - documentation (NXcalibration.nxdl.xml:/original_axis):
 DEBUG - 
              Vector containing the data coordinates in the original uncalibrated axis
         
+DEBUG - ===== ATTRS (//entry/process/energy_calibration/original_axis@units)
+DEBUG - value: ns 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/original_axis
+DEBUG - NXcalibration.nxdl.xml:/original_axis@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/energy_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
 DEBUG - value: b'energy' 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
@@ -4876,6 +4940,16 @@ DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
+DEBUG - ===== ATTRS (//entry/process/kx_calibration/calibrated_axis@units)
+DEBUG - value: 1/angstrom 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis
+NXcalibration.nxdl.xml:/calibrated_axis
+DEBUG - NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis@units - REQUIRED, but undefined unit category
+DEBUG - NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis@units [NX_WAVENUMBER]
+DEBUG - NXcalibration.nxdl.xml:/calibrated_axis@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/kx_calibration/offset): <HDF5 dataset "offset": shape (), type "<f8">
 DEBUG - value: 256.0 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
@@ -4887,6 +4961,12 @@ DEBUG -
              For linear calibration. Offset parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== ATTRS (//entry/process/kx_calibration/offset@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/offset
+DEBUG - NXcalibration.nxdl.xml:/offset@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/kx_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
 DEBUG - value: b'momentum' 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
@@ -4914,6 +4994,12 @@ DEBUG -
              For linear calibration. Scaling parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== ATTRS (//entry/process/kx_calibration/scaling@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/scaling
+DEBUG - NXcalibration.nxdl.xml:/scaling@units [NX_ANY]
 DEBUG - ===== GROUP (//entry/process/ky_calibration [NXmpes::/NXentry/NXprocess_mpes/NXcalibration]): <HDF5 group "/entry/process/ky_calibration" (4 members)>
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration']
 DEBUG - classes:
@@ -4966,6 +5052,16 @@ DEBUG - documentation (NXcalibration.nxdl.xml:/calibrated_axis):
 DEBUG - 
              A vector representing the axis after calibration, matching the data length
         
+DEBUG - ===== ATTRS (//entry/process/ky_calibration/calibrated_axis@units)
+DEBUG - value: 1/angstrom 
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis
+NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis
+NXcalibration.nxdl.xml:/calibrated_axis
+DEBUG - NXmpes.nxdl.xml:/ENTRY/PROCESS_MPES/kN_calibration/calibrated_axis@units - REQUIRED, but undefined unit category
+DEBUG - NXprocess_mpes.nxdl.xml:/kN_calibration/calibrated_axis@units [NX_WAVENUMBER]
+DEBUG - NXcalibration.nxdl.xml:/calibrated_axis@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/ky_calibration/offset): <HDF5 dataset "offset": shape (), type "<f8">
 DEBUG - value: 256.0 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
@@ -4977,6 +5073,12 @@ DEBUG -
              For linear calibration. Offset parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== ATTRS (//entry/process/ky_calibration/offset@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/offset
+DEBUG - NXcalibration.nxdl.xml:/offset@units [NX_ANY]
 DEBUG - ===== FIELD (//entry/process/ky_calibration/physical_quantity): <HDF5 dataset "physical_quantity": shape (), type "|O">
 DEBUG - value: b'momentum' 
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_CHAR']
@@ -5004,6 +5106,12 @@ DEBUG -
              For linear calibration. Scaling parameter.
              This should yield the relation `calibrated_axis` = `scaling` * `original_axis` + `offset`.
         
+DEBUG - ===== ATTRS (//entry/process/ky_calibration/scaling@units)
+DEBUG - value:  
+DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXcalibration', 'NX_FLOAT']
+DEBUG - classes:
+NXcalibration.nxdl.xml:/scaling
+DEBUG - NXcalibration.nxdl.xml:/scaling@units [NX_ANY]
 DEBUG - ===== GROUP (//entry/process/registration [NXmpes::/NXentry/NXprocess_mpes/NXregistration]): <HDF5 group "/entry/process/registration" (2 members)>
 DEBUG - classpath: ['NXentry', 'NXprocess_mpes', 'NXregistration']
 DEBUG - classes:
