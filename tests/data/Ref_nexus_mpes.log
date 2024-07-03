@@ -535,14 +535,18 @@ DEBUG -
              
              *It is advised* to use :ref:`NXsubentry`, instead, as the overlay position.
         
-DEBUG - ===== ATTRS (//entry/definition@url)
+DEBUG - ===== ATTRS (//entry/definition@URL)
 DEBUG - value: https://github.com/FAIRmat-NFDI/nexus_definitions/blob/0682943ba 
 DEBUG - classpath: ['NXentry', 'NX_CHAR']
 DEBUG - classes:
 NXmpes.nxdl.xml:/ENTRY/definition
 NXentry.nxdl.xml:/definition
-DEBUG - @url - IS NOT IN SCHEMA
+DEBUG - NXentry.nxdl.xml:/definition@URL - [NX_CHAR]
+DEBUG - <<OPTIONAL>>
+DEBUG - documentation (NXentry.nxdl.xml:/definition/URL):
 DEBUG - 
+                 URL of NXDL file
+            
 DEBUG - ===== ATTRS (//entry/definition@version)
 DEBUG - value: None 
 DEBUG - classpath: ['NXentry', 'NX_CHAR']
