@@ -13,7 +13,7 @@ from pynxtools.dataconverter.helpers import generate_template_from_nxdl
 from pynxtools.dataconverter.template import Template
 from pynxtools.dataconverter.validation import validate_dict_against
 from pynxtools.definitions.dev_tools.utils.nxdl_utils import get_nexus_definitions_path
-from pynxtools.nexus import nexus  # noqa: E402 # noqa: E402
+from pynxtools.nexus.nexus import HandleNexus
 
 from pynxtools_mpes.reader import MPESReader
 
@@ -73,7 +73,7 @@ def test_mpes_writing(tmp_path):
     handler.setLevel(logging.DEBUG)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
-    nexus_helper = nexus.HandleNexus(logger, test_data, None, None)
+    nexus_helper = HandleNexus(logger, test_data, None, None)
     nexus_helper.process_nexus_master_file(None)
     with open(
         os.path.join(tmp_path, "mpes_test.log"), "r", encoding="utf-8"
