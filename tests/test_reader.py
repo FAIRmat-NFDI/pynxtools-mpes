@@ -8,6 +8,7 @@ import xml.etree.ElementTree as ET
 from pathlib import Path
 
 import pynxtools.dataconverter.convert as dataconverter
+from numpy.testing import assert_equal
 from pynxtools.dataconverter.convert import get_reader
 from pynxtools.dataconverter.helpers import generate_template_from_nxdl
 from pynxtools.dataconverter.template import Template
@@ -78,10 +79,20 @@ def test_mpes_writing(tmp_path):
     with open(
         os.path.join(tmp_path, "mpes_test.log"), "r", encoding="utf-8"
     ) as logfile:
-        log = logfile.readlines()
+        log = []
+        for line in logfile.readlines():
+            if not line.startswith(
+                "DEBUG - value: https://github.com/FAIRmat-NFDI/nexus_definitions/blob/"
+            ):
+                log.append(line)
     with open(dir_path / "Ref_nexus_mpes.log", "r", encoding="utf-8") as logfile:
-        ref_log = logfile.readlines()
-    assert log == ref_log
+        ref_log = []
+        for line in logfile.readlines():
+            if not line.startswith(
+                "DEBUG - value: https://github.com/FAIRmat-NFDI/nexus_definitions/blob/"
+            ):
+                ref_log.append(line)
+    assert_equal(log, ref_log)
 
 
 def test_shows_correct_warnings():
