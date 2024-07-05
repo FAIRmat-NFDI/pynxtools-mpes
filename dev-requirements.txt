@@ -71,7 +71,7 @@ pip-tools==7.4.0
     # via pynxtools-mpes (pyproject.toml)
 pluggy==1.4.0
     # via pytest
-pynxtools==0.3.2
+pynxtools==0.4.0
     # via pynxtools-mpes (pyproject.toml)
 pyparsing==3.1.1
     # via matplotlib
