@@ -27,7 +27,7 @@ dependencies = [
     "h5py>=3.6.0",
     "PyYAML>=6.0",
     "xarray>=0.20.2",
-    "pynxtools>=0.3.3"
+    "pynxtools>=0.4.0"
 ]
 
 [project.urls]
