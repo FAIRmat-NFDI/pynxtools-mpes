@@ -34,14 +34,14 @@ def test_eln_data(tmp_path):
     """Check if the subsections in the eln_data.yml file work."""
     dir_path = Path(__file__).parent / "data"
     dataconverter.convert(
-        (
+        input_file=(
             str(dir_path / "xarray_saved_small_calibration.h5"),
             str(dir_path / "config_file.json"),
             str(dir_path / "eln_data.yaml"),
         ),
-        "mpes",
-        "NXmpes",
-        os.path.join(tmp_path, "mpes.small_test.nxs"),
-        False,
-        False,
+        reader="mpes",
+        nxdl="NXmpes",
+        output=os.path.join(tmp_path, "mpes.small_test.nxs"),
+        skip_verify=False,
+        ignore_undocumented=False,
     )
