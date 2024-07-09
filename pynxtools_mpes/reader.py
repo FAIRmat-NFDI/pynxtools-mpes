@@ -330,7 +330,13 @@ class MPESReader(BaseReader):
 
         fill_data_indices_in_config(config_file_dict, x_array_loaded)
 
+        optional_groups_to_remove = []
+
         for key, value in config_file_dict.items():
+            if isinstance(value, str) and "!" in value and value.index("!") == 0:
+                optional_groups_to_remove.append(key)
+                value = value[1:]
+
             if isinstance(value, str) and ":" in value:
                 precursor = value.split(":")[0]
                 value = value[value.index(":") + 1 :]
@@ -383,6 +389,18 @@ class MPESReader(BaseReader):
         # giving preference to the ELN metadata
         for key, value in eln_data_dict.items():
             template[key] = value
+
+        # remove groups that have required children missing
+        for key in optional_groups_to_remove:
+            if key not in template:
+                group_to_delete = "/".join(key.split("/")[:-1])
+                print(
+                    f"[info]: Required element {key} not provided. "
+                    f"Removing the parent group {group_to_delete}.",
+                )
+                for temp_key in template.keys():
+                    if temp_key.find(group_to_delete) == 0:
+                        del template[temp_key]
 
         return template
 
