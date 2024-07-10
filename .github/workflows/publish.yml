@@ -27,5 +27,7 @@ jobs:
         pip install build
     - name: Build package
       run: python -m build
+    - name: git status
+      run: git status
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
