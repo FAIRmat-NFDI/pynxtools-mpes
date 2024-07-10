@@ -47,8 +47,6 @@ dev = [
 mpes = "pynxtools_mpes.reader:MPESReader"
 
 [tool.setuptools_scm]
-version_scheme = "no-guess-dev"
-local_scheme = "node-and-date"
 
 [tool.ruff]
 include = ["pynxtools_mpes/*.py", "tests/*.py"]
