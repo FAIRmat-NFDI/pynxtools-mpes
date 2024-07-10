@@ -18,6 +18,7 @@
 """MPES reader implementation for the DataConverter."""
 
 import errno
+import logging
 import os
 from functools import reduce
 from typing import Any, Tuple, Union
@@ -32,6 +33,9 @@ from pynxtools.dataconverter.readers.utils import (
     flatten_and_replace,
     parse_flatten_json,
 )
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 DEFAULT_UNITS = {
     "X": "step",
@@ -333,7 +337,7 @@ class MPESReader(BaseReader):
         optional_groups_to_remove = []
 
         for key, value in config_file_dict.items():
-            if isinstance(value, str) and "!" in value and value.index("!") == 0:
+            if isinstance(value, str) and value.startswith("!"):
                 optional_groups_to_remove.append(key)
                 value = value[1:]
 
@@ -392,14 +396,14 @@ class MPESReader(BaseReader):
 
         # remove groups that have required children missing
         for key in optional_groups_to_remove:
-            if key not in template:
-                group_to_delete = "/".join(key.split("/")[:-1])
-                print(
+            if template.get(key) is None:
+                group_to_delete = key.rsplit("/", 1)[0]
+                logger.info(
                     f"[info]: Required element {key} not provided. "
                     f"Removing the parent group {group_to_delete}.",
                 )
                 for temp_key in template.keys():
-                    if temp_key.find(group_to_delete) == 0:
+                    if temp_key.startswith(group_to_delete):
                         del template[temp_key]
 
         return template
