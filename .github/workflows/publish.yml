@@ -15,8 +15,8 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v4
-    - name: Fetch tags
-      run: git fetch --tags --prune
+      with:
+        fetch-tags: true
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
@@ -24,10 +24,9 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
+        git reset --hard HEAD
         pip install build
     - name: Build package
       run: python -m build
-    - name: git status
-      run: git status
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1

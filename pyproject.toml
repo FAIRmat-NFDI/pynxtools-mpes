@@ -46,6 +46,9 @@ dev = [
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
 
+[tool.setuptools]
+packages = ["pynxtools_mpes"]
+
 [tool.setuptools_scm]
 
 [tool.ruff]
