@@ -42,7 +42,7 @@
       "physical_quantity": "momentum",
       "type": "estimated"
     },
-    "pressure_gauge_chamber": {
+    "pressure_gauge": {
       "name": "sample_chamber_pressure",
       "measurement": "pressure",
       "value": "@attrs:metadata/file/trARPES:XGS600:PressureAC:P_RD",
@@ -273,7 +273,7 @@
       "temperature_sensor": "@link:/entry/instrument/manipulator/temperature_sensor"
     },
     "gas_pressure_env": {
-      "pressure_gauge": "@link:/entry/instrument/pressure_gauge_chamber"
+      "pressure_gauge": "@link:/entry/instrument/pressure_gauge"
     },
     "bias_env": {
       "voltmeter": "@link:/entry/instrument/manipulator/sample_bias_voltmeter"
