@@ -26,12 +26,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python_version }}
-      - name: Install dependencies
-        run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
-          uv pip install coverage coveralls
       - name: Install package
         run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
           uv pip install ".[dev]"
       - name: Test with pytest
         run: |
