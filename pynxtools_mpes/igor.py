@@ -1,6 +1,7 @@
 """
 Parser for the igor binarywave files from the FHI Phoibos detector
 """
+
 import re
 from bisect import insort
 from typing import Any, Dict, List
