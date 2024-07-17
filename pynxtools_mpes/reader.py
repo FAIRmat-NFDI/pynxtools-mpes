@@ -19,7 +19,7 @@
 
 import logging
 from functools import reduce
-from typing import Any, Dict, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import h5py
 import numpy as np
@@ -190,21 +190,30 @@ class MPESReader(MultiFormatReader):
 
     # Whitelist for the NXDLs that the reader supports and can process
     supported_nxdls = ["NXmpes", "NXmpes_arpes"]
+    config_file: Optional[str] = None
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.eln_data = None
 
         self.extensions = {
             ".yml": self.handle_eln_file,
             ".yaml": self.handle_eln_file,
+            ".json": self.set_config_file,
             ".h5": self.handle_hdf5_file,
+            ".hdf5": self.handle_hdf5_file,
         }
 
     def handle_hdf5_file(self, file_path: str) -> Dict[str, Any]:
         """Handle hdf5 file"""
         self.data_xarray = h5_to_xarray(file_path)
 
+        return {}
+
+    def set_config_file(self, file_path: str) -> Dict[str, Any]:
+        if self.config_file is not None:
+            logger.info(f"Config file already set. Skipping the new file {file_path}.")
+        self.config_file = file_path
         return {}
 
     def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
@@ -262,6 +271,9 @@ class MPESReader(MultiFormatReader):
                 "Incorrect naming syntax or the xarray doesn't "
                 f"contain entry corresponding to the path {path}"
             )
+
+    def get_data_dims(self) -> List[str]:
+        return list(map(str, self.data_xarray.dims))
 
     def get_attr(self, path: str) -> Any:
         try:
