@@ -57,6 +57,7 @@ igor = [
 
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
+igor_fhi = "pynxtools_mpes.igor:IgorReader"
 
 [project.entry-points.'nomad.plugin']
 mpes_example = "pynxtools_mpes.nomad.entrypoints:mpes_example"
