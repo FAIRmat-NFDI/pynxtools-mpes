@@ -13,7 +13,7 @@ def test_igor_reader(tmp_path):
         input_file=glob(str(dir_path / "data" / "*.ibw")),
         reader="igor_fhi",
         nxdl="NXmpes",
-        output=os.path.join(dir_path / "igor_test.nxs"),
+        output=os.path.join(tmp_path / "igor_test.nxs"),
         config_file=str(dir_path / "config_file.json"),
         skip_verify=False,
         ignore_undocumented=False,
