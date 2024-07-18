@@ -14,7 +14,7 @@ def test_nexus_conversion(caplog, tmp_path):
     Tests the conversion into nexus.
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data"
+    dir_path = Path(__file__).parent / "data" / "mpes"
     test = ReaderTest(
         nxdl="NXmpes",
         reader_name="mpes",
@@ -32,7 +32,7 @@ def test_nexus_conversion(caplog, tmp_path):
 
 def test_eln_data(tmp_path):
     """Check if the subsections in the eln_data.yml file work."""
-    dir_path = Path(__file__).parent / "data"
+    dir_path = Path(__file__).parent / "data" / "mpes"
     dataconverter.convert(
         input_file=(
             str(dir_path / "xarray_saved_small_calibration.h5"),
