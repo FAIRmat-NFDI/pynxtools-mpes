@@ -135,6 +135,7 @@ class IgorReader(MultiFormatReader):
         self.ibw_files = []
         self.eln_data = None
         self.ibw_data = {}
+        self.ibw_attrs = {}
         self.scan_nos = []
 
         self.extensions = {
@@ -154,8 +155,11 @@ class IgorReader(MultiFormatReader):
 
         return self.eln_data.get(path)
 
-    def get_data(self, path: str) -> Dict[str, Any]:
+    def get_data(self, path: str) -> Any:
         return self.ibw_data.get(f"{self.callbacks.entry_name}/{path}")
+
+    def get_attr(self, path: str) -> Any:
+        return self.ibw_attrs.get(path)
 
     def get_entry_names(self) -> List[str]:
         return [f"entry{scan_no}" for scan_no in self.scan_nos]
@@ -177,9 +181,9 @@ class IgorReader(MultiFormatReader):
             theta = []
             for file in files:
                 ibw = binarywave.load(file)
-                notes = parse_note(ibw["wave"]["note"])
-                beta.append(float(notes["Beta"]))
-                theta.append(float(notes["Theta"]))
+                self.ibw_attrs = parse_note(ibw["wave"]["note"])
+                beta.append(float(self.ibw_attrs["Beta"]))
+                theta.append(float(self.ibw_attrs["Theta"]))
                 waves.append(ibw["wave"]["wData"])
 
             data_entry = f"entry{scan_no}/data"
