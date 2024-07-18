@@ -1,6 +1,6 @@
 {
     "/@default": "entry",
-    "/ENTRY[entry]/PROCESS[process]/energy_referencing/reference_peak": "@data:process/energy_referencing/reference_peak",
+    "/ENTRY[entry]/PROCESS_MPES[process]/energy_referencing/reference_peak": "@data:process/energy_referencing/reference_peak",
     "/ENTRY[entry]/data/@axes": "@data:data/@axes",
     "/ENTRY[entry]/data/@signal": "@data:data/@signal",
     "/ENTRY[entry]/data/beta": "@data:data/beta",
