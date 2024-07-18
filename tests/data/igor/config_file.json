@@ -1,5 +1,5 @@
 {
-    "/@default": "entry0",
+    "/@default": "entry",
     "/ENTRY[entry]/PROCESS[process]/energy_referencing/reference_peak": "@data:process/energy_referencing/reference_peak",
     "/ENTRY[entry]/data/@axes": "@data:data/@axes",
     "/ENTRY[entry]/data/@signal": "@data:data/@signal",
@@ -10,6 +10,6 @@
     "/ENTRY[entry]/data/energy": "@data:data/energy",
     "/ENTRY[entry]/data/energy/@units": "@data:data/energy/@units",
     "/ENTRY[entry]/data/energy/@type": "@data:data/energy/@type",
-    "/ENTRY[entry/data/theta": "@data:data/theta",
-    "/ENTRY[entry/data/theta/@units": "@data:data/theta/@units"
+    "/ENTRY[entry]/data/theta": "@data:data/theta",
+    "/ENTRY[entry]/data/theta/@units": "@data:data/theta/@units"
 }
