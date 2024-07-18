@@ -164,31 +164,9 @@ def rgetattr(obj, attr):
     return reduce(_getattr, [obj] + attr.split("."))
 
 
-def fill_data_indices_in_config(config_file_dict, x_array_loaded):
-    """Add data indices key value pairs to the config_file
-    dictionary from the xarray dimensions if not already
-    present.
-    """
-    for key in list(config_file_dict):
-        if "*" in key:
-            value = config_file_dict[key]
-            for dim in x_array_loaded.dims:
-                new_key = key.replace("*", dim)
-                new_value = value.replace("*", dim)
-
-                if (
-                    new_key not in config_file_dict.keys()
-                    and new_value not in config_file_dict.values()
-                ):
-                    config_file_dict[new_key] = new_value
-
-            config_file_dict.pop(key)
-
-
 class MPESReader(MultiFormatReader):
     """MPES-specific reader class"""
 
-    # Whitelist for the NXDLs that the reader supports and can process
     supported_nxdls = ["NXmpes", "NXmpes_arpes"]
     config_file: Optional[str] = None
 
@@ -231,9 +209,6 @@ class MPESReader(MultiFormatReader):
             return None
 
         return self.eln_data.get(path)
-
-    def setup_template(self) -> Dict[str, Any]:
-        return {}
 
     def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
         if isinstance(objects, xr.DataArray):
