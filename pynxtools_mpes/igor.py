@@ -8,6 +8,8 @@ from typing import Any, Dict, List
 
 import numpy as np
 from igor2 import binarywave
+from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
+from pynxtools.dataconverter.readers.utils import parse_yml
 
 
 def parse_note(bnote: bytes) -> Dict[str, Any]:
@@ -123,43 +125,86 @@ def axis_units_from(ibw_data: Dict[str, Any], dim: int) -> str:
     return unit
 
 
-def read_ibw(filenames: List[str]) -> Dict[str, Any]:
-    """
-    Reads the igor binarywave files and returns a dictionary containing the data.
+class IgorReader(MultiFormatReader):
+    """Reader for FHI specific igor binarywave files"""
 
-    Args:
-        filenames (List[str]): The filenames to read.
+    supported_nxdls = ["NXmpes", "NXmpes_arpes"]
 
-    Returns:
-        Dict[str, Any]: The dictionary containing the data.
-    """
-    template: Dict[str, Any] = {}
-    for scan_no, files in find_scan_sets(filenames).items():
-        waves = []
-        beta = []
-        theta = []
-        for file in files:
-            ibw = binarywave.load(file)
-            notes = parse_note(ibw["note"])
-            beta.append(float(notes["Beta"]))
-            theta.append(float(notes["Theta"]))
-            waves.append(ibw["wave"]["wData"])
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.ibw_files = []
+        self.eln_data = None
+        self.ibw_data = {}
+        self.scan_nos = []
 
-        data_entry = f"/ENTRY[entry{scan_no}]/data"
-        template[f"/ENTRY[entry{scan_no}]/theta"] = theta
-        template[
-            f"/ENTRY[entry{scan_no}]/PROCESS[process]/energy_referencing/reference_peak"
-        ] = "vacuum level"
-        template[f"{data_entry}/@axes"] = ["theta", "beta", "energy"]
-        template[f"{data_entry}/AXISNAME[beta]"] = beta
-        template[f"{data_entry}/AXISNAME[beta]/@units"] = "degrees"
-        template[f"{data_entry}/AXISNAME[energy]"] = axis_from(ibw, 0)
-        template[f"{data_entry}/AXISNAME[energy]/@units"] = axis_units_from(ibw, 0)
-        template[f"{data_entry}/AXISNAME[theta]"] = axis_from(ibw, 1)
-        template[f"{data_entry}/AXISNAME[theta]/@units"] = axis_units_from(ibw, 1)
-        template[f"{data_entry}/@signal"] = "data"
-        template[f"{data_entry}/data"] = np.array(waves).swapaxes(1, 2).swapaxes(0, 1)
-        template[f"{data_entry}/data/@units"] = "counts"
-        template[f"{data_entry}/energy/@type"] = "kinetic"
+        self.extensions = {
+            ".yml": self.handle_eln_file,
+            ".yaml": self.handle_eln_file,
+            ".ibw": self.collect_ibw_file,
+        }
 
-    return template
+    def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
+        self.eln_data = parse_yml(file_path)
+        return {}
+
+    def get_eln_data(self, path: str) -> Any:
+        """Returns data from the given eln path."""
+        if self.eln_data is None:
+            return None
+
+        return self.eln_data.get(path)
+
+    def get_data(self, path: str) -> Dict[str, Any]:
+        self.ibw_data.get(f"{self.callbacks.entry_name}/{path}")
+        return {}
+
+    def get_entry_names(self) -> List[str]:
+        return [f"entry{scan_no}" for scan_no in self.scan_nos]
+
+    def post_process(self) -> None:
+        """
+        Reads the igor binarywave files and returns a dictionary containing the data.
+
+        Args:
+            filenames (List[str]): The filenames to read.
+
+        Returns:
+            Dict[str, Any]: The dictionary containing the data.
+        """
+        for scan_no, files in find_scan_sets(self.ibw_files).items():
+            self.scan_nos.append(scan_no)
+            waves = []
+            beta = []
+            theta = []
+            for file in files:
+                ibw = binarywave.load(file)
+                notes = parse_note(ibw["note"])
+                beta.append(float(notes["Beta"]))
+                theta.append(float(notes["Theta"]))
+                waves.append(ibw["wave"]["wData"])
+
+            data_entry = f"entry{scan_no}/data"
+            self.ibw_data[f"entry{scan_no}/theta"] = theta
+            self.ibw_data[
+                f"entry{scan_no}/process/energy_referencing/reference_peak"
+            ] = "vacuum level"
+            self.ibw_data[f"{data_entry}/@axes"] = ["theta", "beta", "energy"]
+            self.ibw_data[f"{data_entry}/beta"] = beta
+            self.ibw_data[f"{data_entry}/beta/@units"] = "degrees"
+            self.ibw_data[f"{data_entry}/energy"] = axis_from(ibw, 0)
+            self.ibw_data[f"{data_entry}/energy/@units"] = axis_units_from(ibw, 0)
+            self.ibw_data[f"{data_entry}/theta"] = axis_from(ibw, 1)
+            self.ibw_data[f"{data_entry}/theta/@units"] = axis_units_from(ibw, 1)
+            self.ibw_data[f"{data_entry}/@signal"] = "data"
+            self.ibw_data[f"{data_entry}/data"] = (
+                np.array(waves).swapaxes(1, 2).swapaxes(0, 1)
+            )
+            self.ibw_data[f"{data_entry}/data/@units"] = "counts"
+            self.ibw_data[f"{data_entry}/energy/@type"] = "kinetic"
+
+    def collect_ibw_file(self, file_path: str) -> Dict[str, Any]:
+        self.ibw_files.append(file_path)
+        return {}
+
+
+READER = IgorReader
