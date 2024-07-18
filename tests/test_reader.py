@@ -29,7 +29,7 @@ def test_nexus_conversion(caplog, tmp_path):
     Tests the conversion into nexus.
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data"
+    dir_path = Path(__file__).parent / "data" / "mpes"
     test = ReaderTest(
         nxdl="NXmpes",
         reader_name="mpes",
@@ -50,7 +50,7 @@ def test_conversion_w_eln_data(caplog, tmp_path):
     Tests the conversion with additional ELN data
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data"
+    dir_path = Path(__file__).parent / "data" / "mpes"
     test = ReaderTest(
         nxdl="NXmpes",
         reader_name="mpes",
