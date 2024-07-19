@@ -3,7 +3,6 @@ Parser for the igor binarywave files from the FHI Phoibos detector
 """
 
 import re
-from bisect import insort
 from typing import Any, Dict, List
 
 import numpy as np
@@ -70,11 +69,14 @@ def find_scan_sets(
     Where <frame> is used as the sort key and <scan> is used to indicate the scan number.
 
     Args:
-        filenames (List[str]): _description_
-        pattern (str, optional): _description_. Defaults to r"[^\/_]+_(\d+)_(\d+).ibw$".
+        filenames (List[str]): The filenames to sort into scan sets.
+        pattern (str, optional):
+            The pattern to search for scan groups.
+            The first regex group is used as a scan number.
+            Defaults to r"[^\/_]+_(\d+)_(\d+).ibw$".
 
     Returns:
-        Dict[int, Any]: _description_
+        Dict[int, Any]: A dict of scan sets.
     """
     scan_sets: Dict[int, Any] = {}
     for fn in filenames:
@@ -83,7 +85,8 @@ def find_scan_sets(
             scan = int(groups.group(1))
             if scan not in scan_sets:
                 scan_sets[scan] = []
-            insort(scan_sets[scan], fn, key=lambda fn: sort_key(fn, pattern))
+            scan_sets[scan].append(fn)
+            scan_sets[scan].sort(key=lambda fn: sort_key(fn, pattern))
     return scan_sets
 
 
@@ -165,15 +168,6 @@ class IgorReader(MultiFormatReader):
         return [f"entry{scan_no}" for scan_no in self.scan_nos]
 
     def post_process(self) -> None:
-        """
-        Reads the igor binarywave files and returns a dictionary containing the data.
-
-        Args:
-            filenames (List[str]): The filenames to read.
-
-        Returns:
-            Dict[str, Any]: The dictionary containing the data.
-        """
         for scan_no, files in find_scan_sets(self.ibw_files).items():
             self.scan_nos.append(scan_no)
             waves = []
