@@ -247,7 +247,7 @@ class MPESReader(MultiFormatReader):
                 f"contain entry corresponding to the path {path}"
             )
 
-    def get_data_dims(self) -> List[str]:
+    def get_data_dims(self, path: str) -> List[str]:
         return list(map(str, self.data_xarray.dims))
 
     def get_attr(self, path: str) -> Any:
