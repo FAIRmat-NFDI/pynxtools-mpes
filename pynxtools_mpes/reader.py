@@ -203,7 +203,7 @@ class MPESReader(MultiFormatReader):
 
         return {}
 
-    def get_eln_data(self, path: str) -> Any:
+    def get_eln_data(self, key: str, path: str) -> Any:
         """Returns data from the given eln path."""
         if self.eln_data is None:
             return None
@@ -231,7 +231,7 @@ class MPESReader(MultiFormatReader):
         )
         return {}
 
-    def get_data(self, path: str) -> Any:
+    def get_data(self, key: str, path: str) -> Any:
         try:
             value = rgetattr(obj=self.data_xarray, attr=path)
             if path.split("/")[-1] == "@axes":
@@ -247,10 +247,10 @@ class MPESReader(MultiFormatReader):
                 f"contain entry corresponding to the path {path}"
             )
 
-    def get_data_dims(self, path: str) -> List[str]:
+    def get_data_dims(self, key: str, path: str) -> List[str]:
         return list(map(str, self.data_xarray.dims))
 
-    def get_attr(self, path: str) -> Any:
+    def get_attr(self, key: str, path: str) -> Any:
         try:
             return iterate_dictionary(self.data_xarray.attrs, path)
         except KeyError:
