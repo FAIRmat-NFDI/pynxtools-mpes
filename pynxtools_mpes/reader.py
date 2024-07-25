@@ -199,6 +199,7 @@ class MPESReader(MultiFormatReader):
             file_path,
             convert_dict=CONVERT_DICT,
             replace_nested=REPLACE_NESTED,
+            parent_key="/ENTRY",
         )
 
         return {}
