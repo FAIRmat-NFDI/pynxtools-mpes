@@ -19,10 +19,10 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           uv pip install --no-deps .
           uv pip install -r dev-requirements.txt
-      - name: ruff
+      - name: ruff check
         run: |
-          ruff pynxtools_mpes tests
-      - name: ruff formatting
+          ruff check pynxtools_mpes tests
+      - name: ruff format
         run: |
           ruff format --check pynxtools_mpes tests
       - name: mypy
