@@ -29,8 +29,7 @@ from pynxtools.dataconverter.readers.utils import parse_yml
 
 from pynxtools_mpes.mappings import CONVERT_DICT, DEFAULT_UNITS, REPLACE_NESTED
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
+logger = logging.getLogger("pynxtools")
 
 
 def recursive_parse_metadata(
@@ -228,7 +227,7 @@ class MPESReader(MultiFormatReader):
             self.data_xarray = objects[0]
             return {}
 
-        logging.info(
+        logger.info(
             f"Error while reading objects: {objects} does not contain an xarray object."
             " Skipping the objects."
         )
@@ -242,10 +241,10 @@ class MPESReader(MultiFormatReader):
             return value
 
         except ValueError:
-            print(f"Incorrect axis name corresponding to the path {path}")
+            logger.warning(f"Incorrect axis name corresponding to the path {path}")
 
         except AttributeError:
-            print(
+            logger.warning(
                 "Incorrect naming syntax or the xarray doesn't "
                 f"contain entry corresponding to the path {path}"
             )
@@ -257,7 +256,7 @@ class MPESReader(MultiFormatReader):
         try:
             return iterate_dictionary(self.data_xarray.attrs, path)
         except KeyError:
-            logging.info(f"Path {path} not found. Skipping the entry.")
+            logger.info(f"Path {path} not found. Skipping the entry.")
 
 
 READER = MPESReader
