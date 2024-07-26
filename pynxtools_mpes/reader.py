@@ -209,7 +209,7 @@ class MPESReader(MultiFormatReader):
         if self.eln_data is None:
             return None
 
-        return self.eln_data.get(path)
+        return self.eln_data.get(key.replace(f"/ENTRY[{self.callbacks.entry_name}]", "/ENTRY"))
 
     def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
         if isinstance(objects, xr.DataArray):
