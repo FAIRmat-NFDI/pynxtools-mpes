@@ -27,8 +27,6 @@ import xarray as xr
 from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
 from pynxtools.dataconverter.readers.utils import parse_yml
 
-from pynxtools_mpes.mappings import CONVERT_DICT, DEFAULT_UNITS, REPLACE_NESTED
-
 logger = logging.getLogger("pynxtools")
 
 
@@ -121,15 +119,15 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
                     f"ax{axis}"
                 ].attrs["unit"]
             except (KeyError, TypeError):
-                xarray[bin_names[axis]].attrs["unit"] = DEFAULT_UNITS[bin_names[axis]]
+                xarray[bin_names[axis]].attrs["unit"] = ""
         try:
             xarray.attrs["units"] = h5_file["binned"]["BinnedData"].attrs["units"]
             xarray.attrs["long_name"] = h5_file["binned"]["BinnedData"].attrs[
                 "long_name"
             ]
         except (KeyError, TypeError):
-            xarray.attrs["units"] = "counts"
-            xarray.attrs["long_name"] = "photoelectron counts"
+            xarray.attrs["units"] = ""
+            xarray.attrs["long_name"] = ""
 
         if metadata is not None:
             xarray.attrs["metadata"] = metadata
@@ -146,8 +144,7 @@ def iterate_dictionary(dic, key_string):
         if not len(keys) == 1:
             return iterate_dictionary(dic[keys[0]], keys[1])
     else:
-        raise KeyError
-    return None
+        return None
 
 
 def rgetattr(obj, attr):
@@ -196,8 +193,6 @@ class MPESReader(MultiFormatReader):
     def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
         self.eln_data = parse_yml(
             file_path,
-            convert_dict=CONVERT_DICT,
-            replace_nested=REPLACE_NESTED,
             parent_key="/ENTRY",
         )
 
@@ -208,9 +203,7 @@ class MPESReader(MultiFormatReader):
         if self.eln_data is None:
             return None
 
-        return self.eln_data.get(
-            key.replace(f"/ENTRY[{self.callbacks.entry_name}]", "/ENTRY")
-        )
+        return self.eln_data.get(path)
 
     def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
         if isinstance(objects, xr.DataArray):
@@ -253,10 +246,7 @@ class MPESReader(MultiFormatReader):
         return list(map(str, self.data_xarray.dims))
 
     def get_attr(self, key: str, path: str) -> Any:
-        try:
-            return iterate_dictionary(self.data_xarray.attrs, path)
-        except KeyError:
-            logger.info(f"Path {path} not found. Skipping the entry.")
+        return iterate_dictionary(self.data_xarray.attrs, path)
 
 
 READER = MPESReader
