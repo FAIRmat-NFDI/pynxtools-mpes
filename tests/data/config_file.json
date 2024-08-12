@@ -2,7 +2,7 @@
   "/@default": "entry",
   "/ENTRY/@default": "data",
   "/ENTRY/definition": "NXmpes",
-  "/ENTRY/title": "@attrs:metadata/entry_title",
+  "/ENTRY/title": "['@eln:/ENTRY/title', '@attrs:metadata/entry_title']",
   "/ENTRY/start_time": "@attrs:metadata/timing/acquisition_start",
   "/ENTRY/experiment_institution": "Fritz Haber Institute - Max Planck Society",
   "/ENTRY/experiment_facility": "Time Resolved ARPES",
