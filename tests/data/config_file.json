@@ -2,7 +2,7 @@
   "/@default": "entry",
   "/ENTRY/@default": "data",
   "/ENTRY/definition": "NXmpes",
-  "/ENTRY/title": "@attrs:metadata/entry_title",
+  "/ENTRY/title": "['@eln:/ENTRY/title', '@attrs:metadata/entry_title']",
   "/ENTRY/start_time": "@attrs:metadata/timing/acquisition_start",
   "/ENTRY/experiment_institution": "Fritz Haber Institute - Max Planck Society",
   "/ENTRY/experiment_facility": "Time Resolved ARPES",
@@ -24,8 +24,8 @@
     "name": "Time-of-flight momentum microscope equipped delay line detector, at the endstation of the high rep-rate HHG source at FHI",
     "name/@short_name": "TR-ARPES @ FHI",
     "energy_resolution": {
-      "resolution": 140.0,
-      "resolution/@units": "meV",
+      "resolution": "['@eln:/ENTRY/Instrument/energy_resolution', '140.0']",
+      "resolution/@units": "['@eln:/ENTRY/Instrument/energy_resolution/@units', 'meV']",
       "physical_quantity": "energy",
       "type": "estimated"
     },
