@@ -17,42 +17,17 @@
 #
 """MPES reader implementation for the DataConverter."""
 
-import errno
 import logging
-import os
 from functools import reduce
-from typing import Any, Tuple, Union
+from typing import Any, Dict, List, Optional, Tuple, Union
 
 import h5py
 import numpy as np
 import xarray as xr
-import yaml
-from pynxtools.dataconverter.readers.base.reader import BaseReader
-from pynxtools.dataconverter.readers.utils import (
-    FlattenSettings,
-    flatten_and_replace,
-    parse_flatten_json,
-)
+from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
+from pynxtools.dataconverter.readers.utils import parse_yml
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
-DEFAULT_UNITS = {
-    "X": "step",
-    "Y": "step",
-    "t": "step",
-    "tofVoltage": "V",
-    "extractorVoltage": "V",
-    "extractorCurrent": "A",
-    "cryoTemperature": "K",
-    "sampleTemperature": "K",
-    "dldTimeBinSize": "ns",
-    "delay": "ps",
-    "timeStamp": "s",
-    "energy": "eV",
-    "kx": "1/A",
-    "ky": "1/A",
-}
+logger = logging.getLogger("pynxtools")
 
 
 def recursive_parse_metadata(
@@ -103,7 +78,7 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
             data = np.asarray(h5_file["binned"]["BinnedData"])
         except KeyError as exc:
             raise ValueError(
-                f"Wrong Data Format, the BinnedData was not found.",
+                "Wrong Data Format, the BinnedData was not found.",
             ) from exc
 
         # Reading the axes
@@ -116,7 +91,7 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
                 bin_names.append(h5_file["axes"][axis].attrs["name"])
         except KeyError as exc:
             raise ValueError(
-                f"Wrong Data Format, the axes were not found.",
+                "Wrong Data Format, the axes were not found.",
             ) from exc
 
         # load metadata
@@ -144,15 +119,15 @@ def h5_to_xarray(faddr: str, mode: str = "r") -> xr.DataArray:
                     f"ax{axis}"
                 ].attrs["unit"]
             except (KeyError, TypeError):
-                xarray[bin_names[axis]].attrs["unit"] = DEFAULT_UNITS[bin_names[axis]]
+                xarray[bin_names[axis]].attrs["unit"] = ""
         try:
             xarray.attrs["units"] = h5_file["binned"]["BinnedData"].attrs["units"]
             xarray.attrs["long_name"] = h5_file["binned"]["BinnedData"].attrs[
                 "long_name"
             ]
         except (KeyError, TypeError):
-            xarray.attrs["units"] = "counts"
-            xarray.attrs["long_name"] = "photoelectron counts"
+            xarray.attrs["units"] = ""
+            xarray.attrs["long_name"] = ""
 
         if metadata is not None:
             xarray.attrs["metadata"] = metadata
@@ -169,107 +144,7 @@ def iterate_dictionary(dic, key_string):
         if not len(keys) == 1:
             return iterate_dictionary(dic[keys[0]], keys[1])
     else:
-        raise KeyError
-    return None
-
-
-CONVERT_DICT = {
-    "Instrument": "INSTRUMENT[instrument]",
-    "Analyzer": "ELECTRONANALYSER[electronanalyser]",
-    "Manipulator": "MANIPULATOR[manipulator]",
-    "Beam": "beamTYPE[beam]",
-    "unit": "@units",
-    "Sample": "SAMPLE[sample]",
-    "Source": "sourceTYPE[source]",
-    "User": "USER[user]",
-    "energy_resolution": "energy_resolution/resolution",
-    "momentum_resolution": "RESOLUTION[momentum_resolution]/resolution",
-    "temporal_resolution": "RESOLUTION[temporal_resolution]/resolution",
-    "spatial_resolution": "RESOLUTION[spatial_resolution]/resolution",
-    "angular_resolution": "RESOLUTION[angular_resolution]/resolution",
-    "sample_temperature": "temperature_sensor/value",
-    "drain_current": "drain_current_amperemeter/value",
-    "photon_energy": "energy",
-}
-
-REPLACE_NESTED = {
-    "SAMPLE[sample]/chemical_formula": "SAMPLE[sample]/SUBSTANCE[substance]/molecular_formula_hill",
-    "sourceTYPE[source]/Probe": "sourceTYPE[source_probe]",
-    "sourceTYPE[source]/Pump": "sourceTYPE[source_pump]",
-    "beamTYPE[beam]/Probe": "beamTYPE[beam_probe]",
-    "beamTYPE[beam]/Pump": "beamTYPE[beam_pump]",
-    "sample_history": "history/notes/description",
-    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[energy_resolution]": (
-        "ELECTRONANALYSER[electronanalyser]/energy_resolution"
-    ),
-    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[momentum_resolution]": (
-        "ELECTRONANALYSER[electronanalyser]/momentum_resolution"
-    ),
-    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[spatial_resolution]": (
-        "ELECTRONANALYSER[electronanalyser]/spatial_resolution"
-    ),
-    "ELECTRONANALYSER[electronanalyser]/RESOLUTION[angular_resolution]": (
-        "ELECTRONANALYSER[electronanalyser]/angular_resolution"
-    ),
-    "SAMPLE[sample]/gas_pressure": "INSTRUMENT[instrument]/pressure_gauge/value",
-    "SAMPLE[sample]/temperature": (
-        "INSTRUMENT[instrument]/MANIPULATOR[manipulator]/temperature_sensor/value"
-    ),
-}
-
-
-def handle_h5_and_json_file(file_paths, objects):
-    """Handle h5 or json input files."""
-    x_array_loaded = xr.DataArray()
-    config_file_dict = {}
-    eln_data_dict = {}
-
-    for file_path in file_paths:
-        try:
-            file_extension = file_path[file_path.rindex(".") :]
-        except ValueError as exc:
-            raise ValueError(
-                f"The file path {file_path} must have an extension.",
-            ) from exc
-
-        extentions = [".h5", ".json", ".yaml", ".yml"]
-        if file_extension not in extentions:
-            print(
-                f"WARNING \n"
-                f"The reader only supports files of type {extentions}, "
-                f"but {file_path} does not match.",
-            )
-
-        if not os.path.exists(file_path):
-            raise FileNotFoundError(
-                errno.ENOENT,
-                os.strerror(errno.ENOENT),
-                file_path,
-            )
-
-        if file_extension == ".h5":
-            x_array_loaded = h5_to_xarray(file_path)
-        elif file_extension == ".json":
-            config_file_dict = parse_flatten_json(file_path)
-        elif file_extension in [".yaml", ".yml"]:
-            with open(file_path, encoding="utf-8") as feln:
-                eln_data_dict = flatten_and_replace(
-                    FlattenSettings(
-                        dic=yaml.safe_load(feln),
-                        convert_dict=CONVERT_DICT,
-                        replace_nested=REPLACE_NESTED,
-                    )
-                )
-
-    if objects is not None:
-        # For the case of a single object
-        assert isinstance(
-            objects,
-            xr.core.dataarray.DataArray,
-        ), "The given object must be an xarray"
-        x_array_loaded = objects
-
-    return x_array_loaded, config_file_dict, eln_data_dict
+        return None
 
 
 def rgetattr(obj, attr):
@@ -285,128 +160,93 @@ def rgetattr(obj, attr):
     return reduce(_getattr, [obj] + attr.split("."))
 
 
-def fill_data_indices_in_config(config_file_dict, x_array_loaded):
-    """Add data indices key value pairs to the config_file
-    dictionary from the xarray dimensions if not already
-    present.
-    """
-    for key in list(config_file_dict):
-        if "*" in key:
-            value = config_file_dict[key]
-            for dim in x_array_loaded.dims:
-                new_key = key.replace("*", dim)
-                new_value = value.replace("*", dim)
-
-                if (
-                    new_key not in config_file_dict.keys()
-                    and new_value not in config_file_dict.values()
-                ):
-                    config_file_dict[new_key] = new_value
-
-            config_file_dict.pop(key)
-
-
-class MPESReader(BaseReader):
+class MPESReader(MultiFormatReader):
     """MPES-specific reader class"""
 
-    # pylint: disable=too-few-public-methods
-
-    # Whitelist for the NXDLs that the reader supports and can process
     supported_nxdls = ["NXmpes", "NXmpes_arpes"]
+    config_file: Optional[str] = None
 
-    def read(  # pylint: disable=too-many-branches
-        self,
-        template: dict = None,
-        file_paths: Tuple[str] = None,
-        objects: Tuple[Any] = None,
-    ) -> dict:
-        """Reads data from given file or alternatively an xarray object
-        and returns a filled template dictionary"""
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.eln_data = None
 
-        if not file_paths:
-            raise IOError("No input files were given to MPES Reader.")
+        self.extensions = {
+            ".yml": self.handle_eln_file,
+            ".yaml": self.handle_eln_file,
+            ".json": self.set_config_file,
+            ".h5": self.handle_hdf5_file,
+            ".hdf5": self.handle_hdf5_file,
+        }
 
-        (
-            x_array_loaded,
-            config_file_dict,
-            eln_data_dict,
-        ) = handle_h5_and_json_file(file_paths, objects)
+    def handle_hdf5_file(self, file_path: str) -> Dict[str, Any]:
+        """Handle hdf5 file"""
+        self.data_xarray = h5_to_xarray(file_path)
 
-        fill_data_indices_in_config(config_file_dict, x_array_loaded)
+        return {}
 
-        optional_groups_to_remove = []
+    def set_config_file(self, file_path: str) -> Dict[str, Any]:
+        if self.config_file is not None:
+            logger.info(f"Config file already set. Skipping the new file {file_path}.")
+        self.config_file = file_path
+        return {}
 
-        for key, value in config_file_dict.items():
-            if isinstance(value, str) and value.startswith("!"):
-                optional_groups_to_remove.append(key)
-                value = value[1:]
+    def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
+        self.eln_data = parse_yml(
+            file_path,
+            parent_key="/ENTRY",
+        )
 
-            if isinstance(value, str) and ":" in value:
-                precursor = value.split(":")[0]
-                value = value[value.index(":") + 1 :]
+        return {}
 
-                # Filling in the data and axes along with units from xarray
-                if precursor == "@data":
-                    try:
-                        template[key] = rgetattr(
-                            obj=x_array_loaded,
-                            attr=value,
-                        )
-                        if key.split("/")[-1] == "@axes":
-                            template[key] = list(template[key])
+    def get_eln_data(self, key: str, path: str) -> Any:
+        """Returns data from the given eln path."""
+        if self.eln_data is None:
+            return None
 
-                    except ValueError:
-                        print(
-                            f"Incorrect axis name corresponding to " f"the path {key}",
-                        )
+        return self.eln_data.get(path)
 
-                    except AttributeError:
-                        print(
-                            f"Incorrect naming syntax or the xarray doesn't "
-                            f"contain entry corresponding to the path {key}",
-                        )
+    def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
+        if isinstance(objects, xr.DataArray):
+            # Should normally be a tuple, but in the
+            # past a single xarray object was passed.
+            # This if-clause exists for backwards compatibility
+            self.data_xarray = objects
+            return {}
+        if (
+            isinstance(objects, tuple)
+            and len(objects) > 0
+            and isinstance(objects[0], xr.DataArray)
+        ):
+            self.data_xarray = objects[0]
+            return {}
 
-                # Filling in the metadata from xarray
-                elif precursor == "@attrs":
-                    if key not in eln_data_dict:
-                        try:  # Tries to fill the metadata
-                            template[key] = iterate_dictionary(
-                                x_array_loaded.attrs,
-                                value,
-                            )
+        logger.info(
+            f"Error while reading objects: {objects} does not contain an xarray object."
+            " Skipping the objects."
+        )
+        return {}
 
-                        except KeyError:
-                            print(
-                                f"[info]: Path {key} not found. "
-                                f"Skipping the entry.",
-                            )
+    def get_data(self, key: str, path: str) -> Any:
+        try:
+            value = rgetattr(obj=self.data_xarray, attr=path)
+            if path.split("/")[-1] == "@axes":
+                return list(value)
+            return value
 
-                if isinstance(template.get(key), str) and template[key].startswith(
-                    "@link:"
-                ):
-                    template[key] = {"link": template[key][6:]}
-            else:
-                # Fills in the fixed metadata
-                template[key] = value
+        except ValueError:
+            logger.warning(f"Incorrect axis name corresponding to the path {path}")
 
-        # Filling in ELN metadata and overwriting the common paths by
-        # giving preference to the ELN metadata
-        for key, value in eln_data_dict.items():
-            template[key] = value
+        except AttributeError:
+            logger.warning(
+                "Incorrect naming syntax or the xarray doesn't "
+                f"contain entry corresponding to the path {path}"
+            )
 
-        # remove groups that have required children missing
-        for key in optional_groups_to_remove:
-            if template.get(key) is None:
-                group_to_delete = key.rsplit("/", 1)[0]
-                logger.info(
-                    f"[info]: Required element {key} not provided. "
-                    f"Removing the parent group {group_to_delete}.",
-                )
-                for temp_key in template.keys():
-                    if temp_key.startswith(group_to_delete):
-                        del template[temp_key]
+    def get_data_dims(self, key: str, path: str) -> List[str]:
+        return list(map(str, self.data_xarray.dims))
 
-        return template
+    def get_attr(self, key: str, path: str) -> Any:
+        return iterate_dictionary(self.data_xarray.attrs, path)
 
 
 READER = MPESReader
