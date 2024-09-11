@@ -25,9 +25,8 @@ classifiers = [
 ]
 dependencies = [
     "h5py>=3.6.0",
-    "PyYAML>=6.0",
     "xarray>=0.20.2",
-    "pynxtools>=0.5.1"
+    "pynxtools>=0.6.0",
 ]
 
 [project.urls]
@@ -37,7 +36,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff==0.3.4",
+    "ruff==0.5.5",
     "pytest",
     "types-pyyaml",
     "pip-tools",
