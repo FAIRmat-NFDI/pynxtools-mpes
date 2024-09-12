@@ -13,7 +13,7 @@ function update_mpes_eln_example {
 }
 
 project_dir=$(dirname $(dirname $(realpath $0)))
-cd $project_dir/tests/data
+cd $project_dir/tests/data/mpes
 
 update_mpes_example
 update_mpes_eln_example
