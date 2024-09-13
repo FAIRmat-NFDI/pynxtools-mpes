@@ -2,14 +2,16 @@
 Parser for the igor binarywave files from the FHI Phoibos detector
 """
 
+import logging
 import re
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 from igor2 import binarywave
 from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
 from pynxtools.dataconverter.readers.utils import parse_yml
 
+logger = logging.getLogger("pynxtools")
 
 def parse_note(bnote: bytes) -> Dict[str, Any]:
     """
@@ -32,62 +34,6 @@ def parse_note(bnote: bytes) -> Dict[str, Any]:
             notes[key] = val
 
     return notes
-
-
-def sort_key(filename: str, pattern: str = r"[^\/_]+_(\d+)_(\d+).ibw$") -> int:
-    r"""
-    Returns the sort key based on the second group in the regex pattern.
-    Default is to match filenames of the form ..._<scan>_<frame>.ibw.
-    Where <frame> is used as the sort key.
-
-    Args:
-        filename (str): The filename to return a sort key for.
-        pattern (str, optional):
-            The sort key pattern. Defaults to r"[^\/_]+_(\d+)_(\d+).ibw$".
-
-    Raises:
-        ValueError: If no match in the filename is found.
-
-    Returns:
-        int: The sort key.
-    """
-    groups = re.search(pattern, filename)
-    if groups is not None:
-        return int(groups.group(2))
-    raise ValueError(
-        "Invalid filename: Expected file of the form ..._<scan>_<frame>.ibw."
-    )
-
-
-def find_scan_sets(
-    filenames: List[str], pattern: str = r"[^\/_]+_(\d+)_(\d+).ibw$"
-) -> Dict[int, Any]:
-    r"""
-    Returns a dict of scan sets where the key is the scan number
-    and the value is a list of filenames.
-    Default is to match filenames of the form ..._<scan>_<frame>.ibw.
-    Where <frame> is used as the sort key and <scan> is used to indicate the scan number.
-
-    Args:
-        filenames (List[str]): The filenames to sort into scan sets.
-        pattern (str, optional):
-            The pattern to search for scan groups.
-            The first regex group is used as a scan number.
-            Defaults to r"[^\/_]+_(\d+)_(\d+).ibw$".
-
-    Returns:
-        Dict[int, Any]: A dict of scan sets.
-    """
-    scan_sets: Dict[int, Any] = {}
-    for fn in filenames:
-        groups = re.search(pattern, fn)
-        if groups is not None:
-            scan = int(groups.group(1))
-            if scan not in scan_sets:
-                scan_sets[scan] = []
-            scan_sets[scan].append(fn)
-            scan_sets[scan].sort(key=lambda fn: sort_key(fn, pattern))
-    return scan_sets
 
 
 def axis_from(ibw_data: Dict[str, Any], dim: int) -> np.ndarray:
@@ -131,7 +77,8 @@ def axis_units_from(ibw_data: Dict[str, Any], dim: int) -> str:
 class IgorReader(MultiFormatReader):
     """Reader for FHI specific igor binarywave files"""
 
-    supported_nxdls = ["NXmpes", "NXmpes_arpes"]
+    supported_nxdls = ["NXmpes", "NXmpes_arpes", "NXxrd"]
+    config_file: Optional[str] = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -144,6 +91,7 @@ class IgorReader(MultiFormatReader):
         self.extensions = {
             ".yml": self.handle_eln_file,
             ".yaml": self.handle_eln_file,
+            ".json": self.set_config_file,
             ".ibw": self.collect_ibw_file,
         }
 
@@ -151,53 +99,34 @@ class IgorReader(MultiFormatReader):
         self.eln_data = parse_yml(file_path)
         return {}
 
-    def get_eln_data(self, path: str) -> Any:
+    def get_eln_data(self, key: str, path: str) -> Any:
         """Returns data from the given eln path."""
         if self.eln_data is None:
             return None
 
         return self.eln_data.get(path)
 
-    def get_data(self, path: str) -> Any:
-        return self.ibw_data.get(f"{self.callbacks.entry_name}/{path}")
+    def set_config_file(self, file_path: str) -> Dict[str, Any]:
+        if self.config_file is not None:
+            logger.info(f"Config file already set. Skipping the new file {file_path}.")
+        self.config_file = file_path
+        return {}
 
-    def get_attr(self, path: str) -> Any:
+    def get_data(self, key: str, path: str) -> Any:
+        return self.ibw_data.get(path)
+
+    def get_attr(self, key: str, path: str) -> Any:
         return self.ibw_attrs.get(path)
 
-    def get_entry_names(self) -> List[str]:
-        return [f"entry{scan_no}" for scan_no in self.scan_nos]
-
     def post_process(self) -> None:
-        for scan_no, files in find_scan_sets(self.ibw_files).items():
-            self.scan_nos.append(scan_no)
-            waves = []
-            beta = []
-            theta = []
-            for file in files:
-                ibw = binarywave.load(file)
-                self.ibw_attrs = parse_note(ibw["wave"]["note"])
-                beta.append(float(self.ibw_attrs["Beta"]))
-                theta.append(float(self.ibw_attrs["Theta"]))
-                waves.append(ibw["wave"]["wData"])
-
-            data_entry = f"entry{scan_no}/data"
-            self.ibw_data[f"entry{scan_no}/theta"] = theta
-            self.ibw_data[
-                f"entry{scan_no}/process/energy_referencing/reference_peak"
-            ] = "vacuum level"
-            self.ibw_data[f"{data_entry}/@axes"] = ["theta", "beta", "energy"]
-            self.ibw_data[f"{data_entry}/beta"] = beta
-            self.ibw_data[f"{data_entry}/beta/@units"] = "degrees"
-            self.ibw_data[f"{data_entry}/energy"] = axis_from(ibw, 0)
-            self.ibw_data[f"{data_entry}/energy/@units"] = axis_units_from(ibw, 0)
-            self.ibw_data[f"{data_entry}/theta"] = axis_from(ibw, 1)
-            self.ibw_data[f"{data_entry}/theta/@units"] = axis_units_from(ibw, 1)
-            self.ibw_data[f"{data_entry}/@signal"] = "data"
-            self.ibw_data[f"{data_entry}/data"] = (
-                np.array(waves).swapaxes(1, 2).swapaxes(0, 1)
-            )
-            self.ibw_data[f"{data_entry}/data/@units"] = "counts"
-            self.ibw_data[f"{data_entry}/energy/@type"] = "kinetic"
+        for file in self.ibw_files:
+            ibw = binarywave.load(file)
+            self.ibw_attrs = parse_note(ibw["wave"]["note"])
+            for dim in range(ibw["wave"]['wave_header']["nDim"].size):
+                self.ibw_data[f"axis{dim}"] = axis_from(ibw, dim)
+                self.ibw_data[f"axis{dim}/@units"] = axis_units_from(ibw, dim)
+            self.ibw_data["data"] = ibw["wave"]["wData"]
+            self.ibw_data["data/@units"] = ibw["wave"]["data_units"]
 
     def collect_ibw_file(self, file_path: str) -> Dict[str, Any]:
         self.ibw_files.append(file_path)
