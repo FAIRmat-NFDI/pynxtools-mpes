@@ -4,14 +4,15 @@ Parser for the igor binarywave files from the FHI Phoibos detector
 
 import logging
 import re
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 import numpy as np
-from igor2 import binarywave
+from igor2 import binarywave, packed
 from pynxtools.dataconverter.readers.multi.reader import MultiFormatReader
 from pynxtools.dataconverter.readers.utils import parse_yml
 
 logger = logging.getLogger("pynxtools")
+
 
 def parse_note(bnote: bytes) -> Dict[str, Any]:
     """
@@ -74,6 +75,20 @@ def axis_units_from(ibw_data: Dict[str, Any], dim: int) -> str:
     return unit
 
 
+def iterate_dictionary(dic, key_string):
+    """Recursively iterate in dictionary and give back its values"""
+    keys = key_string.split("/", 1)
+    if keys[0] not in dic and bytes(keys[0], "utf8") in dic:
+        keys[0] = bytes(keys[0], "utf8")
+    if keys[0] in dic:
+        if len(keys) == 1:
+            return dic[keys[0]]
+        if not len(keys) == 1:
+            return iterate_dictionary(dic[keys[0]], keys[1])
+    else:
+        return None
+
+
 class IgorReader(MultiFormatReader):
     """Reader for FHI specific igor binarywave files"""
 
@@ -83,16 +98,19 @@ class IgorReader(MultiFormatReader):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.ibw_files = []
+        self.ipx_files = []
         self.eln_data = None
         self.ibw_data = {}
         self.ibw_attrs = {}
         self.scan_nos = []
+        self.ipx_entries = {}
 
         self.extensions = {
             ".yml": self.handle_eln_file,
             ".yaml": self.handle_eln_file,
             ".json": self.set_config_file,
-            ".ibw": self.collect_ibw_file,
+            ".ibw": self.handle_ibw_file,
+            ".pxp": self.handle_pxp_file,
         }
 
     def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
@@ -112,24 +130,69 @@ class IgorReader(MultiFormatReader):
         self.config_file = file_path
         return {}
 
+    def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
+        if isinstance(objects, dict):
+            # We expect a dict of entry name dicts with data entries with wave paths as entries
+            for entry in objects.keys():
+                assert isinstance(
+                    objects[entry], dict
+                ), "Need to pass a dict of dicts as objects!"
+                self.ipx_entries[entry] = objects[entry]
+            return {}
+
+    #        logger.info(
+    #            f"Error while reading objects: {objects} does not contain an xarray object."
+    #            " Skipping the objects."
+    #        )
+    #        return {}
+
     def get_data(self, key: str, path: str) -> Any:
-        return self.ibw_data.get(path)
+        return self.ibw_data.get(f"{self.callbacks.entry_name}/{path}")
 
     def get_attr(self, key: str, path: str) -> Any:
-        return self.ibw_attrs.get(path)
+        return self.ibw_attrs.get(f"{self.callbacks.entry_name}/{path}")
+
+    def get_entry_names(self) -> List[str]:
+        if self.ipx_entries:
+            return self.ipx_entries.keys()
+        else:
+            return ["entry"]
 
     def post_process(self) -> None:
         for file in self.ibw_files:
             ibw = binarywave.load(file)
             self.ibw_attrs = parse_note(ibw["wave"]["note"])
-            for dim in range(ibw["wave"]['wave_header']["nDim"].size):
-                self.ibw_data[f"axis{dim}"] = axis_from(ibw, dim)
-                self.ibw_data[f"axis{dim}/@units"] = axis_units_from(ibw, dim)
-            self.ibw_data["data"] = ibw["wave"]["wData"]
-            self.ibw_data["data/@units"] = ibw["wave"]["data_units"]
+            for dim in range(ibw["wave"]["wave_header"]["nDim"].size):
+                self.ibw_data[f"entry/axis{dim}"] = axis_from(ibw, dim)
+                self.ibw_data[f"entry/axis{dim}/@units"] = axis_units_from(ibw, dim)
+            self.ibw_data["entry/data"] = ibw["wave"]["wData"]
+            self.ibw_data["entry/data/@units"] = ibw["wave"]["data_units"]
 
-    def collect_ibw_file(self, file_path: str) -> Dict[str, Any]:
+        assert len(self.ipx_files) <= 1, "Only one pxt file can be read at a time."
+        for file in self.ipx_files:
+            _, ipx = packed.load(file)
+            for entry, entry_dict in self.ipx_entries.items():
+                self.ibw_data[f"{entry}/@axes"] = entry_dict["@axes"]
+                self.ibw_data[f"{entry}/@signal"] = "data"
+                self.ibw_data[f"{entry}/data"] = iterate_dictionary(
+                    ipx, entry_dict["data"]
+                ).wave["wave"]["wData"]
+                for dim in range(4):
+                    if f"ax{dim}" in entry_dict:
+                        self.ibw_data[f"{entry}/ax{dim}"] = iterate_dictionary(
+                            ipx, entry_dict[f"ax{dim}"]
+                        ).wave["wave"]["wData"]
+                    else:
+                        self.ibw_data[f"{entry}/ax{dim}"] = axis_from(
+                            iterate_dictionary(ipx, entry_dict["data"]).wave, dim
+                        )
+
+    def handle_ibw_file(self, file_path: str) -> Dict[str, Any]:
         self.ibw_files.append(file_path)
+        return {}
+
+    def handle_pxp_file(self, file_path: str) -> Dict[str, Any]:
+        self.ipx_files.append(file_path)
         return {}
 
 

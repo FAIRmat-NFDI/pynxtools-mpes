@@ -1,10 +1,10 @@
 {
     "/@default": "entry",
-    "/ENTRY[entry]/DATA[data]/@axes": "ax0",
-    "/ENTRY[entry]/DATA[data]/@signal": "data",
-    "/ENTRY[entry]/DATA[data]/data": "@data:data",
-    "/ENTRY[entry]/DATA[data]/data/@units": "@data:data/@units",
-    "/ENTRY[entry]/DATA[data]/ax0": "@data:axis0",
-    "/ENTRY[entry]/DATA[data]/ax0/@units": "@data:axis0/@units",
-    "/ENTRY[entry]/DATA[data]/@ax0_indices": 0
+    "/ENTRY/DATA[data]/@axes": "ax0",
+    "/ENTRY/DATA[data]/@signal": "data",
+    "/ENTRY/DATA[data]/data": "@data:data",
+    "/ENTRY/DATA[data]/data/@units": "@data:data/@units",
+    "/ENTRY/DATA[data]/ax0": "@data:ax0",
+    "/ENTRY/DATA[data]/ax0/@units": "@data:ax0/@units",
+    "/ENTRY/DATA[data]/@ax0_indices": 0
 }
