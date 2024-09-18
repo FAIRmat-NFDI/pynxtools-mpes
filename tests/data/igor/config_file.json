@@ -1,15 +1,15 @@
 {
     "/@default": "entry1",
-    "/ENTRY[entry]/PROCESS_MPES[process]/energy_referencing/reference_peak": "@data:process/energy_referencing/reference_peak",
-    "/ENTRY[entry]/data/@axes": "@data:data/@axes",
-    "/ENTRY[entry]/data/@signal": "@data:data/@signal",
-    "/ENTRY[entry]/data/beta": "@data:data/beta",
-    "/ENTRY[entry]/data/beta/@units": "@data:data/beta/@units",
-    "/ENTRY[entry]/data/data": "@data:data/data",
-    "/ENTRY[entry]/data/data/@units": "@data:data/data/@units",
-    "/ENTRY[entry]/data/energy": "@data:data/energy",
-    "/ENTRY[entry]/data/energy/@units": "@data:data/energy/@units",
-    "/ENTRY[entry]/data/energy/@type": "@data:data/energy/@type",
-    "/ENTRY[entry]/data/theta": "@data:data/theta",
-    "/ENTRY[entry]/data/theta/@units": "@data:data/theta/@units"
+    "/ENTRY/PROCESS_MPES[process]/energy_referencing/reference_peak": "@data:process/energy_referencing/reference_peak",
+    "/ENTRY/data/@axes": "@data:data/@axes",
+    "/ENTRY/data/@signal": "@data:data/@signal",
+    "/ENTRY/data/beta": "@data:data/beta",
+    "/ENTRY/data/beta/@units": "@data:data/beta/@units",
+    "/ENTRY/data/data": "@data:data/data",
+    "/ENTRY/data/data/@units": "@data:data/data/@units",
+    "/ENTRY/data/energy": "@data:data/energy",
+    "/ENTRY/data/energy/@units": "@data:data/energy/@units",
+    "/ENTRY/data/energy/@type": "@data:data/energy/@type",
+    "/ENTRY/data/theta": "@data:data/theta",
+    "/ENTRY/data/theta/@units": "@data:data/theta/@units"
 }
