@@ -170,22 +170,25 @@ class IgorReader(MultiFormatReader):
 
         assert len(self.ipx_files) <= 1, "Only one pxt file can be read at a time."
         for file in self.ipx_files:
-            _, ipx = packed.load(file)
+            _, pxp = packed.load(file)
             for entry, entry_dict in self.ipx_entries.items():
-                self.ibw_data[f"{entry}/@axes"] = entry_dict["@axes"]
-                self.ibw_data[f"{entry}/@signal"] = "data"
-                self.ibw_data[f"{entry}/data"] = iterate_dictionary(
-                    ipx, entry_dict["data"]
-                ).wave["wave"]["wData"]
+                data_wave = iterate_dictionary(pxp, entry_dict["data"])
+                if data_wave:
+                    self.ibw_data[f"{entry}/data"] = data_wave.wave["wave"]["wData"]
                 for dim in range(4):
                     if f"ax{dim}" in entry_dict:
                         self.ibw_data[f"{entry}/ax{dim}"] = iterate_dictionary(
-                            ipx, entry_dict[f"ax{dim}"]
+                            pxp, entry_dict[f"ax{dim}"]
                         ).wave["wave"]["wData"]
                     else:
-                        self.ibw_data[f"{entry}/ax{dim}"] = axis_from(
-                            iterate_dictionary(ipx, entry_dict["data"]).wave, dim
-                        )
+                        if data_wave:
+                            self.ibw_data[f"{entry}/ax{dim}"] = axis_from(
+                                data_wave.wave, dim
+                            )
+
+                if "metadata" in entry_dict.keys():
+                    for key, val in entry_dict["metadata"].items():
+                        self.ibw_attrs[f"{entry}/{key}"] = val
 
     def handle_ibw_file(self, file_path: str) -> Dict[str, Any]:
         self.ibw_files.append(file_path)
