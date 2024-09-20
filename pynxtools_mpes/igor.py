@@ -92,7 +92,7 @@ def iterate_dictionary(dic, key_string):
 class IgorReader(MultiFormatReader):
     """Reader for FHI specific igor binarywave files"""
 
-    supported_nxdls = ["NXmpes", "NXmpes_arpes", "NXxrd"]
+    supported_nxdls = ["NXmpes", "NXmpes_arpes", "NXxrd", "NXxnb", "NXscan"]
     config_file: Optional[str] = None
 
     def __init__(self, *args, **kwargs):
@@ -175,6 +175,12 @@ class IgorReader(MultiFormatReader):
                 data_wave = iterate_dictionary(pxp, entry_dict["data"])
                 if data_wave:
                     self.ibw_data[f"{entry}/data"] = data_wave.wave["wave"]["wData"]
+                if "error" in entry_dict:
+                    error_wave = iterate_dictionary(pxp, entry_dict["error"])
+                    if error_wave:
+                        self.ibw_data[f"{entry}/error"] = error_wave.wave["wave"][
+                            "wData"
+                        ]
                 for dim in range(4):
                     if f"ax{dim}" in entry_dict:
                         self.ibw_data[f"{entry}/ax{dim}"] = iterate_dictionary(
