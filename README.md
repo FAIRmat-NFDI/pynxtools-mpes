@@ -28,4 +28,4 @@ for the latest development version.
 Extensive documentation of this pynxtools plugin is available [here](https://fairmat-nfdi.github.io/pynxtools-mpes/). You can find information about getting started, how-to guides, the supported file formats, how to get involved, and much more there.
 
 ## Contact person in FAIRmat for this reader
-Lukas Pielsticker, Laurenz Rettig
+Lukas Pielsticker, Laurenz Rettig, [the FAIRmat team](https://www.fair-di.eu/fairmat/about-fairmat/team-fairmat)
