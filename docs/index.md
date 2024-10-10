@@ -6,9 +6,10 @@ hide: toc
 
 pynxtools-mpes is a free, and open-source data software for harmonizing multidimensional photoemission spectroscopy (MPES) data and metadata for research data management using [NeXus](https://www.nexusformat.org/).
 
-pynxtools-mpes is a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) for translating MPES and standardizing such that it is compliant with the NeXus application definition [`NXmpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html). In addition, it also supports the specialized application definition [`NXmpes_arpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes_arpes.html) for angle-resolved photoemission spectroscopy (ARPES) experiments.
+pynxtools-mpes is a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) for reading, translating, and standardizing MPES data such that it is compliant with the NeXus application definition [`NXmpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html). In addition, it also supports the specialized application definition [`NXmpes_arpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes_arpes.html) for angle-resolved photoemission spectroscopy (ARPES) experiments.
 
-pynxtools-mpes is developed both as a standalone reader and as a tool within [NOMAD](https://nomad-lab.eu/), which is the open-source data management platform for materials science we are developing within [FAIRmat](https://www.fairmat-nfdi.eu/fairmat/).
+pynxtools-xps is developed both as a standalone reader and as a tool within [NOMAD](https://nomad-lab.eu/), which is the open-source data management platform for materials science we are developing within [FAIRmat](https://www.fairmat-nfdi.eu/fairmat/).
+
 
 <div markdown="block" class="home-grid">
 <div markdown="block"> 

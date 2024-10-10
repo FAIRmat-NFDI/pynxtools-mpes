@@ -7,7 +7,7 @@ name = "pynxtools-mpes"
 dynamic = ["version"]
 authors = [
     { name = "Florian Dobener", email = "florian.dobener@physik.hu-berlin.de" },
-    { name = "Abeer Aurora", email = "arora@fhi-berlin.mpg.de" },
+    { name = "Abeer Arora", email = "arora@fhi-berlin.mpg.de" },
     { name = "Laurenz Rettig", email = "rettig@fhi-berlin.mpg.de" },
     { name = "Lukas Pielsticker", email = "lukas.pielsticker@physik.hu-berlin.de" },
 ]
