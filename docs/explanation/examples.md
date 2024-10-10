@@ -1,22 +1,16 @@
 # Examples
 
+You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline [here](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-remote-tools-hub/-/tree/develop/docker/mpes).
 
-# How to use it?
+There are also small example files for using the `pynxtools` dataconverter with the `mpes` reader and the `NXmpes` application definition in [`tests/data/dataconverter/readers/mpes`](https://github.com/FAIRmat-NFDI/pynxtools/tree/master/tests/data/dataconverter/readers/mpes).
 
-This is an example to use the dataconvert with the `mpes` reader and the `NXmpes` application definition.
-If you want to use some example data you can find small example files in [`tests/data/dataconverter/readers/mpes`](https://github.com/FAIRmat-NFDI/pynxtools/tree/master/tests/data/dataconverter/readers/mpes).
-
+You can run the conversion 
 ```shell
-dataconverter --reader mpes \\
-    --nxdl NXmpes \\
+dataconverter \\
+    --reader mpes \\
+    --nxdl NXmpes_arpes \\
     xarray_saved_small_calibration \\
-    config_file.json \\
     eln_data.yaml \\
+    -c  config_file.json \\
     --output mpes_example.nxs
 ```
-
-The reader is a tailored parser for research data in a common format. This particular example is able to read and map hdf5 files, as well as json and yaml files. Feel free to contact FAIRmat if you want to create a parser for your research data.
-
-# Are there detailed examples?
-
-Yes, [here](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-remote-tools-hub/-/tree/develop/docker/mpes) you can find exhaustive examples how to use `pynxtools` for your ARPES research data pipeline.

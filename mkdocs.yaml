@@ -11,6 +11,7 @@ nav:
       - tutorial/installation.md
       - tutorial/standalone.md
   - How-To Guides:
+      - how-tos/build-a-reader.md
   - Explanation:
       - explanation/examples.md
   - Reference:

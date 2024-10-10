@@ -6,7 +6,7 @@ hide: toc
 
 pynxtools-mpes is a free, and open-source data software for harmonizing multidimensional photoemission spectroscopy (MPES) data and metadata for research data management using [NeXus](https://www.nexusformat.org/).
 
-pynxtools-mpes is a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) for translating MPES and standardizing such that it is compliant with the NeXus application definition [`NXmpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html). In addition, it also supports the specialized application definition [NXmpes_arpes](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes_arpes.html) for angle-resolved photoemission spectroscopy (ARPES) experiments.
+pynxtools-mpes is a plugin for [pynxtools](https://github.com/FAIRmat-NFDI/pynxtools) for translating MPES and standardizing such that it is compliant with the NeXus application definition [`NXmpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes.html). In addition, it also supports the specialized application definition [`NXmpes_arpes`](https://fairmat-nfdi.github.io/nexus_definitions/classes/contributed_definitions/NXmpes_arpes.html) for angle-resolved photoemission spectroscopy (ARPES) experiments.
 
 pynxtools-mpes is developed both as a standalone reader and as a tool within [NOMAD](https://nomad-lab.eu/), which is the open-source data management platform for materials science we are developing within [FAIRmat](https://www.fairmat-nfdi.eu/fairmat/).
 
@@ -27,7 +27,7 @@ A series of tutorials giving you an overview on how to store or convert your XPS
 
 How-to guides provide step-by-step instructions for a wide range of tasks, with the overarching topics:
 
-- coming soon!
+- [How to build a new MPES reader](how-tos/build-a-reader.md)
 
 </div>
 
@@ -44,7 +44,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 
 Here you can learn which specific readers are currently implemented in `pynxtools-mpes`.
 
-- [MPES reader](reference/mpes.md) for data from the [Fritz Haber Institute of the Max Planck Soeciety (FHI)](https://www.fhi.mpg.de/de) Berlin
+- [MPES reader](reference/mpes.md) for data from the [FHI Berlin](https://www.fhi.mpg.de/de) 
 
 </div>
 </div>

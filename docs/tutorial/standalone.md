@@ -1,4 +1,4 @@
-# Convert multi-dimensional photoemission spectroscopy (MPES) data and metadata to NeXus
+# Convert MPES data and metadata to NeXus
 
 ## Who is this tutorial for?
 
