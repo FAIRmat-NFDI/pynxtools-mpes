@@ -1,6 +1,6 @@
 # Data from MPES instruments
 
-The reader supports [HDF5](https://www.hdfgroup.org/solutions/hdf5/) created using the MPES instruments at the [Fritz Haber Institute of the Max Planck Society (FHI)](https://www.fhi.mpg.de/de).
+The reader supports [HDF5](https://www.hdfgroup.org/solutions/hdf5/) files created using the MPES instruments at the Department of Physical Chemistry of the [Fritz Haber Institute of the Max Planck Society (FHI)](https://pc.fhi-berlin.mpg.de).
 
 The reader for can be found [here](https://github.com/FAIRmat-NFDI/pynxtools-mpes/blob/main/pynxtools_mpes/reader.py).
 

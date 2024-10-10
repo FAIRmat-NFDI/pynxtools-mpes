@@ -2,8 +2,8 @@
 
 ## Who is this tutorial for?
 
-This document is for people who want to use this reader as a standalone standardize their research data by converting these
-into a NeXus standardized format.
+This document is for people who want to use this reader as a standalone application for converting their research data
+into a standardized NeXus format.
 
 ## What should you should know before this tutorial?
 

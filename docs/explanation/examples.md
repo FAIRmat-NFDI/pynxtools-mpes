@@ -1,6 +1,6 @@
 # Examples
 
-You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline [here](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-remote-tools-hub/-/tree/develop/docker/mpes).
+You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline [here](https://gitlab.mpcdf.mpg.de/nomad-lab/north/mpes/-/tree/main/example).
 
 There are also small example files for using the `pynxtools` dataconverter with the `mpes` reader and the `NXmpes` application definition in [`tests/data/dataconverter/readers/mpes`](https://github.com/FAIRmat-NFDI/pynxtools/tree/master/tests/data/dataconverter/readers/mpes).
 
