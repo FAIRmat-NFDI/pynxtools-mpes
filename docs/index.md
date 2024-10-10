@@ -19,7 +19,7 @@ pynxtools-mpes is developed both as a standalone reader and as a tool within [NO
 A series of tutorials giving you an overview on how to store or convert your XPS data to NeXus compliant files.
 
 - [Installation guide](tutorial/installation.md)
-- [Standalone usage](tutorial/standalone.md)
+- [Standalone usage and examples](tutorial/standalone.md)
 
 </div>
 <div markdown="block">
@@ -36,7 +36,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 
 ### Learn
 
-- [Examples](explanation/examples.md)
+- coming soon!
 
 </div>
 <div markdown="block">

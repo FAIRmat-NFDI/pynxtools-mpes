@@ -31,4 +31,21 @@ $<eln-file path> \
 --output <output-file path>.nxs
 ```
 
+### Examples
+
+You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline [here](https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-remote-tools-hub/-/tree/develop/docker/mpes).
+
+There are also small example files for using the `pynxtools` dataconverter with the `mpes` reader and the `NXmpes` application definition in [`tests/data`](https://github.com/FAIRmat-NFDI/pynxtools.mpes/tree/main/tests/data).
+
+For this tutorial, we will work with this data. You can run the conversion as
+```shell
+dataconverter \\
+    --reader mpes \\
+    --nxdl NXmpes_arpes \\
+    xarray_saved_small_calibration \\
+    eln_data.yaml \\
+    -c  config_file.json \\
+    --output mpes_example.nxs
+```
+
 **Congrats! You now have a FAIR NeXus file!**
