@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: 'pynxtools-mpes: A pynxtools reader plugin for multidimensional photoemission spectroscopy (MPES) data'
-version: 0.2.1
+version: 0.2.2
 message:
   If you use this software, please cite it using the
   metadata from this file.
@@ -27,9 +27,9 @@ authors:
     family-names: Brockhauser
     orcid: 'https://orcid.org/0000-0002-9700-4803'
 
-doi: TODO
+doi: CHANGE HERE
 repository-code: 'https://github.com/FAIRmat-NFDI/pynxtools-mpes'
-url: TODO
+url: CHANGE HERE
 keywords:
   - Multidimensional Photoelectron Spectroscopy
   - ARPES
