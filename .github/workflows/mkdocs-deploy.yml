@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main  # Triggers deployment on push to the main branch
-      - start-docs
 
 env:
   UV_SYSTEM_PYTHON: true
