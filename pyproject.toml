@@ -55,6 +55,9 @@ docs = [
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
 
+[project.entry-points.'nomad.plugin']
+mpes_example = "pynxtools_mpes.nomad.entrypoints:mpes_example"
+
 [tool.setuptools.packages.find]
 where = [
     "src",
