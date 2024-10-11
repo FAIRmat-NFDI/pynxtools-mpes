@@ -17,11 +17,7 @@
 #
 """Entry points for mpes examples."""
 try:
-    from nomad.config.models.plugins import (
-        ParserEntryPoint,
-        SchemaPackageEntryPoint,
-        ExampleUploadEntryPoint,
-    )
+    from nomad.config.models.plugins import ExampleUploadEntryPoint
 except ImportError as exc:
     raise ImportError(
         "Could not import nomad package. Please install the package 'nomad-lab'."
