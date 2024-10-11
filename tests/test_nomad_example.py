@@ -55,4 +55,8 @@ def test_nomad_examples(mainfile, no_warn):
     ],
 )
 def test_nomad_example_upload_entry_point_valid(config, expected_local_path):
-    test_example_upload_entry_point_valid(plugin_package="pynxtools-mpes", config, expected_local_path)
+    test_example_upload_entry_point_valid(
+        plugin_package="pynxtools-mpes",
+        config=config,
+        expected_local_path=expected_local_path,
+    )

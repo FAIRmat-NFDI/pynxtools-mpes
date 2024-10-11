@@ -16,6 +16,7 @@
 # limitations under the License.
 #
 """Entry points for mpes examples."""
+
 try:
     from nomad.config.models.plugins import ExampleUploadEntryPoint
 except ImportError as exc:
