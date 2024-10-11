@@ -2,7 +2,7 @@
 
 The reader supports [HDF5](https://www.hdfgroup.org/solutions/hdf5/) files created using the MPES instruments at the Department of Physical Chemistry of the [Fritz Haber Institute of the Max Planck Society (FHI)](https://pc.fhi-berlin.mpg.de).
 
-The reader for can be found [here](https://github.com/FAIRmat-NFDI/pynxtools-mpes/blob/main/pynxtools_mpes/reader.py).
+The reader for can be found [here](https://github.com/FAIRmat-NFDI/pynxtools-mpes/blob/main/src/pynxtools_mpes/reader.py).
 
 Example data for the MPES reader is available [here](https://github.com/FAIRmat-NFDI/pynxtools-mpes/tree/main/tests/data).
 
