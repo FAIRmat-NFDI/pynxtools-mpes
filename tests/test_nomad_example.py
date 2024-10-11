@@ -34,6 +34,8 @@ from pynxtools.testing.nomad_example import (
     example_upload_entry_point_valid,
 )
 
+from pynxtools.nomad.entrypoints import mpes_example
+
 
 @pytest.mark.parametrize(
     "mainfile", get_file_parameter("../src/pynxtools_mpes/nomad/examples")
@@ -44,23 +46,20 @@ def test_nomad_examples(mainfile, no_warn):
 
 
 @pytest.mark.parametrize(
-    "config, expected_local_path",
+    "entrypoint",
+    "expected_local_path",
     [
         pytest.param(
-            {
-                "title": "mpes_example",
-                "description": "mpes_example",
-                "category": "test",
-                "path": "nomad/examples",
-            },
+            mpes_example,
             f"examples/data/uploads/mpes.zip",
             id="mpes_example",
         ),
     ],
 )
-def test_nomad_example_upload_entry_point_valid(config, expected_local_path):
+def test_nomad_example_upload_entry_point_valid(entrypoint, expected_local_path):
+    """Test if NOMAD ExampleUploadEntryPoint works."""
     example_upload_entry_point_valid(
+        entrypoint=entrypoint,
         plugin_package="pynxtools-mpes",
-        config=config,
         expected_local_path=expected_local_path,
     )
