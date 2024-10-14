@@ -21,10 +21,10 @@ jobs:
           uv pip install -r dev-requirements.txt
       - name: ruff check
         run: |
-          ruff check pynxtools_mpes tests
+          ruff check src/pynxtools_mpes tests
       - name: ruff format
         run: |
-          ruff format --check pynxtools_mpes tests
+          ruff format --check src/pynxtools_mpes tests
       - name: mypy
         run: |
-          mypy pynxtools_mpes tests
+          mypy src/pynxtools_mpes tests

@@ -20,7 +20,7 @@ nav:
 plugins:
   - search
   - macros:
-      module_name: pynxtools_mpes/mkdocs
+      module_name: src/pynxtools_mpes/mkdocs
 
 theme:
   name: material

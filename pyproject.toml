@@ -55,13 +55,15 @@ docs = [
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
 
-[tool.setuptools]
-packages = ["pynxtools_mpes"]
+[tool.setuptools.packages.find]
+where = [
+    "src",
+]
 
 [tool.setuptools_scm]
 
 [tool.ruff]
-include = ["pynxtools_mpes/*.py", "tests/*.py"]
+include = ["src/*.py", "tests/*.py"]
 line-length = 88
 indent-width = 4
 

@@ -1,4 +1,4 @@
 prune *
 exclude *
-recursive-include pynxtools_mpes *.py
+recursive-include src/pynxtools_mpes *.py
 include pyproject.toml README.md dev-requirements.txt
