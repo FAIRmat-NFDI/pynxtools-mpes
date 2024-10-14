@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Test for NOMAD examples in reader plugins."""
+"""Test for NOMAD examples in MPES reader plugin."""
 
 import pytest
 
@@ -30,28 +30,27 @@ except ImportError:
 
 from pynxtools.testing.nomad_example import (
     get_file_parameter,
-    parse_nomad_example,
+    parse_nomad_examples,
     example_upload_entry_point_valid,
 )
 
-from pynxtools.nomad.entrypoints import mpes_example
+from pynxtools_mpes.nomad.entrypoints import mpes_example
 
 
 @pytest.mark.parametrize(
-    "mainfile", get_file_parameter("../src/pynxtools_mpes/nomad/examples")
+    "mainfile", get_file_parameter("src/pynxtools_mpes/nomad/examples")
 )
-def test_nomad_examples(mainfile, no_warn):
+def test_parse_nomad_examples(mainfile):
     """Test if NOMAD examples work."""
-    parse_nomad_example(mainfile)
+    parse_nomad_examples(mainfile)
 
 
 @pytest.mark.parametrize(
-    "entrypoint",
-    "expected_local_path",
+    ("entrypoint", "expected_local_path"),
     [
         pytest.param(
             mpes_example,
-            f"examples/data/uploads/mpes.zip",
+            "examples/data/uploads/mpes.zip",
             id="mpes_example",
         ),
     ],
