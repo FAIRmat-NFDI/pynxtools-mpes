@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Test for NOMAD examples in APM reader plugin."""
+"""Test for NOMAD examples in MPES reader plugin."""
 
 import pytest
 
@@ -34,24 +34,24 @@ from pynxtools.testing.nomad_example import (
     example_upload_entry_point_valid,
 )
 
-from pynxtools_apm.nomad.entrypoints import apm_example
+from pynxtools_mpes.nomad.entrypoints import mpes_example
 
 
 @pytest.mark.parametrize(
-    "mainfile", get_file_parameter("src/pynxtools_apm/nomad/examples")
+    "mainfile", get_file_parameter("src/pynxtools_mpes/nomad/examples")
 )
 def test_parse_nomad_examples(mainfile):
     """Test if NOMAD examples work."""
-    archive_dict = parse_nomad_examples(mainfile)
+    parse_nomad_examples(mainfile)
 
 
 @pytest.mark.parametrize(
     ("entrypoint", "expected_local_path"),
     [
         pytest.param(
-            apm_example,
-            "examples/data/uploads/apm.zip",
-            id="apm_example",
+            mpes_example,
+            "examples/data/uploads/mpes.zip",
+            id="mpes_example",
         ),
     ],
 )
@@ -59,6 +59,6 @@ def test_nomad_example_upload_entry_point_valid(entrypoint, expected_local_path)
     """Test if NOMAD ExampleUploadEntryPoint works."""
     example_upload_entry_point_valid(
         entrypoint=entrypoint,
-        plugin_package="pynxtools-apm",
+        plugin_package="pynxtools-mpes",
         expected_local_path=expected_local_path,
     )
