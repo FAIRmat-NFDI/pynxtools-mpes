@@ -3,12 +3,12 @@ definitions:
   sections:
     MPES:
       base_sections:
-        - "nomad.datamodel.metainfo.eln.ElnYamlConverter"
+        - "pynxtools.nomad.dataconverter.ElnYamlConverter"
         - "nomad.datamodel.data.EntryData"
       m_annotations:
         template:
           reader: mpes
-          nxdl: NXmpes.nxdl
+          nxdl: NXmpes
         eln:
           hide: []
       quantities:
@@ -129,7 +129,7 @@ definitions:
                                 defaultDisplayUnit: "kilohertz"
                           photon_energy:
                             type: np.float64
-                            unit: joule 
+                            unit: joule
                             m_annotations:
                               eln:
                                 component: NumberEditQuantity
