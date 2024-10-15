@@ -40,8 +40,19 @@ from pynxtools.testing.nomad_example import (
 
 from pynxtools_mpes.nomad.entrypoints import mpes_example
 
+
 @pytest.mark.parametrize(
-    "mainfile", get_file_parameter(os.path.join(os.path.dirname(__file__), '..', 'src', 'pynxtools_mpes', 'nomad', 'examples'))
+    "mainfile",
+    get_file_parameter(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "src",
+            "pynxtools_mpes",
+            "nomad",
+            "examples",
+        )
+    ),
 )
 def test_parse_nomad_examples(mainfile):
     """Test if NOMAD examples work."""
