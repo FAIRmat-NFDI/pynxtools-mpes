@@ -20,17 +20,14 @@
 import os
 import pytest
 
-# try:
-#     from nomad.parsing.parser import ArchiveParser
-#     from nomad.datamodel import EntryArchive, Context
-# except ImportError:
-#     pytest.skip(
-#         "Skipping NOMAD example tests because nomad is not installed",
-#         allow_module_level=True,
-#     )
-
-from nomad.parsing.parser import ArchiveParser
-from nomad.datamodel import EntryArchive, Context
+try:
+    from nomad.parsing.parser import ArchiveParser
+    from nomad.datamodel import EntryArchive, Context
+except ImportError:
+    pytest.skip(
+        "Skipping NOMAD example tests because nomad is not installed",
+        allow_module_level=True,
+    )
 
 from pynxtools.testing.nomad_example import (
     get_file_parameter,
