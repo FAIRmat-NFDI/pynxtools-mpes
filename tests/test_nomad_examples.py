@@ -17,16 +17,20 @@
 #
 """Test for NOMAD examples in MPES reader plugin."""
 
+import os
 import pytest
 
-try:
-    from nomad.parsing.parser import ArchiveParser
-    from nomad.datamodel import EntryArchive, Context
-except ImportError:
-    pytest.skip(
-        "Skipping NOMAD example tests because nomad is not installed",
-        allow_module_level=True,
-    )
+# try:
+#     from nomad.parsing.parser import ArchiveParser
+#     from nomad.datamodel import EntryArchive, Context
+# except ImportError:
+#     pytest.skip(
+#         "Skipping NOMAD example tests because nomad is not installed",
+#         allow_module_level=True,
+#     )
+
+from nomad.parsing.parser import ArchiveParser
+from nomad.datamodel import EntryArchive, Context
 
 from pynxtools.testing.nomad_example import (
     get_file_parameter,
@@ -36,9 +40,8 @@ from pynxtools.testing.nomad_example import (
 
 from pynxtools_mpes.nomad.entrypoints import mpes_example
 
-
 @pytest.mark.parametrize(
-    "mainfile", get_file_parameter("src/pynxtools_mpes/nomad/examples")
+    "mainfile", get_file_parameter(os.path.join(os.path.dirname(__file__), '..', 'src', 'pynxtools_mpes', 'nomad', 'examples'))
 )
 def test_parse_nomad_examples(mainfile):
     """Test if NOMAD examples work."""
