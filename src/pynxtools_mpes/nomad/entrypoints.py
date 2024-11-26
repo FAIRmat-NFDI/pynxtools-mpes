@@ -35,5 +35,5 @@ mpes_example = ExampleUploadEntryPoint(
       - Binning of raw data (see [here](https://www.nature.com/articles/s41597-020-00769-8) for additional resources) into a h5 file and consecutively generating a NeXus file from it.
       - An analysis example using data in the NeXus format and employing the [pyARPES](https://github.com/chstan/arpes) analysis tool to reproduce the main findings of [this paper](https://arxiv.org/pdf/2107.07158.pdf).
     """,
-    resources=['nomad/examples/*']
+    resources=["nomad/examples/*"],
 )
