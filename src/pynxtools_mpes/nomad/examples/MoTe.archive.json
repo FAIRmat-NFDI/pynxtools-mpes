@@ -3,7 +3,7 @@
         "m_def": "pynxtools.nomad.dataconverter.NexusDataConverter",
         "input_files": [
             "MoTe2.h5",
-            "config_file_MoTe2.json"
+            "config_file.json"
         ],
         "reader": "mpes",
         "nxdl": "NXmpes",

@@ -11,3 +11,5 @@ data:
       output: TiTe2/TiTe2_0deg.nxs
     - url: https://zenodo.org/records/5541490/files/TiTe2_60deg.nxs?download=1
       output: TiTe2/TiTe2_60deg.nxs
+    - url: https://nomad-lab.eu/prod/v1/api/v1/entries/xV9yMspIyXMfia6nNw3NIbnlZ91H/raw/Scan1496.nxs
+      output: Scan1496.nxs

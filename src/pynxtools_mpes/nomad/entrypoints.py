@@ -34,6 +34,7 @@ mpes_example = ExampleUploadEntryPoint(
         There exists a [NeXus application definition for MPES](https://manual.nexusformat.org/classes/contributed_definitions/NXmpes.html#nxmpes) which details the internal structure of such a file.
       - Binning of raw data (see [here](https://www.nature.com/articles/s41597-020-00769-8) for additional resources) into a h5 file and consecutively generating a NeXus file from it.
       - An analysis example using data in the NeXus format and employing the [pyARPES](https://github.com/chstan/arpes) analysis tool to reproduce the main findings of [this paper](https://arxiv.org/pdf/2107.07158.pdf).
+      - Importing angle-resolved data stored in NXmpes_arpes, and convert these into momentum space coordinates using tools in pyARPES.
     """,
     plugin_package="pynxtools_mpes",
     resources=["nomad/examples/*"],
