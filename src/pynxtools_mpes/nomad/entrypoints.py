@@ -28,7 +28,7 @@ mpes_example = ExampleUploadEntryPoint(
     title="Multidimensional photoemission spectroscopy (MPES)",
     category="FAIRmat examples",
     description="""
-        This example presents the capabilities of the NOMAD platform to store and standardize multidimensional photoemission spectroscopy (MPES) experimental data. It contains three major examples:
+        This example presents the capabilities of the NOMAD platform to store and standardize multidimensional photoemission spectroscopy (MPES) experimental data. It contains four major examples:
 
       - Taking a pre-binned file, here stored in a h5 file, and converting it into the standardized MPES NeXus format.
         There exists a [NeXus application definition for MPES](https://manual.nexusformat.org/classes/contributed_definitions/NXmpes.html#nxmpes) which details the internal structure of such a file.
