@@ -30,7 +30,7 @@ jobs:
         run: |
           curl -LsSf https://astral.sh/uv/install.sh | sh
       - name: Install nomad
-        if: "${{ matrix.python_version != '3.8'}"
+        if: "${{ matrix.python_version != '3.8'}}"
         run: |
           uv pip install nomad-lab[infrastructure]@git+https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-FAIR.git
       - name: Install package
