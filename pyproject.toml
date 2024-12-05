@@ -54,6 +54,9 @@ igor = [
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
 "Bug Tracker" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes/issues"
+igor = [
+    "igor2",
+]
 
 [project.entry-points."pynxtools.reader"]
 mpes = "pynxtools_mpes.reader:MPESReader"
