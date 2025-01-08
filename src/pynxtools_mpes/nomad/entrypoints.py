@@ -98,7 +98,11 @@ mpes_app = AppEntryPoint(
         # results to the wanted subset. Any available search filter can be
         # targeted here. This example makes sure that only entries that use
         # MySchema are included.
-        filters_locked={"section_defs.definition_qualified_name": [schema]},
+        filters_locked={
+            "text_search_contents": [
+                "data.Mpes.ENTRY.definition__field=NXmpes OR data.Mpes_arpes.ENTRY.definition__field=NXmpes_arpes"
+            ]
+        },
         # Controls the menu shown on the left
         menu=Menu(
             title="Material",
