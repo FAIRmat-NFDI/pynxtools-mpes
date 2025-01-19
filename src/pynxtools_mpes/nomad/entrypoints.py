@@ -50,7 +50,7 @@ from nomad.config.models.ui import (
     SearchQuantities,
 )
 
-schema = "pynxtools.nomad.schema.NeXus"
+schema = "pynxtools.nomad.schema.Root"
 
 mpes_app = AppEntryPoint(
     name="MpesApp",
@@ -79,17 +79,17 @@ mpes_app = AppEntryPoint(
             Column(quantity=f"entry_type", selected=True),
             Column(
                 title="definition",
-                quantity=f"data.*.ENTRY[*].definition__field#{schema}",
+                quantity=f"data.ENTRY[*].definition__field#{schema}",
                 selected=True,
             ),
             Column(
                 title="start_time",
-                quantity=f"data.*.ENTRY[*].start_time__field#{schema}",
+                quantity=f"data.ENTRY[*].start_time__field#{schema}",
                 selected=True,
             ),
             Column(
                 title="title",
-                quantity=f"data.*.ENTRY[*].title__field#{schema}",
+                quantity=f"data.ENTRY[*].title__field#{schema}",
                 selected=True,
             ),
         ],
@@ -100,7 +100,7 @@ mpes_app = AppEntryPoint(
         # MySchema are included.
         filters_locked={
             "text_search_contents": [
-                "data.Mpes.ENTRY.definition__field=NXmpes OR data.Mpes_arpes.ENTRY.definition__field=NXmpes_arpes"
+                "data.ENTRY.definition__field==NXmpes OR data.ENTRY.definition__field==NXmpes_arpes"
             ]
         },
         # Controls the menu shown on the left
@@ -139,30 +139,74 @@ mpes_app = AppEntryPoint(
                     "autorange": True,
                     "nbins": 30,
                     "scale": "linear",
-                    "quantity": f"data.Root.datetime#{schema}",
-                    "title": "Procesing Time",
+                    "quantity": f"data.ENTRY.start_time__field#{schema}",
+                    "title": "Start Time",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 12, "y": 0, "x": 0}
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 0}
+                    },
+                },
+                {
+                    "type": "histogram",
+                    "show_input": False,
+                    "autorange": True,
+                    "nbins": 30,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#pynxtools.nomad.schema.Root#float",
+                    "title": "Temperature",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 7}
+                    },
+                },
+                {
+                    "type": "histogram",
+                    "show_input": False,
+                    "autorange": True,
+                    "nbins": 30,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.INSTRUMENT.beamTYPE.fluence__field#pynxtools.nomad.schema.Root#float",
+                    "title": "Pump Fluence",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 13}
                     },
                 },
                 {
                     "type": "terms",
                     "show_input": False,
                     "scale": "linear",
-                    "quantity": f"entry_type",
-                    "title": "Entry Type",
+                    "quantity": f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#pynxtools.nomad.schema.Root#str",
+                    "title": "Material",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 8, "w": 4, "y": 0, "x": 12}
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 0}
                     },
                 },
                 {
-                    "type": "periodic_table",
+                    "type": "terms",
+                    "show_input": False,
                     "scale": "linear",
-                    "quantity": f"results.material.elements",
+                    "quantity": f"data.ENTRY.INSTRUMENT.name__field#pynxtools.nomad.schema.Root#str",
+                    "title": "Instrument",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 12, "y": 4, "x": 0}
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 6}
                     },
                 },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.USER.name__field#pynxtools.nomad.schema.Root#str",
+                    "title": "User",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
+                    },
+                },
+                # {
+                #     "type": "periodic_table",
+                #     "scale": "linear",
+                #     "quantity": f"results.material.elements",
+                #     "layout": {
+                #         "lg": {"minH": 3, "minW": 3, "h": 6, "w": 12, "y": 4, "x": 0}
+                #     },
+                # },
             ]
         },
     ),
