@@ -199,6 +199,16 @@ mpes_app = AppEntryPoint(
                         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
                     },
                 },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.data.___axes#pynxtools.nomad.schema.Root#str",
+                    "title": "Axes",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 18}
+                    },
+                },
                 # {
                 #     "type": "periodic_table",
                 #     "scale": "linear",
