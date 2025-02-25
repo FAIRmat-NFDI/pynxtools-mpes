@@ -229,7 +229,7 @@ class MPESReader(MultiFormatReader):
     def get_data(self, key: str, path: str) -> Any:
         try:
             value = rgetattr(obj=self.data_xarray, attr=path)
-            if path.split("/")[-1] == "@axes":
+            if key.split("/")[-1] == "@axes":
                 return list(value)
             return value
 
