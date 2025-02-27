@@ -1,0 +1,414 @@
+definitions:
+  name: "ELN for MPES Lab"
+  sections:
+    Project:
+      base_sections:
+        - "pynxtools_mpes.nomad.lab.dataconverter.MpesDataConverter"
+      m_annotations:
+        template:
+          reader: json_map
+          nxdl: NXmpes
+          input_files: ["mpes.mapping.json"]
+        eln:
+          hide: ['reader', 'input_files', 'nxdl', 'output']
+      quantities:
+        nexus_view:
+          type: pynxtools.nomad.schema.Root
+          m_annotations:
+            eln:
+              overview: true
+        title:
+          type: str
+          description: Short Title for the Project
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        description:
+          type: str
+          description: Free text description of a set of measurements belonging together.
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        summary:
+          type: str
+          description: Free text description of a set of measurements belonging together.
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        users:
+          type: Member
+          shape: ['*']
+          description: link to project users
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        measurements:
+          type: Measurement
+          shape: ['*']
+          description: link to measurements
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        analysis:
+          type: Analysis
+          shape: ['*']
+          description: link to analysis
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
+
+    InstrumentStatus:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        energy_resolution:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "meV"
+        momentum_resolution:
+          type: np.float64
+          unit: 1/meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "1/angstrom"
+        temporal_resolution:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "fs"
+      sub_sections:
+        Manipulator:
+          section:
+            quantities:
+              sample_temperature:
+                type: np.float64
+                unit: celsius
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "kelvin"
+        Analyzer:
+          section:
+            quantities:
+              slow_axes:
+                type: str
+                m_annotations:
+                  eln:
+                    component: StringEditQuantity
+              spatial_resolution:
+                type: np.float64
+                unit: meter
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "micrometer"
+              energy_resolution:
+                type: np.float64
+                unit: joule
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "eV"
+              momentum_resolution:
+                type: np.float64
+                unit: 1/meter
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "1/angstrom"
+
+
+    LaserStatus:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      sub_sections:
+        Source:
+          section:
+            sub_sections:
+              Probe:
+                section:
+                  quantities:
+                    frequency:
+                      type: np.float64
+                      unit: hertz
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "kilohertz"
+                    photon_energy:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "eV"
+              Pump:
+                section:
+                  quantities:
+                    frequency:
+                      type: np.float64
+                      unit: hertz
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "kilohertz"
+                    photon_energy:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "eV"
+        Beam:
+          section:
+            sub_sections:
+              Probe:
+                section:
+                  quantities:
+                    incident_energy:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "eV"
+                    incident_energy_spread:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "eV"
+                    pulse_duration:
+                      type: np.float64
+                      unit: second
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "fs"
+                    incident_polarization:
+                      type: np.float64
+                      shape: ["4"]
+                      description: Incident Stokes Vector
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                    extent:
+                      type: np.float64
+                      shape: ["2"]
+                      unit: meter
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "micrometer"
+              Pump:
+                section:
+                  quantities:
+                    incident_energy:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "eV"
+                    incident_energy_spread:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "eV"
+                    pulse_duration:
+                      type: np.float64
+                      unit: second
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          minValue: 0
+                          defaultDisplayUnit: "fs"
+                    incident_polarization:
+                      type: np.float64
+                      shape: ["4"]
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                    extent:
+                      type: np.float64
+                      shape: ["2"]
+                      unit: meter
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "micrometer"
+                    incident_wavelength:
+                      type: np.float64
+                      unit: meter
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "nanometer"
+                    average_power:
+                      type: np.float64
+                      unit: watt
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "milliwatt"
+                    pulse_energy:
+                      type: np.float64
+                      unit: joule
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "microjoule"
+                    fluence:
+                      type: np.float64
+                      unit: joule / meter ** 2
+                      m_annotations:
+                        eln:
+                          component: NumberEditQuantity
+                          defaultDisplayUnit: "millijoule / centimeter**2"
+
+
+    Measurement:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        title:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        scanned_axes:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        instrument:
+          type: InstrumentStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        laser:
+          type: LaserStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        sample:
+          type: Sample
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
+    Member:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        name:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        role:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        affiliation:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        address:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        email:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+
+
+    Sample:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        preparation_date:
+          type: Datetime
+          m_annotations:
+            eln:
+              component: DateTimeEditQuantity
+        sample_history:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        chemical_formula:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        description:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        name:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        temperature:
+          type: np.float64
+          unit: celsius
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "kelvin"
+        gas_pressure:
+          type: np.float64
+          unit: bar
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "mbar"
+
+
+    Analysis:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        software:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        inputs:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+
+
+
+
+
+
+

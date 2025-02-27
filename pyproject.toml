@@ -76,6 +76,7 @@ mpes = "pynxtools_mpes.reader:MPESReader"
 mpes_app = "pynxtools_mpes.nomad.apps:mpes_app"
 mpes_example_upload = "pynxtools_mpes.nomad.example_uploads:mpes_example_upload"
 mpes_north_tool = "pynxtools_mpes.nomad.north_tools:mpes"
+mpes_data_converter = "pynxtools_mpes.nomad.entrypoints:mpes_data_converter"
 
 [tool.uv]
 extra-index-url = [
