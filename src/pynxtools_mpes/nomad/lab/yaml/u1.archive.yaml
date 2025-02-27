@@ -1,0 +1,6 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#Member'
+  name: useer1
+  role: guest
+  affiliation: uni
+
