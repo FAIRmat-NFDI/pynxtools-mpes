@@ -30,7 +30,7 @@ class MpesDataConverter(NexusDataConverter):
 
     def normalize(self, archive, logger):
         if self.export:
-            self.output = f"{archive.metadata.mainfile}.nxs"
+            self.output = f"{archive.metadata.mainfile.replace(".","_")}.nxs"
             super(MpesDataConverter, self).normalize(archive, logger)
 
 
