@@ -19,7 +19,8 @@
 
 try:
     from nomad.config.models.plugins import (
-        ExampleUploadEntryPoint,
+        ExampleUploadEntryPoint, 
+        AppEntryPoint,
         SchemaPackageEntryPoint,
     )
 except ImportError as exc:
@@ -41,6 +42,188 @@ mpes_example = ExampleUploadEntryPoint(
     """,
     plugin_package="pynxtools_mpes",
     resources=["nomad/examples/*"],
+)
+
+from nomad.config.models.ui import (
+    App,
+    Column,
+    Menu,
+    MenuItemHistogram,
+    MenuItemPeriodicTable,
+    MenuItemTerms,
+    SearchQuantities,
+)
+
+schema = "pynxtools.nomad.schema.Root"
+
+mpes_app = AppEntryPoint(
+    name="MpesApp",
+    description="Simple NXmpes NeXus app.",
+    app=App(
+        # Label of the App
+        label="MPES",
+        # Path used in the URL, must be unique
+        path="mpesapp",
+        # Used to categorize apps in the explore menu
+        category="Experiment",
+        # Brief description used in the app menu
+        description="A simple search app customized for NXmpes NeXus data.",
+        # Longer description that can also use markdown
+        readme="This is a simple App to support basic search for NXmpes NeXus based Experiment Entries.",
+        # If you want to use quantities from a custom schema, you need to load
+        # the search quantities from it first here. Note that you can use a glob
+        # syntax to load the entire package, or just a single schema from a
+        # package.
+        search_quantities=SearchQuantities(
+            include=[f"*#{schema}"],
+        ),
+        # Controls which columns are shown in the results table
+        columns=[
+            Column(quantity="entry_id", selected=True),
+            Column(quantity=f"entry_type", selected=True),
+            Column(
+                title="definition",
+                quantity=f"data.ENTRY[*].definition__field#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="start_time",
+                quantity=f"data.ENTRY[*].start_time__field#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="title",
+                quantity=f"data.ENTRY[*].title__field#{schema}",
+                selected=True,
+            ),
+        ],
+        # Dictionary of search filters that are always enabled for queries made
+        # within this app. This is especially important to narrow down the
+        # results to the wanted subset. Any available search filter can be
+        # targeted here. This example makes sure that only entries that use
+        # MySchema are included.
+        filters_locked={
+            "text_search_contents": [
+                "data.ENTRY.definition__field==NXmpes OR data.ENTRY.definition__field==NXmpes_arpes"
+            ]
+        },
+        # Controls the menu shown on the left
+        menu=Menu(
+            title="Material",
+            items=[
+                Menu(
+                    title="elements",
+                    items=[
+                        MenuItemPeriodicTable(
+                            quantity="results.material.elements",
+                        ),
+                        MenuItemTerms(
+                            quantity="results.material.chemical_formula_hill",
+                            width=6,
+                            options=0,
+                        ),
+                        MenuItemTerms(
+                            quantity="results.material.chemical_formula_iupac",
+                            width=6,
+                            options=0,
+                        ),
+                        MenuItemHistogram(
+                            x="results.material.n_elements",
+                        ),
+                    ],
+                )
+            ],
+        ),
+        # Controls the default dashboard shown in the search interface
+        dashboard={
+            "widgets": [
+                {
+                    "type": "histogram",
+                    "show_input": False,
+                    "autorange": True,
+                    "nbins": 30,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.start_time__field#{schema}",
+                    "title": "Start Time",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 0}
+                    },
+                },
+                {
+                    "type": "histogram",
+                    "show_input": False,
+                    "autorange": True,
+                    "nbins": 30,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#pynxtools.nomad.schema.Root#float",
+                    "title": "Temperature",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 7}
+                    },
+                },
+                {
+                    "type": "histogram",
+                    "show_input": False,
+                    "autorange": True,
+                    "nbins": 30,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.INSTRUMENT.beamTYPE.fluence__field#pynxtools.nomad.schema.Root#float",
+                    "title": "Pump Fluence",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 13}
+                    },
+                },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#pynxtools.nomad.schema.Root#str",
+                    "title": "Material",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 0}
+                    },
+                },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.INSTRUMENT.name__field#pynxtools.nomad.schema.Root#str",
+                    "title": "Instrument",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 6}
+                    },
+                },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.USER.name__field#pynxtools.nomad.schema.Root#str",
+                    "title": "User",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
+                    },
+                },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.data.___axes#pynxtools.nomad.schema.Root#str",
+                    "title": "Axes",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 18}
+                    },
+                },
+                # {
+                #     "type": "periodic_table",
+                #     "scale": "linear",
+                #     "quantity": f"results.material.elements",
+                #     "layout": {
+                #         "lg": {"minH": 3, "minW": 3, "h": 6, "w": 12, "y": 4, "x": 0}
+                #     },
+                # },
+            ]
+        },
+    ),
 )
 
 
