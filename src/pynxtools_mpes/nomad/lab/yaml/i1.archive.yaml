@@ -1,0 +1,7 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#InstrumentStatus'
+  energy_resolution: 2
+  Manipulator:
+    sample_temperature: 20
+  Analyzer:
+    spatial_resolution: 2.0e-5
