@@ -217,6 +217,15 @@ mpes_app = AppEntryPoint(
                 #         "lg": {"minH": 3, "minW": 3, "h": 6, "w": 12, "y": 4, "x": 0}
                 #     },
                 # },
+                {
+                    "type": "scatter_plot",
+                    "x": "data.ENTRY[*].data.data__size#pynxtools.nomad.schema.Root#int",
+                    "y": "data.ENTRY[*].collection_time__field#pynxtools.nomad.schema.Root#int",
+                    "title": "ScanQuality",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 10, "x": 18}
+                    },
+                },
             ]
         },
     ),
