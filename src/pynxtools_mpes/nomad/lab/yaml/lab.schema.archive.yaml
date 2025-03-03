@@ -10,7 +10,7 @@ definitions:
           nxdl: NXmpes
           input_files: ["mpes.mapping.json"]
         eln:
-          hide: ['reader', 'input_files', 'nxdl', 'output']
+          hide: ['reader', 'input_files', 'nxdl', 'output', 'filter']
       quantities:
         nexus_view:
           type: pynxtools.nomad.schema.Root
