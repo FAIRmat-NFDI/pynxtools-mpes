@@ -57,7 +57,7 @@ mpes = "pynxtools_mpes.reader:MPESReader"
 
 [project.entry-points.'nomad.plugin']
 mpes_example = "pynxtools_mpes.nomad.entrypoints:mpes_example"
-mpes_data_converter = "pynxtools_mpes.nomad.entrypoints:mpes_data_converter"
+mpes_eln_exporter = "pynxtools_mpes.nomad.entrypoints:mpes_eln_exporter"
 mpes_app = "pynxtools_mpes.nomad.entrypoints:mpes_app"
 
 [tool.setuptools.packages.find]
