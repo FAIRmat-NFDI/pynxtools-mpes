@@ -15,23 +15,23 @@ except ImportError as exc:
         "Could not import nomad package. Please install the package 'nomad-lab'."
     ) from exc
 
-from pynxtools.nomad.dataconverter import NexusDataConverter
+from pynxtools.nomad.dataconverter import ElnYamlConverter
 
-m_package = Package(name="mpes_data_converter")
+m_package = Package(name="mpes_eln_exporter")
 
 
-class MpesDataConverter(NexusDataConverter):
+class MpesElnExporter(ElnYamlConverter):
     export = Quantity(
         type=bool,
-        description="Project from parent section to be exported to NeXus",
+        description="Export ELN data to YAML file",
         a_eln=dict(component="BoolEditQuantity"),
-        default=False,
+        default=True,
     )
 
     def normalize(self, archive, logger):
         if self.export:
-            self.output = f"{archive.metadata.mainfile.replace('.','_')}.nxs"
-            super(MpesDataConverter, self).normalize(archive, logger)
+            self.output = f"{archive.metadata.mainfile.replace('.','_')}.yaml"
+            super(ElnYamlConverter, self).normalize(archive, logger)
 
 
 m_package.__init_metainfo__()
