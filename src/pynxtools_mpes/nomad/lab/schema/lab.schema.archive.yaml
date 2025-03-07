@@ -3,14 +3,7 @@ definitions:
   sections:
     Project:
       base_sections:
-        - "pynxtools_mpes.nomad.lab.dataconverter.MpesDataConverter"
-      m_annotations:
-        template:
-          reader: json_map
-          nxdl: NXmpes
-          input_files: ["mpes.mapping.json"]
-        eln:
-          hide: ['reader', 'input_files', 'nxdl', 'output', 'filter']
+        - "nomad.datamodel.data.EntryData"
       quantities:
         nexus_view:
           type: pynxtools.nomad.schema.Root
@@ -23,12 +16,6 @@ definitions:
           m_annotations:
             eln:
               component: StringEditQuantity
-        description:
-          type: str
-          description: Free text description of a set of measurements belonging together.
-          m_annotations:
-            eln:
-              component: RichTextEditQuantity
         summary:
           type: str
           description: Free text description of a set of measurements belonging together.
@@ -42,17 +29,32 @@ definitions:
           m_annotations:
             eln:
               component: ReferenceEditQuantity
+        
+        instrument_status:
+          type: InstrumentStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        
+        laser_status:
+          type: LaserStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        
+        samples:
+          type: Sample
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
         measurements:
           type: Measurement
           shape: ['*']
           description: link to measurements
-          m_annotations:
-            eln:
-              component: ReferenceEditQuantity
-        analysis:
-          type: Analysis
-          shape: ['*']
-          description: link to analysis
           m_annotations:
             eln:
               component: ReferenceEditQuantity
@@ -62,6 +64,32 @@ definitions:
       base_sections:
         - "nomad.datamodel.data.EntryData"
       quantities:
+        summary:
+          type: str
+          description: Free text description of the Instrument status
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        entrance_slit_type:
+          type: str
+          description: Type of the Phoibos entrance slit
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        entrance_slit_size:
+          type: np.float64
+          unit: meter
+          description: Size of the Phoibos entrance slit
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "mm"
+        exit_slit_type:
+          type: str
+          description: Type of the Phoibos exit slit
+          m_annotations:
+            eln:
+              component: StringEditQuantity
         energy_resolution:
           type: np.float64
           unit: joule
@@ -69,6 +97,13 @@ definitions:
             eln:
               component: NumberEditQuantity
               defaultDisplayUnit: "meV"
+        angular_resolution:
+          type: np.float64
+          unit: 1/meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "1/angstrom"
         momentum_resolution:
           type: np.float64
           unit: 1/meter
@@ -97,11 +132,6 @@ definitions:
         Analyzer:
           section:
             quantities:
-              slow_axes:
-                type: str
-                m_annotations:
-                  eln:
-                    component: StringEditQuantity
               spatial_resolution:
                 type: np.float64
                 unit: meter
@@ -129,203 +159,102 @@ definitions:
       base_sections:
         - "nomad.datamodel.data.EntryData"
       quantities:
-        title:
+        summary:
           type: str
-          description: Short Title for the Laser entry
+          description: Free text description of the Laser status
           m_annotations:
             eln:
-              component: StringEditQuantity
-      sub_sections:
-        Source:
-          section:
-            sub_sections:
-              Probe:
-                section:
-                  quantities:
-                    frequency:
-                      type: np.float64
-                      unit: hertz
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "kilohertz"
-                    photon_energy:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "eV"
-              Pump:
-                section:
-                  quantities:
-                    frequency:
-                      type: np.float64
-                      unit: hertz
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "kilohertz"
-                    photon_energy:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "eV"
-        Beam:
-          section:
-            sub_sections:
-              Probe:
-                section:
-                  quantities:
-                    incident_energy:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "eV"
-                    incident_energy_spread:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "eV"
-                    pulse_duration:
-                      type: np.float64
-                      unit: second
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "fs"
-                    incident_polarization:
-                      type: np.float64
-                      shape: ["4"]
-                      description: Incident Stokes Vector
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                    extent:
-                      type: np.float64
-                      shape: ["2"]
-                      unit: meter
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "micrometer"
-              Pump:
-                section:
-                  quantities:
-                    incident_energy:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "eV"
-                    incident_energy_spread:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "eV"
-                    pulse_duration:
-                      type: np.float64
-                      unit: second
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          minValue: 0
-                          defaultDisplayUnit: "fs"
-                    incident_polarization:
-                      type: np.float64
-                      shape: ["4"]
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                    extent:
-                      type: np.float64
-                      shape: ["2"]
-                      unit: meter
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "micrometer"
-                    incident_wavelength:
-                      type: np.float64
-                      unit: meter
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "nanometer"
-                    average_power:
-                      type: np.float64
-                      unit: watt
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "milliwatt"
-                    pulse_energy:
-                      type: np.float64
-                      unit: joule
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "microjoule"
-                    fluence:
-                      type: np.float64
-                      unit: joule / meter ** 2
-                      m_annotations:
-                        eln:
-                          component: NumberEditQuantity
-                          defaultDisplayUnit: "millijoule / centimeter**2"
+              component: RichTextEditQuantity
+        probe_photon_energy:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        probe_photon_energy_spread:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        probe_pulse_duration:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "fs"
+        probe_profile:
+          type: np.float64
+          shape: ["2"]
+          unit: meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "micrometer"
+        probe_repetition_rate:
+          type: np.float64
+          unit: hertz
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "kilohertz"
+        pump_photon_energy:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        pump_photon_energy_spread:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        pump_pulse_duration:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "fs"
+        pump_profile:
+          type: np.float64
+          shape: ["2"]
+          unit: meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "micrometer"
+        pump_repetition_rate:
+          type: np.float64
+          unit: hertz
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "kilohertz"
 
-
-    Measurement:
-      base_sections:
-        - "nomad.datamodel.data.EntryData"
-      quantities:
-        title:
-          type: str
-          m_annotations:
-            eln:
-              component: StringEditQuantity
-        scanned_axes:
-          type: str
-          m_annotations:
-            eln:
-              component: StringEditQuantity
-        instrument:
-          type: InstrumentStatus
-          shape: ['*']
-          m_annotations:
-            eln:
-              component: ReferenceEditQuantity
-        laser:
-          type: LaserStatus
-          shape: ['*']
-          m_annotations:
-            eln:
-              component: ReferenceEditQuantity
-        sample:
-          type: Sample
-          shape: ['*']
-          m_annotations:
-            eln:
-              component: ReferenceEditQuantity
 
     Member:
       base_sections:
         - "nomad.datamodel.data.EntryData"
       quantities:
+        summary:
+          type: str
+          description: Free text description of the User
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
         name:
           type: str
           m_annotations:
@@ -357,6 +286,17 @@ definitions:
       base_sections:
         - "nomad.datamodel.data.EntryData"
       quantities:
+        name:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        summary:
+          type: str
+          description: Free text description of the sample
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
         preparation_date:
           type: Datetime
           m_annotations:
@@ -372,36 +312,18 @@ definitions:
           m_annotations:
             eln:
               component: StringEditQuantity
-        description:
-          type: str
-          m_annotations:
-            eln:
-              component: StringEditQuantity
-        name:
-          type: str
-          m_annotations:
-            eln:
-              component: StringEditQuantity
-        temperature:
-          type: np.float64
-          unit: celsius
-          m_annotations:
-            eln:
-              component: NumberEditQuantity
-              defaultDisplayUnit: "kelvin"
-        gas_pressure:
-          type: np.float64
-          unit: bar
-          m_annotations:
-            eln:
-              component: NumberEditQuantity
-              defaultDisplayUnit: "mbar"
 
 
     Analysis:
       base_sections:
         - "nomad.datamodel.data.EntryData"
       quantities:
+        summary:
+          type: str
+          description: Free text description of the analysis
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
         software:
           type: str
           m_annotations:
@@ -412,6 +334,85 @@ definitions:
           m_annotations:
             eln:
               component: StringEditQuantity
+              
+
+    Measurement:
+      base_sections:
+        - "pynxtools_mpes.nomad.lab.dataconverter.MpesElnExporter"
+        - "nomad.datamodel.data.EntryData"
+      m_annotations:
+        template:
+          reader: json_map
+          nxdl: NXmpes
+        eln:
+          hide: ['reader', 'input_files', 'nxdl', 'output', 'filter']
+      quantities:
+        title:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        summary:
+          type: str
+          description: Free text description of the analysis
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        scanned_axes:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        probe_polarization:
+          type: str
+          description: Polarization state of the probe beam
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        pump_status:
+          type: str
+          description: Selection if pump was applied
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        pump_fluence:
+          type: np.float64
+          unit: joule / meter ** 2
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "millijoule / centimeter**2"
+        pump_polarization:
+          type: str
+          description: Polarization state of the probe beam
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        project:
+          type: Project
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        instrument:
+          type: InstrumentStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        laser:
+          type: LaserStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        sample:
+          type: Sample
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
 
 
 
