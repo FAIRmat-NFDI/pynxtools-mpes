@@ -128,6 +128,13 @@ definitions:
     LaserStatus:
       base_sections:
         - "nomad.datamodel.data.EntryData"
+      quantities:
+        title:
+          type: str
+          description: Short Title for the Laser entry
+          m_annotations:
+            eln:
+              component: StringEditQuantity
       sub_sections:
         Source:
           section:
