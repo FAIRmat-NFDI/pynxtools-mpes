@@ -15,15 +15,31 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Entry points for mpes."""
+try:
+    from nomad.config.models.plugins import (
+        ExampleUploadEntryPoint,
+        AppEntryPoint,
+        SchemaPackageEntryPoint,
+    )
+except ImportError as exc:
+    raise ImportError(
+        "Could not import nomad package. Please install the package 'nomad-lab'."
+    ) from exc
+
 class MpesDataConverterEntryPoint(SchemaPackageEntryPoint):
     def load(self):
         from pynxtools_mpes.nomad.lab.dataconverter import m_package
 
-        return m_package
+        return m_package    
+
+class MpesElnExporterEntryPoint(SchemaPackageEntryPoint):
+    def load(self):
+        from pynxtools_mpes.nomad.lab.dataconverter import MpesElnExporter
+
+        return MpesElnExporter
 
 
-mpes_data_converter = MpesDataConverterEntryPoint(
-    name="NeXus Dataconverter",
-    description="The NeXus dataconverter to convert data into the NeXus format.",
+mpes_eln_exporter = MpesElnExporterEntryPoint(
+    name="Mpes ELN Exporter",
+    description="The Mpes ELN exporter to write ELN data into yaml files.",
 )
