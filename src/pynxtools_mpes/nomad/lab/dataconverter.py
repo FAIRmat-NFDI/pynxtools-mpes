@@ -17,7 +17,7 @@ except ImportError as exc:
 
 from pynxtools.nomad.dataconverter import ElnYamlConverter
 
-m_package = Package(name="mpes_data_converter")
+m_package = Package(name="mpes_eln_exporter")
 
 
 class MpesElnExporter(ElnYamlConverter):
@@ -29,8 +29,13 @@ class MpesElnExporter(ElnYamlConverter):
     )
 
     def normalize(self, archive, logger):
+        import debugpy
+
+        debugpy.debug_this_thread()
         if self.export:
-            self.output = f"{archive.metadata.mainfile.replace('.','_')}.yaml"
+            self.output = (
+                f"{archive.metadata.mainfile.replace('.archive,json','')}.yaml"
+            )
             super(MpesElnExporter, self).normalize(archive, logger)
 
 
