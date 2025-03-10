@@ -51,14 +51,6 @@ definitions:
             eln:
               component: ReferenceEditQuantity
 
-        measurements:
-          type: Measurement
-          shape: ['*']
-          description: link to measurements
-          m_annotations:
-            eln:
-              component: ReferenceEditQuantity
-
 
     InstrumentStatus:
       base_sections:
@@ -99,11 +91,11 @@ definitions:
               defaultDisplayUnit: "meV"
         angular_resolution:
           type: np.float64
-          unit: 1/meter
+          unit: radians
           m_annotations:
             eln:
               component: NumberEditQuantity
-              defaultDisplayUnit: "1/angstrom"
+              defaultDisplayUnit: "degree"
         momentum_resolution:
           type: np.float64
           unit: 1/meter
@@ -345,7 +337,7 @@ definitions:
           reader: json_map
           nxdl: NXmpes
         eln:
-          hide: ['reader', 'input_files', 'nxdl', 'output', 'filter']
+          hide: ['output', 'filter']
       quantities:
         title:
           type: str
@@ -390,25 +382,21 @@ definitions:
               component: StringEditQuantity
         project:
           type: Project
-          shape: ['*']
           m_annotations:
             eln:
               component: ReferenceEditQuantity
         instrument:
           type: InstrumentStatus
-          shape: ['*']
           m_annotations:
             eln:
               component: ReferenceEditQuantity
         laser:
           type: LaserStatus
-          shape: ['*']
           m_annotations:
             eln:
               component: ReferenceEditQuantity
         sample:
           type: Sample
-          shape: ['*']
           m_annotations:
             eln:
               component: ReferenceEditQuantity
