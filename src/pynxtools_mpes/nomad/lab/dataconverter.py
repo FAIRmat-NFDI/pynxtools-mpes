@@ -39,7 +39,7 @@ class MpesElnExporter(EntryData):
         super(MpesElnExporter, self).normalize(archive, logger)
         if self.export:
             self.output = (
-                f"{archive.metadata.mainfile.replace('.archive.json','')}.yaml"
+                f"{archive.metadata.mainfile.replace('.archive.json', '')}.yaml"
             )
             eln_dict = create_eln_dict(archive)
             try:
