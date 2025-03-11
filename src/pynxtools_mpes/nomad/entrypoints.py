@@ -236,14 +236,14 @@ mpes_app = AppEntryPoint(
 )
 
 
-class MpesElnExporterEntryPoint(SchemaPackageEntryPoint):
+class MpesDataConverterEntryPoint(SchemaPackageEntryPoint):
     def load(self):
         from pynxtools_mpes.nomad.lab.dataconverter import m_package
 
         return m_package
 
 
-mpes_eln_exporter = MpesElnExporterEntryPoint(
-    name="Mpes ELN Exporter",
-    description="The Mpes ELN exporter to write ELN data into yaml files.",
+mpes_data_converter = MpesDataConverterEntryPoint(
+    name="NeXus Dataconverter",
+    description="The NeXus dataconverter to convert data into the NeXus format.",
 )
