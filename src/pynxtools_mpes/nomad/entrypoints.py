@@ -52,6 +52,9 @@ from nomad.config.models.ui import (
     MenuItemPeriodicTable,
     MenuItemTerms,
     SearchQuantities,
+    AxisLimitedScale,
+    Markers,
+    Axis,
 )
 
 schema = "pynxtools.nomad.schema.Root"
@@ -81,11 +84,11 @@ mpes_app = AppEntryPoint(
         columns=[
             Column(quantity="entry_id", selected=True),
             Column(quantity=f"entry_type", selected=True),
-            Column(
-                title="definition",
-                quantity=f"data.ENTRY[*].definition__field#{schema}",
-                selected=True,
-            ),
+            # Column(
+            #     title="definition",
+            #     quantity=f"data.ENTRY[*].definition__field#{schema}",
+            #     selected=True,
+            # ),
             Column(
                 title="start_time",
                 quantity=f"data.ENTRY[*].start_time__field#{schema}",
@@ -112,26 +115,89 @@ mpes_app = AppEntryPoint(
             title="Material",
             items=[
                 Menu(
-                    title="elements",
+                    title="Material",
                     items=[
                         MenuItemPeriodicTable(
                             quantity="results.material.elements",
                         ),
                         MenuItemTerms(
-                            quantity="results.material.chemical_formula_hill",
-                            width=6,
-                            options=0,
+                            quantity=f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#{schema}#str",
+                            width=12,
+                            options=10,
                         ),
                         MenuItemTerms(
-                            quantity="results.material.chemical_formula_iupac",
-                            width=6,
-                            options=0,
+                            quantity=f"data.ENTRY.SAMPLE.name__field#{schema}#str",
+                            width=12,
+                            options=10,
                         ),
                         MenuItemHistogram(
                             x="results.material.n_elements",
                         ),
                     ],
-                )
+                ),
+                Menu(
+                    title="User",
+                    items=[
+                        MenuItemTerms(
+                            quantity=f"data.ENTRY.USER.name__field#{schema}#str",
+                            width=12,
+                            options=10,
+                        ),
+                        MenuItemTerms(
+                            quantity=f"data.ENTRY.USER.affiliation__field#{schema}#str",
+                            width=12,
+                            options=10,
+                        ),
+                    ],
+                ),
+                Menu(
+                    title="Instrument",
+                    items=[
+                        MenuItemTerms(
+                            quantity=f"data.ENTRY.INSTRUMENT.name__field#{schema}#str",
+                            width=12,
+                            options=10,
+                        ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                    ],
+                ),
+                Menu(
+                    title="Probe Beam",
+                    items=[
+                        MenuItemTerms(
+                            quantity=f"data.ENTRY.INSTRUMENT.source_probe.type__field#{schema}#str",
+                            width=12,
+                            options=10,
+                        ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.beam_probe.incident_energy__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.beam_probe.incident_polarization__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                    ],
+                ),
+                Menu(
+                    title="Pump Beam",
+                    items=[
+                        MenuItemTerms(
+                            quantity=f"data.ENTRY.INSTRUMENT.source_pump.type__field#{schema}#str",
+                            width=12,
+                            options=10,
+                        ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.beam_pump.incident_energy__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.beam_pump.incident_polarization__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                        # MenuItemHistogram(
+                        #     x="data.ENTRY.INSTRUMENT.beam_pump.fluence__field#pynxtools.nomad.schema.Root#float",
+                        # ),
+                    ],
+                ),
             ],
         ),
         # Controls the default dashboard shown in the search interface
@@ -143,10 +209,13 @@ mpes_app = AppEntryPoint(
                     "autorange": True,
                     "nbins": 30,
                     "scale": "linear",
-                    "quantity": f"data.ENTRY.start_time__field#{schema}",
+                    "x": Axis(
+                        title="Start Time",
+                        search_quantity=f"data.ENTRY.start_time__field#{schema}#datetime",
+                    ),
                     "title": "Start Time",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 0}
+                        "lg": {"minH": 3, "minW": 3, "h": 3, "w": 6, "y": 0, "x": 0}
                     },
                 },
                 {
@@ -155,72 +224,90 @@ mpes_app = AppEntryPoint(
                     "autorange": True,
                     "nbins": 30,
                     "scale": "linear",
-                    "quantity": f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#pynxtools.nomad.schema.Root#float",
-                    "title": "Temperature",
+                    "x": Axis(
+                        title="Sample Temperature",
+                        search_quantity=f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#{schema}#float",
+                    ),
+                    "title": "Sample Temperature",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 7}
-                    },
-                },
-                {
-                    "type": "histogram",
-                    "show_input": False,
-                    "autorange": True,
-                    "nbins": 30,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.INSTRUMENT.beamTYPE.fluence__field#pynxtools.nomad.schema.Root#float",
-                    "title": "Pump Fluence",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 13}
-                    },
-                },
-                {
-                    "type": "terms",
-                    "show_input": False,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#pynxtools.nomad.schema.Root#str",
-                    "title": "Material",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 0}
-                    },
-                },
-                {
-                    "type": "terms",
-                    "show_input": False,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.INSTRUMENT.name__field#pynxtools.nomad.schema.Root#str",
-                    "title": "Instrument",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 6}
-                    },
-                },
-                {
-                    "type": "terms",
-                    "show_input": False,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.USER.name__field#pynxtools.nomad.schema.Root#str",
-                    "title": "User",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
-                    },
-                },
-                {
-                    "type": "terms",
-                    "show_input": False,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.data.___axes#pynxtools.nomad.schema.Root#str",
-                    "title": "Axes",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 18}
+                        "lg": {"minH": 3, "minW": 3, "h": 3, "w": 6, "y": 3, "x": 0}
                     },
                 },
                 # {
-                #     "type": "periodic_table",
+                #     "type": "histogram",
+                #     "show_input": False,
+                #     "autorange": True,
+                #     "nbins": 30,
                 #     "scale": "linear",
-                #     "quantity": f"results.material.elements",
+                #     "quantity": f"data.ENTRY.INSTRUMENT.beam_pump.fluence__field#pynxtools.nomad.schema.Root#float",
+                #     "title": "Pump Fluence",
                 #     "layout": {
-                #         "lg": {"minH": 3, "minW": 3, "h": 6, "w": 12, "y": 4, "x": 0}
+                #         "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 13}
                 #     },
                 # },
+                # {
+                #     "type": "terms",
+                #     "show_input": False,
+                #     "scale": "linear",
+                #     "quantity": f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#pynxtools.nomad.schema.Root#str",
+                #     "title": "Material",
+                #     "layout": {
+                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 0}
+                #     },
+                # },
+                # {
+                #     "type": "terms",
+                #     "show_input": False,
+                #     "scale": "linear",
+                #     "quantity": f"data.ENTRY.INSTRUMENT.name__field#pynxtools.nomad.schema.Root#str",
+                #     "title": "Instrument",
+                #     "layout": {
+                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 6}
+                #     },
+                # },
+                # {
+                #     "type": "terms",
+                #     "show_input": False,
+                #     "scale": "linear",
+                #     "quantity": f"data.ENTRY.USER.name__field#pynxtools.nomad.schema.Root#str",
+                #     "title": "User",
+                #     "layout": {
+                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
+                #     },
+                # },
+                {
+                    "type": "terms",
+                    "show_input": False,
+                    "scale": "linear",
+                    "quantity": f"data.ENTRY.data.___axes#{schema}#str",
+                    "title": "Dataset Axes",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 6}
+                    },
+                },
+                {
+                    "type": "scatter_plot",
+                    "x": AxisLimitedScale(
+                        title="# Data Points",
+                        search_quantity=f"data.ENTRY[*].data.data__size#{schema}#int",
+                        scale="log",
+                    ),
+                    "y": AxisLimitedScale(
+                        title="Acquisition time",
+                        search_quantity=f"data.ENTRY[*].collection_time__field#{schema}#int",
+                        scale="log",
+                    ),
+                    "markers": Markers(
+                        color=Axis(
+                            title="Data Dimension",
+                            search_quantity=f"data.ENTRY[*].data.data__ndim#{schema}#int",
+                        )
+                    ),
+                    "title": "Scan Quality",
+                    "layout": {
+                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 12}
+                    },
+                },
                 {
                     "type": "scatter_plot",
                     "x": "data.ENTRY[*].data.data__size#pynxtools.nomad.schema.Root#int",
