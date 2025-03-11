@@ -19,6 +19,7 @@ Tommaso
 Vset
 caplog
 dataconverter
+datamodel
 faddr
 fairmat
 fluence
@@ -27,6 +28,7 @@ iupac
 jovyan
 lukaspie
 mainfile
+metainfo
 mpes
 mpesapp
 nbins
@@ -40,4 +42,5 @@ rettigl
 rgetattr
 silx
 specsanalyzer
+ureg
 zenodo
