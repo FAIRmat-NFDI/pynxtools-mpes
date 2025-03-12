@@ -15,15 +15,31 @@ jobs:
       id-token: write
     steps:
     - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v5
+    - name: Install uv and use the python version 3.12
+      uses: astral-sh/setup-uv@v5
       with:
-        python-version: "3.x"
-    - name: Install dependencies
+        python-version: 3.12
+
+    # Final pytest with latest pynxtools release
+    - name: Install nomad
       run: |
-        python -m pip install --upgrade pip
+        uv pip install nomad-lab[infrastructure]@git+https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-FAIR.git
+    - name: Install pynxtools-mpes
+      run: |
+        uv pip install ".[dev]"
+        uv pip install coverage coveralls
+    - name: Install latest pynxtools release
+      run: |
+        uv pip install pynxtools
+    - name: Run tests
+      run: |
+        pytest tests/.
+
+    # Build
+    - name: Install build dependencies
+      run: |
         git reset --hard HEAD
-        pip install build
+        uv pip install build
     - name: Build package
       run: python -m build
     - name: Publish package distributions to PyPI
