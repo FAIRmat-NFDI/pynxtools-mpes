@@ -1,0 +1,41 @@
+name: Compatibility with pynxtools
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  pynx_compatibility:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        pynxtools_version: ["latest"]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+      - name: Install uv and set the python version to 3.12
+        uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - name: Install pynxtools-mpes
+        run: |
+          uv pip install ".[dev]"
+      - name: Install nomad
+        run: |
+          uv pip install nomad-lab[infrastructure]@git+https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-FAIR.git
+      - name: Install pynxtools release version ${{ matrix.pynxtools_version }}
+        run: |
+          if [ "${{ matrix.pynxtools_version }}" == "latest" ]; then
+            uv pip install pynxtools
+          else
+           uv pip install pynxtools==${{ matrix.pynxtools_version }}
+          fi
+      - name: Run tests
+        run: |
+          pytest tests/.
