@@ -24,7 +24,7 @@ jobs:
     - name: Install nomad
       run: |
         uv pip install nomad-lab[infrastructure]@git+https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-FAIR.git
-    - name: Install pynxtools-xps
+    - name: Install pynxtools-mpes
       run: |
         uv pip install ".[dev]"
         uv pip install coverage coveralls
