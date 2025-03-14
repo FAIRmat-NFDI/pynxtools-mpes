@@ -389,7 +389,7 @@
     "calibrated_axis/@units": "eV",
     "physical_quantity": "energy"
   },
-  "/ENTRY/PROCESS_MPES[process]/CALIBRATION[kx_calibration]": {
+  "/ENTRY/PROCESS_MPES[process]/kN_calibration[kx_calibration]": {
     "scaling": "@attrs:metadata/momentum_correction/calibration/scale_kx",
     "scaling/@units": "",
     "offset": "@attrs:metadata/momentum_correction/offset_kx",
@@ -398,7 +398,7 @@
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
-  "/ENTRY/PROCESS_MPES[process]/CALIBRATION[ky_calibration]": {
+  "/ENTRY/PROCESS_MPES[process]/kN_calibration[ky_calibration]": {
     "scaling": "@attrs:metadata/momentum_correction/calibration/scale_ky",
     "scaling/@units": "",
     "offset": "@attrs:metadata/momentum_correction/offset_ky",
@@ -415,6 +415,6 @@
     "data/@units": "counts",
     "AXISNAME[*]": "@data:*.data",
     "AXISNAME[*]/@units": "@data:*.unit",
-    "energy/@type": "binding"
+    "AXISNAME[energy]/@type": "binding"
   }
 }
