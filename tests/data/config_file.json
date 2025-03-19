@@ -148,11 +148,6 @@
   "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYZER[electronanalyzer]/ELECTRON_DETECTOR[detector]": {
     "amplifier_type": "MCP",
     "detector_type": "DLD",
-    "sensor_pixels": [
-      1800,
-      1800
-    ],
-    "sensor_pixels/@units": "",
     "amplifier_bias": "@attrs:metadata/file/KTOF:Lens:MCPfront:V",
     "amplifier_bias/@units": "V",
     "amplifier_voltage": "@attrs:metadata/file/KTOF:Lens:MCPback:V",
@@ -409,8 +404,8 @@
     "@axes": "@data:dims",
     "AXISNAME_indices[@*_indices]": "@data:*.index",
     "@signal": "data",
-    "DATA[data]": "@data:data",
-    "DATA[data]/@units": "counts",
+    "data": "@data:data",
+    "data/@units": "counts",
     "AXISNAME[*]": "@data:*.data",
     "AXISNAME[*]/@units": "@data:*.unit",
     "AXISNAME[energy]/@type": "binding"
