@@ -7,9 +7,7 @@
   "/ENTRY/experiment_institution": "Fritz Haber Institute - Max Planck Society",
   "/ENTRY/experiment_facility": "Time Resolved ARPES",
   "/ENTRY/experiment_laboratory": "Clean Room 4",
-  "/ENTRY/entry_identifier": {
-    "identifier":"@attrs:metadata/entry_identifier"
-  },
+  "/ENTRY/identifierNAME[entry_identifier]": "@attrs:metadata/entry_identifier",
   "/ENTRY/end_time": "@attrs:metadata/timing/acquisition_stop",
   "/ENTRY/duration": "@attrs:metadata/timing/acquisition_duration",
   "/ENTRY/duration/@units": "s",
@@ -49,7 +47,7 @@
       "value": "@attrs:metadata/file/trARPES:XGS600:PressureAC:P_RD",
       "value/@units": "mbar"
     },
-    "ELECTRONANALYSER[electronanalyser]": {
+    "ELECTRONANALYZER[electronanalyzer]": {
       "description": "SPECS Metis 1000 Momentum Microscope",
       "device_information": {
         "vendor": "SPECS GmbH",
@@ -79,7 +77,7 @@
         "physical_quantity": "length",
         "type": "estimated"
       },
-      "depends_on": "/entry/instrument/electronanalyser/transformations/trans_z",
+      "depends_on": "/entry/instrument/electronanalyzer/transformations/trans_z",
       "TRANSFORMATIONS[transformations]": {
         "AXISNAME[trans_z]": 4.0,
         "AXISNAME[trans_z]/@depends_on": "rot_y",
@@ -102,7 +100,7 @@
       }
     }
   },
-  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYSER[electronanalyser]/COLLECTIONCOLUMN[collectioncolumn]": {
+  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYZER[electronanalyzer]/COLLECTIONCOLUMN[collectioncolumn]": {
     "projection": "@attrs:metadata/instrument/analyzer/projection",
     "scheme": "momentum dispersive",
     "lens_mode": "@attrs:metadata/instrument/analyzer/lens_mode",
@@ -140,21 +138,16 @@
       }
     }
   },
-  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYSER[electronanalyser]/ENERGYDISPERSION[energydispersion]": {
+  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYZER[electronanalyzer]/ENERGYDISPERSION[energydispersion]": {
     "pass_energy": "@attrs:metadata/file/KTOF:Lens:TOF:V",
     "pass_energy/@units": "eV",
     "scheme": "tof",
     "tof_distance": 0.9,
     "tof_distance/@units": "m"
   },
-  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYSER[electronanalyser]/DETECTOR[detector]": {
+  "/ENTRY/INSTRUMENT[instrument]/ELECTRONANALYZER[electronanalyzer]/ELECTRON_DETECTOR[detector]": {
     "amplifier_type": "MCP",
     "detector_type": "DLD",
-    "sensor_pixels": [
-      1800,
-      1800
-    ],
-    "sensor_pixels/@units": "",
     "amplifier_bias": "@attrs:metadata/file/KTOF:Lens:MCPfront:V",
     "amplifier_bias/@units": "V",
     "amplifier_voltage": "@attrs:metadata/file/KTOF:Lens:MCPback:V",
@@ -162,7 +155,7 @@
     "detector_voltage": "@attrs:metadata/file/KTOF:Lens:UDLD:V",
     "detector_voltage/@units": "V"
   },
-  "/ENTRY/INSTRUMENT[instrument]/sourceTYPE[source_probe]": {
+  "/ENTRY/INSTRUMENT[instrument]/source_probe": {
     "name": "HHG @ TR-ARPES @ FHI",
     "probe": "photon",
     "type": "HHG laser",
@@ -171,7 +164,7 @@
     "frequency/@units": "kHz",
     "associated_beam": "/entry/instrument/beam_probe"
   },
-  "/ENTRY/INSTRUMENT[instrument]/beamTYPE[beam_probe]": {
+  "/ENTRY/INSTRUMENT[instrument]/beam_probe": {
     "distance": 0.0,
     "distance/@units": "mm",
     "incident_energy": "@attrs:metadata/instrument/beam/probe/incident_energy",
@@ -186,7 +179,7 @@
     "extent/@units": "µm",
     "associated_source": "/entry/instrument/source_probe"
   },
-  "/ENTRY/INSTRUMENT[instrument]/sourceTYPE[source_pump]": {
+  "/ENTRY/INSTRUMENT[instrument]/source_pump": {
     "name": "OPCPA @ TR-ARPES @ FHI",
     "probe": "visible light",
     "type": "Optical Laser",
@@ -195,7 +188,7 @@
     "frequency/@units": "kHz",
     "associated_beam": "/entry/instrument/beam_pump"
   },
-  "/ENTRY/INSTRUMENT[instrument]/beamTYPE[beam_pump]": {
+  "/ENTRY/INSTRUMENT[instrument]/beam_pump": {
     "distance": 0.0,
     "distance/@units": "mm",
     "incident_energy": "@attrs:metadata/instrument/beam/pump/incident_energy",
@@ -264,12 +257,12 @@
   },
   "/ENTRY/SAMPLE[sample]": {
     "preparation_date": "@attrs:metadata/sample/preparation_date",
-    "history/notes/type": "text/plain",
-    "history/notes/description": "@attrs:metadata/sample/sample_history",
+    "history/sample_preparation/start_time": "@attrs:metadata/sample/preparation_date",
+    "history/sample_preparation/description": "@attrs:metadata/sample/sample_history",
     "description": "@attrs:metadata/sample/chemical_formula",
     "name": "@attrs:metadata/sample/chemical_formula",
     "situation": "vacuum",
-    "SUBSTANCE[substance]/molecular_formula_hill": "@attrs:metadata/sample/chemical_formula",
+    "chemical_formula": "@attrs:metadata/sample/chemical_formula",
     "temperature_env": {
       "temperature_sensor": "@link:/entry/instrument/manipulator/temperature_sensor"
     },
@@ -346,7 +339,7 @@
       ]
     }
   },
-  "/ENTRY/PROCESS_MPES[process]/DISTORTION[distortion]": {
+  "/ENTRY/DISTORTION[distortion]": {
     "symmetry": "@attrs:metadata/momentum_correction/rotsym",
     "symmetry/@units": "",
     "original_centre": "@attrs:metadata/momentum_correction/pcent",
@@ -358,7 +351,7 @@
     "rdeform_field": "@attrs:metadata/momentum_correction/rdeform_field",
     "rdeform_field/@units": ""
   },
-  "/ENTRY/PROCESS_MPES[process]/REGISTRATION[registration]": {
+  "/ENTRY/REGISTRATION[registration]": {
     "depends_on": "/entry/process/registration/tranformations/rot_z",
     "TRANSFORMATIONS[tranformations]": {
       "AXISNAME[trans_x]": "@attrs:metadata/momentum_correction/adjust_params/xtrans",
@@ -379,28 +372,28 @@
       "AXISNAME[rot_z]/@depends_on": "trans_y"
     }
   },
-  "/ENTRY/PROCESS_MPES[process]/energy_calibration":{
-    "coefficients": "@attrs:metadata/energy_correction/calibration/coeffs",
-    "coefficients/@units": "",
-    "fit_function": "@attrs:metadata/energy_correction/calibration/fit_function",
+  "/ENTRY/CALIBRATION[energy_calibration]":{
+    "fit_formula_inputs/TERM[coefficients]": "@attrs:metadata/energy_correction/calibration/coeffs",
+    "fit_formula_inputs/TERM[coefficients]/@units": "",
+    "fit_formula_description": "@attrs:metadata/energy_correction/calibration/fit_function",
     "original_axis": "@attrs:metadata/energy_correction/tof",
     "original_axis/@units": "ns",
     "calibrated_axis": "@attrs:metadata/energy_correction/calibration/axis",
     "calibrated_axis/@units": "eV",
     "physical_quantity": "energy"
   },
-  "/ENTRY/PROCESS_MPES[process]/CALIBRATION[kx_calibration]": {
-    "scaling": "@attrs:metadata/momentum_correction/calibration/scale_kx",
-    "scaling/@units": "",
+  "/ENTRY/CALIBRATION[kx_calibration]": {
+    "scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_kx",
+    "scaling_factor/@units": "",
     "offset": "@attrs:metadata/momentum_correction/offset_kx",
     "offset/@units": "",
     "calibrated_axis": "@attrs:metadata/momentum_correction/calibration/axis_kx",
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
-  "/ENTRY/PROCESS_MPES[process]/CALIBRATION[ky_calibration]": {
-    "scaling": "@attrs:metadata/momentum_correction/calibration/scale_ky",
-    "scaling/@units": "",
+  "/ENTRY/CALIBRATION[ky_calibration]": {
+    "scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_ky",
+    "scaling_factor/@units": "",
     "offset": "@attrs:metadata/momentum_correction/offset_ky",
     "offset/@units": "",
     "calibrated_axis": "@attrs:metadata/momentum_correction/calibration/axis_ky",
@@ -415,6 +408,6 @@
     "data/@units": "counts",
     "AXISNAME[*]": "@data:*.data",
     "AXISNAME[*]/@units": "@data:*.unit",
-    "energy/@type": "binding"
+    "AXISNAME[energy]/@type": "binding"
   }
 }

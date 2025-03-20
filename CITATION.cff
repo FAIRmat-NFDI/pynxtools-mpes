@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: 'pynxtools-mpes: A pynxtools reader plugin for multidimensional photoemission spectroscopy (MPES) data'
-version: 0.2.1
+version: 0.2.2
 message:
   If you use this software, please cite it using the
   metadata from this file.
@@ -19,7 +19,7 @@ authors:
     family-names: Pincelli
     orcid: 'https://orcid.org/0000-0003-2692-2540'
   - given-names: Arora
-    family-names: Abeer 
+    family-names: Abeer
   - given-names: Rubel
     family-names: Mozumder
     orcid: 'https://orcid.org/0009-0007-5926-6646'
@@ -38,7 +38,7 @@ keywords:
   - NeXus
 abstract:
   pynxtools-mpes is a reader plugin for pynxtools (https://github.com/FAIRmat-NFDI/pynxtools)
-  written in Python. pynxtools-mpes is a tool for reading, translating, and standardizing multidimensional photoemission spectroscopy (MPES) 
+  written in Python. pynxtools-mpes is a tool for reading, translating, and standardizing multidimensional photoemission spectroscopy (MPES)
   data technology such that it is compliant with the NeXus application definitions NXmpes and NXmpes_arpes
   (https://fairmat-nfdi.github.io/nexus_definitions/).
 
