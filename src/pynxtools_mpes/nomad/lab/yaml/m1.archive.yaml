@@ -1,0 +1,10 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#Measurement'
+  title: "Measurement 1"
+  scanned_axes: slow
+  instrument:
+    - '../upload/raw/i1.archive.yaml#data'
+  laser:
+    - '../upload/raw/l1.archive.yaml#data'
+  sample:
+    - '../upload/raw/s1.archive.yaml#data'
