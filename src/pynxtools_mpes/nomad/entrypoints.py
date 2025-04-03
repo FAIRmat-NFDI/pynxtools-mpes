@@ -47,6 +47,7 @@ from nomad.config.models.ui import (
     MenuItemHistogram,
     MenuItemPeriodicTable,
     MenuItemTerms,
+    MenuSizeEnum,
     SearchQuantities,
     AxisLimitedScale,
     Markers,
@@ -78,21 +79,40 @@ mpes_app = AppEntryPoint(
         ),
         # Controls which columns are shown in the results table
         columns=[
-            Column(quantity="entry_id", selected=True),
-            Column(quantity=f"entry_type", selected=True),
-            # Column(
-            #     title="definition",
-            #     quantity=f"data.ENTRY[*].definition__field#{schema}",
-            #     selected=True,
-            # ),
+            Column(title="Entry ID", search_quantity="entry_id", selected=True),
             Column(
-                title="start_time",
-                quantity=f"data.ENTRY[*].start_time__field#{schema}",
+                title="File Name",
+                search_quantity=f"mainfile",
                 selected=True,
             ),
             Column(
-                title="title",
-                quantity=f"data.ENTRY[*].title__field#{schema}",
+                title="Start Time",
+                search_quantity=f"data.ENTRY[*].start_time#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="Description",
+                search_quantity=f"data.ENTRY[*].experiment_description__field#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="Author",
+                search_quantity=f"data.ENTRY[*].USER[*].name__field#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="Sample",
+                search_quantity=f"data.ENTRY[*].SAMPLE[*].name__field#{schema}",
+                selected=True,
+            ),
+            Column(
+                title="Sample ID",
+                search_quantity=f"data.ENTRY[*].SAMPLE[*].identifierNAME__field#{schema}",
+                selected=False,
+            ),
+            Column(
+                title="Definition",
+                search_quantity=f"data.ENTRY[*].definition__field#{schema}",
                 selected=True,
             ),
         ],
@@ -108,22 +128,26 @@ mpes_app = AppEntryPoint(
         },
         # Controls the menu shown on the left
         menu=Menu(
-            title="Material",
+            size=MenuSizeEnum.MD,
+            title="Menu",
             items=[
                 Menu(
                     title="Material",
+                    size=MenuSizeEnum.XXL,
                     items=[
                         MenuItemPeriodicTable(
                             quantity="results.material.elements",
                         ),
                         MenuItemTerms(
-                            quantity=f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#{schema}#str",
-                            width=12,
+                            title="Chemical Formula",
+                            quantity="results.material.chemical_formula_descriptive",
+                            width=6,
                             options=10,
                         ),
                         MenuItemTerms(
+                            title="Sample Name",
                             quantity=f"data.ENTRY.SAMPLE.name__field#{schema}#str",
-                            width=12,
+                            width=6,
                             options=10,
                         ),
                         MenuItemHistogram(
@@ -132,67 +156,220 @@ mpes_app = AppEntryPoint(
                     ],
                 ),
                 Menu(
-                    title="User",
+                    title="Authors / Origin",
+                    size=MenuSizeEnum.LG,
                     items=[
                         MenuItemTerms(
-                            quantity=f"data.ENTRY.USER.name__field#{schema}#str",
+                            title="Entry Author",
+                            search_quantity=f"data.ENTRY.USER.name__field#{schema}",
                             width=12,
-                            options=10,
+                            options=5,
                         ),
                         MenuItemTerms(
-                            quantity=f"data.ENTRY.USER.affiliation__field#{schema}#str",
+                            title="Upload Author",
+                            search_quantity=f"authors.name",
                             width=12,
-                            options=10,
+                            options=5,
+                        ),
+                        MenuItemTerms(
+                            title="Affiliation",
+                            search_quantity=f"data.ENTRY.USER.affiliation__field#{schema}",
+                            width=12,
+                            options=5,
                         ),
                     ],
                 ),
                 Menu(
                     title="Instrument",
+                    size=MenuSizeEnum.LG,
                     items=[
                         MenuItemTerms(
+                            title="Instrument Name",
                             quantity=f"data.ENTRY.INSTRUMENT.name__field#{schema}#str",
                             width=12,
                             options=10,
                         ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
-                        # ),
+                        MenuItemHistogram(
+                            title="Energy Resolution",
+                            x=Axis(
+                                title="Energy Resolution",
+                                search_quantity="data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Angular Resolution",
+                            x=Axis(
+                                title="Angular Resolution",
+                                search_quantity="data.ENTRY.INSTRUMENT.angular_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Momentum Resolution",
+                            x=Axis(
+                                title="Momentum Resolution",
+                                search_quantity="data.ENTRY.INSTRUMENT.momentum_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Spatial Resolution",
+                            x=Axis(
+                                title="Spatial Resolution",
+                                search_quantity="data.ENTRY.INSTRUMENT.spatial_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Temporal Resolution",
+                            x=Axis(
+                                title="Temporal Resolution",
+                                search_quantity="data.ENTRY.INSTRUMENT.temporal_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                            ),
+                        ),
                     ],
                 ),
                 Menu(
                     title="Probe Beam",
+                    size=MenuSizeEnum.LG,
                     items=[
                         MenuItemTerms(
-                            quantity=f"data.ENTRY.INSTRUMENT.source_probe.type__field#{schema}#str",
+                            title="Probe Source",
+                            quantity=f"data.ENTRY.INSTRUMENT.source_probe.name__field#{schema}#str",
                             width=12,
-                            options=10,
+                            options=5,
                         ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.beam_probe.incident_energy__field#pynxtools.nomad.schema.Root#float",
-                        # ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.beam_probe.incident_polarization__field#pynxtools.nomad.schema.Root#float",
-                        # ),
+                        MenuItemHistogram(
+                            title="Probe beam energy",
+                            x=Axis(
+                                title="Probe beam energy",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_probe.incident_energy__field#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Probe beam polarization",
+                            x=Axis(
+                                title="Probe beam polarization",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_probe.incident_polarization__field#{schema}#float",
+                            ),
+                        ),
                     ],
                 ),
                 Menu(
                     title="Pump Beam",
+                    size=MenuSizeEnum.LG,
                     items=[
                         MenuItemTerms(
-                            quantity=f"data.ENTRY.INSTRUMENT.source_pump.type__field#{schema}#str",
+                            title="Pump Source",
+                            quantity=f"data.ENTRY.INSTRUMENT.source_pump.name__field#{schema}#str",
+                            width=12,
+                            options=5,
+                        ),
+                        MenuItemHistogram(
+                            title="Pump beam energy",
+                            x=Axis(
+                                title="Pump beam energy",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.incident_energy__field#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Pump beam polarization",
+                            x=Axis(
+                                title="Pump beam polarization",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.incident_polarization__field#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Pump beam fluence",
+                            x=Axis(
+                                title="Pump beam fluence",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.fluence__field#{schema}#float",
+                            ),
+                        ),
+                    ],
+                ),
+                Menu(
+                    title="Data Range",
+                    size=MenuSizeEnum.LG,
+                    items=[
+                        MenuItemTerms(
+                            title="Scan Axes",
+                            quantity=f"data.ENTRY.data.___axes#{schema}#str",
                             width=12,
                             options=10,
                         ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.beam_pump.incident_energy__field#pynxtools.nomad.schema.Root#float",
-                        # ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.beam_pump.incident_polarization__field#pynxtools.nomad.schema.Root#float",
-                        # ),
-                        # MenuItemHistogram(
-                        #     x="data.ENTRY.INSTRUMENT.beam_pump.fluence__field#pynxtools.nomad.schema.Root#float",
-                        # ),
+                        MenuItemHistogram(
+                            title="Min. energy",
+                            x=Axis(
+                                title="Min. energy",
+                                search_quantity=f"data.ENTRY.data.energy__min#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Max. energy",
+                            x=Axis(
+                                title="Max. energy",
+                                search_quantity=f"data.ENTRY.data.energy__max#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Min. kx",
+                            x=Axis(
+                                title="Min. kx",
+                                search_quantity=f"data.ENTRY.data.kx__min#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Max. kx",
+                            x=Axis(
+                                title="Max. kx",
+                                search_quantity=f"data.ENTRY.data.kx__max#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Min. ky",
+                            x=Axis(
+                                title="Min. ky",
+                                search_quantity=f"data.ENTRY.data.ky__min#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Max. ky",
+                            x=Axis(
+                                title="Max. ky",
+                                search_quantity=f"data.ENTRY.data.ky__max#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Min. delay",
+                            x=Axis(
+                                title="Min. delay",
+                                search_quantity=f"data.ENTRY.data.delay__min#{schema}#float",
+                            ),
+                            width=6,
+                        ),
+                        MenuItemHistogram(
+                            title="Max. delay",
+                            x=Axis(
+                                title="Max. delay",
+                                search_quantity=f"data.ENTRY.data.delay__max#{schema}#float",
+                            ),
+                            width=6,
+                        ),
                     ],
+                ),
+                MenuItemHistogram(
+                    title="Start Time",
+                    x=f"data.ENTRY.start_time__field#{schema}",
+                    autorange=True,
+                ),
+                MenuItemHistogram(
+                    title="Upload Creation Time",
+                    x=f"upload_create_time",
+                    autorange=True,
                 ),
             ],
         ),
@@ -200,18 +377,17 @@ mpes_app = AppEntryPoint(
         dashboard={
             "widgets": [
                 {
-                    "type": "histogram",
+                    "type": "terms",
                     "show_input": False,
-                    "autorange": True,
-                    "nbins": 30,
                     "scale": "linear",
-                    "x": Axis(
-                        title="Start Time",
-                        search_quantity=f"data.ENTRY.start_time__field#{schema}#datetime",
-                    ),
-                    "title": "Start Time",
+                    "quantity": "results.material.chemical_formula_descriptive",
+                    "title": "Material",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 3, "w": 6, "y": 0, "x": 0}
+                        "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 0},
+                        "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 0},
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 0},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 0},
+                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 0},
                     },
                 },
                 {
@@ -226,61 +402,27 @@ mpes_app = AppEntryPoint(
                     ),
                     "title": "Sample Temperature",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 3, "w": 6, "y": 3, "x": 0}
+                        "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 4},
+                        "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 6},
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 5},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 4},
+                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 4},
                     },
                 },
                 # {
-                #     "type": "histogram",
-                #     "show_input": False,
-                #     "autorange": True,
-                #     "nbins": 30,
-                #     "scale": "linear",
-                #     "quantity": f"data.ENTRY.INSTRUMENT.beam_pump.fluence__field#pynxtools.nomad.schema.Root#float",
-                #     "title": "Pump Fluence",
-                #     "layout": {
-                #         "lg": {"minH": 3, "minW": 3, "h": 4, "w": 6, "y": 0, "x": 13}
-                #     },
-                # },
-                # {
                 #     "type": "terms",
                 #     "show_input": False,
                 #     "scale": "linear",
-                #     "quantity": f"data.ENTRY.SAMPLE.SUBSTANCE.molecular_formula_hill__field#pynxtools.nomad.schema.Root#str",
-                #     "title": "Material",
+                #     "quantity": f"data.ENTRY.data.___axes#{schema}#str",
+                #     "title": "Dataset Axes",
                 #     "layout": {
-                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 0}
+                #         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 8},
+                #         "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
+                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 10},
+                #         "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
+                #         "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
                 #     },
                 # },
-                # {
-                #     "type": "terms",
-                #     "show_input": False,
-                #     "scale": "linear",
-                #     "quantity": f"data.ENTRY.INSTRUMENT.name__field#pynxtools.nomad.schema.Root#str",
-                #     "title": "Instrument",
-                #     "layout": {
-                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 6}
-                #     },
-                # },
-                # {
-                #     "type": "terms",
-                #     "show_input": False,
-                #     "scale": "linear",
-                #     "quantity": f"data.ENTRY.USER.name__field#pynxtools.nomad.schema.Root#str",
-                #     "title": "User",
-                #     "layout": {
-                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 6, "y": 4, "x": 12}
-                #     },
-                # },
-                {
-                    "type": "terms",
-                    "show_input": False,
-                    "scale": "linear",
-                    "quantity": f"data.ENTRY.data.___axes#{schema}#str",
-                    "title": "Dataset Axes",
-                    "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 6}
-                    },
-                },
                 {
                     "type": "scatter_plot",
                     "x": AxisLimitedScale(
@@ -289,19 +431,23 @@ mpes_app = AppEntryPoint(
                         scale="log",
                     ),
                     "y": AxisLimitedScale(
-                        title="Acquisition time",
+                        title="Acquisition time (s)",
                         search_quantity=f"data.ENTRY[*].collection_time__field#{schema}#int",
                         scale="log",
                     ),
                     "markers": Markers(
                         color=Axis(
-                            title="Data Dimension",
-                            search_quantity=f"data.ENTRY[*].data.data__ndim#{schema}#int",
+                            title="Data Axes",
+                            search_quantity=f"data.ENTRY[*].data.___axes#{schema}#str",
                         )
                     ),
                     "title": "Scan Quality",
                     "layout": {
-                        "lg": {"minH": 3, "minW": 3, "h": 6, "w": 6, "y": 0, "x": 12}
+                        "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 8},
+                        "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
+                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 10},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
+                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
                     },
                 },
             ]
