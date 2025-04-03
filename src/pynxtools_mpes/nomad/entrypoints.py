@@ -385,9 +385,9 @@ mpes_app = AppEntryPoint(
                     "layout": {
                         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 0},
                         "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 0},
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 0},
-                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 0},
-                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 0},
+                        "lg": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 0},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 0},
+                        "xxl": {"minH": 3, "minW": 3, "h": 8, "w": 7, "y": 0, "x": 0},
                     },
                 },
                 {
@@ -404,9 +404,9 @@ mpes_app = AppEntryPoint(
                     "layout": {
                         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 4},
                         "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 6},
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 5},
-                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 4},
-                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 4},
+                        "lg": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 6},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 6},
+                        "xxl": {"minH": 3, "minW": 3, "h": 8, "w": 7, "y": 0, "x": 7},
                     },
                 },
                 # {
@@ -445,9 +445,9 @@ mpes_app = AppEntryPoint(
                     "layout": {
                         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 8},
                         "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
-                        "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 10},
-                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
-                        "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
+                        "lg": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
+                        "xl": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
+                        "xxl": {"minH": 3, "minW": 3, "h": 8, "w": 7, "y": 0, "x": 14},
                     },
                 },
             ]
