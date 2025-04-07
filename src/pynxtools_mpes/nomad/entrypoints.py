@@ -140,7 +140,7 @@ mpes_app = AppEntryPoint(
                         ),
                         MenuItemTerms(
                             title="Chemical Formula",
-                            quantity="results.material.chemical_formula_descriptive",
+                            quantity="results.material.chemical_formula_iupac",
                             width=6,
                             options=10,
                         ),
@@ -380,7 +380,7 @@ mpes_app = AppEntryPoint(
                     "type": "terms",
                     "show_input": False,
                     "scale": "linear",
-                    "quantity": "results.material.chemical_formula_descriptive",
+                    "quantity": "results.material.chemical_formula_iupac",
                     "title": "Material",
                     "layout": {
                         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 0},
