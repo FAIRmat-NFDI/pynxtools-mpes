@@ -122,9 +122,11 @@ mpes_app = AppEntryPoint(
         # targeted here. This example makes sure that only entries that use
         # MySchema are included.
         filters_locked={
-            "text_search_contents": [
-                "data.ENTRY.definition__field==NXmpes OR data.ENTRY.definition__field==NXmpes_arpes"
-            ]
+            f"data.ENTRY.definition__field#{schema}": [
+                "NXmpes",
+                "NXmpes_arpes",
+                "NXxps",
+            ],
         },
         # Controls the menu shown on the left
         menu=Menu(
@@ -222,6 +224,39 @@ mpes_app = AppEntryPoint(
                             x=Axis(
                                 title="Temporal Resolution",
                                 search_quantity=f"data.ENTRY.INSTRUMENT.temporal_resolution.resolution__field#{schema}#float",
+                            ),
+                        ),
+                    ],
+                ),
+                Menu(
+                    title="Sample Environment",
+                    size=MenuSizeEnum.LG,
+                    items=[
+                        MenuItemTerms(
+                            title="Situation",
+                            quantity=f"data.ENTRY.SAMPLE.situation__field#{schema}",
+                            width=12,
+                            options=3,
+                        ),
+                        MenuItemHistogram(
+                            title="Sample temperature",
+                            x=Axis(
+                                title="Sample Temperature",
+                                search_quantity=f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Sample drain current",
+                            x=Axis(
+                                title="Sample drain current",
+                                search_quantity=f"data.ENTRY.SAMPLE.drain_current_env.ammeter.value__field#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Residual gas pressure",
+                            x=Axis(
+                                title="Residual gas pressure",
+                                search_quantity=f"data.ENTRY.SAMPLE.gas_pressure_env.pressure_gauge.value__field#{schema}#float",
                             ),
                         ),
                     ],
