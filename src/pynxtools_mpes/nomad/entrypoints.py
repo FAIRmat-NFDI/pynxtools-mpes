@@ -146,7 +146,7 @@ mpes_app = AppEntryPoint(
                         ),
                         MenuItemTerms(
                             title="Sample Name",
-                            quantity=f"data.ENTRY.SAMPLE.name__field#{schema}#str",
+                            quantity=f"data.ENTRY.SAMPLE.name__field#{schema}",
                             width=6,
                             options=10,
                         ),
@@ -185,7 +185,7 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Instrument Name",
-                            quantity=f"data.ENTRY.INSTRUMENT.name__field#{schema}#str",
+                            quantity=f"data.ENTRY.INSTRUMENT.name__field#{schema}",
                             width=12,
                             options=10,
                         ),
@@ -193,35 +193,35 @@ mpes_app = AppEntryPoint(
                             title="Energy Resolution",
                             x=Axis(
                                 title="Energy Resolution",
-                                search_quantity="data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Angular Resolution",
                             x=Axis(
                                 title="Angular Resolution",
-                                search_quantity="data.ENTRY.INSTRUMENT.angular_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.angular_resolution.resolution__field#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Momentum Resolution",
                             x=Axis(
                                 title="Momentum Resolution",
-                                search_quantity="data.ENTRY.INSTRUMENT.momentum_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.momentum_resolution.resolution__field#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Spatial Resolution",
                             x=Axis(
                                 title="Spatial Resolution",
-                                search_quantity="data.ENTRY.INSTRUMENT.spatial_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.spatial_resolution.resolution__field#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Temporal Resolution",
                             x=Axis(
                                 title="Temporal Resolution",
-                                search_quantity="data.ENTRY.INSTRUMENT.temporal_resolution.resolution__field#pynxtools.nomad.schema.Root#float",
+                                search_quantity=f"data.ENTRY.INSTRUMENT.temporal_resolution.resolution__field#{schema}#float",
                             ),
                         ),
                     ],
