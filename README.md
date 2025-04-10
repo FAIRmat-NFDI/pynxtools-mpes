@@ -5,7 +5,7 @@
 ![](https://img.shields.io/pypi/pyversions/pynxtools-mpes)
 ![](https://img.shields.io/pypi/l/pynxtools-mpes)
 ![](https://img.shields.io/pypi/v/pynxtools-mpes)
-![](https://coveralls.io/repos/github/FAIRmat-NFDI/mpes/badge.svg?branch=main)
+[![Coverage Status](https://coveralls.io/repos/github/FAIRmat-NFDI/mpes/badge.svg?branch=main&kill_cache=1)](https://coveralls.io/github/FAIRmat-NFDI/pynxtools-mpes?branch=main)
 
 # A reader for MPES data
 
