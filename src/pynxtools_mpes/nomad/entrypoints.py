@@ -326,7 +326,7 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Scan Axes",
-                            quantity=f"data.ENTRY.data.___axes#{schema}#str",
+                            quantity=f"data.ENTRY.DATA.___axes#{schema}#str",
                             width=12,
                             options=10,
                         ),
@@ -334,7 +334,7 @@ mpes_app = AppEntryPoint(
                             title="Min. energy",
                             x=Axis(
                                 title="Min. energy",
-                                search_quantity=f"data.ENTRY.data.energy__min#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.energy__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -342,7 +342,7 @@ mpes_app = AppEntryPoint(
                             title="Max. energy",
                             x=Axis(
                                 title="Max. energy",
-                                search_quantity=f"data.ENTRY.data.energy__max#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.energy__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -350,7 +350,7 @@ mpes_app = AppEntryPoint(
                             title="Min. kx",
                             x=Axis(
                                 title="Min. kx",
-                                search_quantity=f"data.ENTRY.data.kx__min#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.kx__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -358,7 +358,7 @@ mpes_app = AppEntryPoint(
                             title="Max. kx",
                             x=Axis(
                                 title="Max. kx",
-                                search_quantity=f"data.ENTRY.data.kx__max#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.kx__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -366,7 +366,7 @@ mpes_app = AppEntryPoint(
                             title="Min. ky",
                             x=Axis(
                                 title="Min. ky",
-                                search_quantity=f"data.ENTRY.data.ky__min#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.ky__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -374,7 +374,7 @@ mpes_app = AppEntryPoint(
                             title="Max. ky",
                             x=Axis(
                                 title="Max. ky",
-                                search_quantity=f"data.ENTRY.data.ky__max#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.ky__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -382,7 +382,7 @@ mpes_app = AppEntryPoint(
                             title="Min. delay",
                             x=Axis(
                                 title="Min. delay",
-                                search_quantity=f"data.ENTRY.data.delay__min#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.delay__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -390,7 +390,7 @@ mpes_app = AppEntryPoint(
                             title="Max. delay",
                             x=Axis(
                                 title="Max. delay",
-                                search_quantity=f"data.ENTRY.data.delay__max#{schema}#float",
+                                search_quantity=f"data.ENTRY.DATA.delay__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -462,7 +462,7 @@ mpes_app = AppEntryPoint(
                     "type": "scatter_plot",
                     "x": AxisLimitedScale(
                         title="# Data Points",
-                        search_quantity=f"data.ENTRY[*].data.data__size#{schema}#int",
+                        search_quantity=f"data.ENTRY[*].DATA[*].data__size#{schema}#int",
                         scale="log",
                     ),
                     "y": AxisLimitedScale(
@@ -473,7 +473,7 @@ mpes_app = AppEntryPoint(
                     "markers": Markers(
                         color=Axis(
                             title="Data Axes",
-                            search_quantity=f"data.ENTRY[*].data.___axes#{schema}#str",
+                            search_quantity=f"data.ENTRY[*].DATA[*].___axes#{schema}#str",
                         )
                     ),
                     "title": "Scan Quality",
