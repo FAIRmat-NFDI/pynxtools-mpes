@@ -373,8 +373,8 @@
     }
   },
   "/ENTRY/CALIBRATION[energy_calibration]":{
-    "fit_formula_inputs/TERM[coefficients]": "@attrs:metadata/energy_correction/calibration/coeffs",
-    "fit_formula_inputs/TERM[coefficients]/@units": "",
+    "fit_formula_inputs/PARAMETER[coefficients]": "@attrs:metadata/energy_correction/calibration/coeffs",
+    "fit_formula_inputs/PARAMETER[coefficients]/@units": "",
     "fit_formula_description": "@attrs:metadata/energy_correction/calibration/fit_function",
     "original_axis": "@attrs:metadata/energy_correction/tof",
     "original_axis/@units": "ns",
@@ -383,24 +383,24 @@
     "physical_quantity": "energy"
   },
   "/ENTRY/CALIBRATION[kx_calibration]": {
-    "scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_kx",
-    "scaling_factor/@units": "",
-    "offset": "@attrs:metadata/momentum_correction/offset_kx",
-    "offset/@units": "",
+    "calibration_parameters/scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_kx",
+    "calibration_parameters/scaling_factor/@units": "",
+    "calibration_parameters/offset": "@attrs:metadata/momentum_correction/offset_kx",
+    "calibration_parameters/offset/@units": "",
     "calibrated_axis": "@attrs:metadata/momentum_correction/calibration/axis_kx",
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
   "/ENTRY/CALIBRATION[ky_calibration]": {
-    "scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_ky",
-    "scaling_factor/@units": "",
-    "offset": "@attrs:metadata/momentum_correction/offset_ky",
-    "offset/@units": "",
+    "calibration_parameters/scaling_factor": "@attrs:metadata/momentum_correction/calibration/scale_ky",
+    "calibration_parameters/scaling_factor/@units": "",
+    "calibration_parameters/offset": "@attrs:metadata/momentum_correction/offset_ky",
+    "calibration_parameters/offset/@units": "",
     "calibrated_axis": "@attrs:metadata/momentum_correction/calibration/axis_ky",
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
-  "/ENTRY/data": {
+  "/ENTRY/DATA[data]": {
     "@axes": "@data:dims",
     "AXISNAME_indices[@*_indices]": "@data:*.index",
     "@signal": "data",
