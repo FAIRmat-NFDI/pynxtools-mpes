@@ -6,7 +6,7 @@
   "/ENTRY/experiment_institution": "Fritz Haber Institute - Max Planck Society",
   "/ENTRY/experiment_facility": "Time Resolved ARPES",
   "/ENTRY/experiment_laboratory": "Clean Room 4",
-  "/ENTRY/identifierNAME[entry_identifier]": "@attrs:metadata/entry_identifier",
+  "/ENTRY/identifierNAME[identifier_entry]": "@attrs:metadata/entry_identifier",
   "/ENTRY/end_time": "@attrs:metadata/timing/acquisition_stop",
   "/ENTRY/duration": "@attrs:metadata/timing/acquisition_duration",
   "/ENTRY/duration/@units": "s",
@@ -315,8 +315,8 @@
     }
   },
   "/ENTRY/CALIBRATION[energy_calibration]":{
-    "fit_formula_inputs/TERM[coefficients]": "['@attrs:metadata/energy_calibration/calibration/coefficients', '@attrs:metadata/energy_correction/calibration/coefficients']",
-    "fit_formula_inputs/TERM[coefficients]/@units": "",
+    "fit_formula_inputs/PARAMETER[coefficients]": "['@attrs:metadata/energy_calibration/calibration/coefficients', '@attrs:metadata/energy_correction/calibration/coefficients']",
+    "fit_formula_inputs/PARAMETER[coefficients]/@units": "",
     "fit_formula_description": "['@attrs:metadata/energy_calibration/calibration/fit_function', '@attrs:metadata/energy_correction/calibration/fit_function']",
     "original_axis": "['@attrs:metadata/energy_calibration/tof', '@attrs:metadata/energy_correction/tof']",
     "original_axis/@units": "",
@@ -325,29 +325,29 @@
     "physical_quantity": "energy"
   },
   "/ENTRY/CALIBRATION[kx_calibration]": {
-    "scaling_factor": "['@attrs:metadata/momentum_calibration/calibration/kx_scale', '@attrs:metadata/momentum_correction/calibration/scale_kx']",
-    "scaling_factor/@units": "",
-    "offset": "['@attrs:metadata/momentum_calibration/calibration/x_center', '@attrs:metadata/momentum_correction/offset_kx']",
-    "offset/@units": "",
+    "calibration_parameters/scaling_factor": "['@attrs:metadata/momentum_calibration/calibration/kx_scale', '@attrs:metadata/momentum_correction/calibration/scale_kx']",
+    "calibration_parameters/scaling_factor/@units": "",
+    "calibration_parameters/offset": "['@attrs:metadata/momentum_calibration/calibration/x_center', '@attrs:metadata/momentum_correction/offset_kx']",
+    "calibration_parameters/offset/@units": "",
     "calibrated_axis": "['@attrs:metadata/momentum_calibration/calibration/kx_axis', '@attrs:metadata/momentum_correction/calibration/axis_kx']",
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
   "/ENTRY/CALIBRATION[ky_calibration]": {
-    "scaling_factor": "['@attrs:metadata/momentum_calibration/calibration/ky_scale', '@attrs:metadata/momentum_correction/calibration/scale_ky']",
-    "scaling_factor/@units": "",
-    "offset": "['@attrs:metadata/momentum_calibration/calibration/y_center', '@attrs:metadata/momentum_correction/offset_ky']",
-    "offset/@units": "",
+    "calibration_parameters/scaling_factor": "['@attrs:metadata/momentum_calibration/calibration/ky_scale', '@attrs:metadata/momentum_correction/calibration/scale_ky']",
+    "calibration_parameters/scaling_factor/@units": "",
+    "calibration_parameters/offset": "['@attrs:metadata/momentum_calibration/calibration/y_center', '@attrs:metadata/momentum_correction/offset_ky']",
+    "calibration_parameters/offset/@units": "",
     "calibrated_axis": "['@attrs:metadata/momentum_calibration/calibration/ky_axis', '@attrs:metadata/momentum_correction/calibration/axis_ky']",
     "calibrated_axis/@units": "1/angstrom",
     "physical_quantity": "momentum"
   },
-  "/ENTRY/data": {
+  "/ENTRY/DATA[data]": {
     "@axes": "@data:dims",
-    "AXISNAME_indices[@*_indices]": "@data:*.index",
+    "@AXISNAME_indices[@*_indices]": "@data:*.index",
     "@signal": "data",
-    "data": "@data:data",
-    "data/@units": "counts",
+    "DATA[data]": "@data:data",
+    "DATA[data]/@units": "counts",
     "AXISNAME[*]": "@data:*.data",
     "AXISNAME[*]/@units": "@data:*.unit",
     "AXISNAME[energy]/@type": "['@attrs:metadata/energy_calibration/calibration/energy_scale', 'kinetic']"
