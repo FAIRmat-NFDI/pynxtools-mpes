@@ -402,7 +402,7 @@
   },
   "/ENTRY/DATA[data]": {
     "@axes": "@data:dims",
-    "AXISNAME_indices[@*_indices]": "@data:*.index",
+    "@AXISNAME_indices[@*_indices]": "@data:*.index",
     "@signal": "data",
     "data": "@data:data",
     "data/@units": "counts",
