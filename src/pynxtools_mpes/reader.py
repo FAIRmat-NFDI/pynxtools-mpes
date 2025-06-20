@@ -51,7 +51,7 @@ def recursive_parse_metadata(
         entry = node[...]
         try:
             dictionary = entry.item()
-            if isinstance(dictionary, (bytes, bytearray)):
+            if isinstance(dictionary, (bytes, bytearray)) and dictionary is not None:
                 dictionary = dictionary.decode()
         except ValueError:
             dictionary = entry
