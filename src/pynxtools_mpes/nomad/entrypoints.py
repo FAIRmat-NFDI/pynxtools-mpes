@@ -26,7 +26,7 @@ except ImportError as exc:
 
 mpes_example = ExampleUploadEntryPoint(
     title="Multidimensional photoemission spectroscopy (MPES)",
-    category="FAIRmat examples",
+    category="NeXus Experiment Examples",
     description="""
         This example presents the capabilities of the NOMAD platform to store and standardize multidimensional photoemission spectroscopy (MPES) experimental data. It contains four major examples:
 
