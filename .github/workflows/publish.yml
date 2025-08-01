@@ -49,8 +49,7 @@ jobs:
           python-version: ${{ env.python-version }}
       - name: Install latest nomad release
         run: |
-          # uv pip install nomad-lab[infrastructure]
-          uv pip install nomad-lab[infrastructure]@git+https://gitlab.mpcdf.mpg.de/nomad-lab/nomad-FAIR.git@v1.3.17
+          uv pip install nomad-lab[infrastructure]
       - name: Install pynxtools-mpes
         run: |
           uv pip install -e ".[dev]"
