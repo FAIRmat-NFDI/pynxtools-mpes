@@ -1,0 +1,13 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#LaserStatus'
+  Source:
+    Probe:
+      frequency: 100
+      photon_energy: 60
+    Pump:
+      frequency: 200
+      photon_energy: 600
+  Beam:
+    Pump:
+      incident_energy: 12
+      pulse_duration: 10
