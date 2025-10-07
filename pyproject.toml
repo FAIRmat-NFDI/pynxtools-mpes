@@ -1,15 +1,12 @@
 [build-system]
-requires = ["setuptools>=64.0.1", "setuptools-scm[toml]>=6.2"]
+requires = ["setuptools>=78.1.1", "setuptools-scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "pynxtools-mpes"
 dynamic = ["version"]
 authors = [
-    { name = "Florian Dobener" },
-    { name = "Abeer Arora", email = "arora@fhi-berlin.mpg.de" },
-    { name = "Laurenz Rettig", email = "rettig@fhi-berlin.mpg.de" },
-    { name = "Lukas Pielsticker", email = "lukas.pielsticker@physik.hu-berlin.de" },
+    { name = "The NOMAD Authors" },
 ]
 description = ""
 readme = "README.md"
@@ -24,15 +21,13 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "h5py>=3.6.0",
-    "xarray>=0.20.2",
     "pynxtools>=0.11.0",
 ]
 
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff>=0.6.0",
+    "ruff>=0.12.0",
     "pytest",
     "pytest-cov",
     "types-pyyaml",
@@ -76,6 +71,7 @@ select = [
     "E", # pycodestyle
     "W", # pycodestyle
     "PL", # pylint
+    "NPY201", # upgrade to numpy v2
 ]
 ignore = [
     "E501", # Line too long ({width} > {limit} characters)
