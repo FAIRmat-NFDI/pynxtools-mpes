@@ -1,9 +1,11 @@
 # Custom Dictionary Words
 ARPES
 Abeer
+Arora
 Brockhauser
 Dobener
 Florian
+Forschungsgemeinschaft
 Laurenz
 Lukas
 MPES
