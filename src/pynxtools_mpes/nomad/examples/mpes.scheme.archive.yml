@@ -1,7 +1,9 @@
 definitions:
-  name: "MPES ELN Example"
+  name: 'MPES_ELN_Example'
+  eln:
+    label: 'MPES ELN Example'
   sections:
-    MPES:
+    ELN_for_MPES:
       base_sections:
         - "pynxtools.nomad.dataconverter.ElnYamlConverter"
         - "nomad.datamodel.data.EntryData"
@@ -11,6 +13,7 @@ definitions:
           nxdl: NXmpes
         eln:
           hide: []
+          label: 'ELN for MPES'
       quantities:
         title:
           type: str
