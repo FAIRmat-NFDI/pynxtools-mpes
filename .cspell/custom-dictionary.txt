@@ -19,3 +19,4 @@ dataconverter
 mpes
 orcid
 pynxtools
+zenodo
