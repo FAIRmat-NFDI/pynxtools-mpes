@@ -27,9 +27,9 @@ authors:
     family-names: Brockhauser
     orcid: 'https://orcid.org/0000-0002-9700-4803'
 
-doi: TODO
+doi: 10.5281/zenodo.16684290
 repository-code: 'https://github.com/FAIRmat-NFDI/pynxtools-mpes'
-url: TODO
+url: https://zenodo.org/records/16684729
 keywords:
   - Multidimensional Photoelectron Spectroscopy
   - ARPES
