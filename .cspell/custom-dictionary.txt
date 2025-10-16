@@ -1,0 +1,21 @@
+# Custom Dictionary Words
+ARPES
+Abeer
+Arora
+Brockhauser
+Dobener
+Florian
+Forschungsgemeinschaft
+Laurenz
+Lukas
+MPES
+Mozumder
+Pielsticker
+Pincelli
+Rettig
+Sandor
+Tommaso
+dataconverter
+mpes
+orcid
+pynxtools
