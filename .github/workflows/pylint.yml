@@ -16,7 +16,6 @@ jobs:
           python-version: ${{ env.python-version }}
       - name: Install package and dev dependencies
         run: |
-          curl -LsSf https://astral.sh/uv/install.sh | sh
           uv pip install ".[dev]"
       - name: ruff check
         run: |

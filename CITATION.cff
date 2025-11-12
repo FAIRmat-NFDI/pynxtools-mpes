@@ -26,16 +26,15 @@ authors:
   - given-names: Sandor
     family-names: Brockhauser
     orcid: 'https://orcid.org/0000-0002-9700-4803'
-
-doi: 10.5281/zenodo.16684290
 repository-code: 'https://github.com/FAIRmat-NFDI/pynxtools-mpes'
-url: https://zenodo.org/records/16684729
+doi: 10.5281/zenodo.16684290
+url: https://zenodo.org/records/16684290
 keywords:
+  - NeXus
+  - pynxtools
+  - NOMAD
   - Multidimensional Photoelectron Spectroscopy
   - ARPES
-  - NOMAD
-  - pynxtools
-  - NeXus
 abstract:
   pynxtools-mpes is a reader plugin for pynxtools (https://github.com/FAIRmat-NFDI/pynxtools)
   written in Python. pynxtools-mpes is a tool for reading, translating, and standardizing multidimensional photoemission spectroscopy (MPES)
@@ -47,4 +46,9 @@ abstract:
 
   The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat)
   (https://gepris.dfg.de/gepris/projekt/460197019?language=en).
-license: Apache-2.0
+license: Apache Software License 2.0
+funding:
+  - name: Deutsche Forschungsgemeinschaft
+    award-number: 460197019
+    title: FAIRmat - FAIR Data Infrastructure for Condensed-Matter Physics and the Chemical Physics of Solids
+    award-uri: https://gepris.dfg.de/gepris/projekt/460197019?language=en
