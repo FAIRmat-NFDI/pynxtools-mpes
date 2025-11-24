@@ -18,7 +18,11 @@
 """Entry points for mpes examples."""
 
 try:
-    from nomad.config.models.plugins import ExampleUploadEntryPoint, AppEntryPoint
+    from nomad.config.models.plugins import (
+        ExampleUploadEntryPoint,
+        AppEntryPoint,
+        SchemaPackageEntryPoint,
+    )
 except ImportError as exc:
     raise ImportError(
         "Could not import nomad package. Please install the package 'nomad-lab'."
@@ -488,4 +492,17 @@ mpes_app = AppEntryPoint(
             ]
         },
     ),
+)
+
+
+class MpesDataConverterEntryPoint(SchemaPackageEntryPoint):
+    def load(self):
+        from pynxtools_mpes.nomad.lab.dataconverter import m_package
+
+        return m_package
+
+
+mpes_data_converter = MpesDataConverterEntryPoint(
+    name="NeXus Dataconverter",
+    description="The NeXus dataconverter to convert data into the NeXus format.",
 )

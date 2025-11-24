@@ -1,0 +1,14 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#Project'
+  title: project
+  description: '<p> <b>very</b> intersting </p>'
+  users:
+    - '../upload/raw/u1.archive.yaml#data'
+  measurements:
+    - '../upload/raw/m1.archive.yaml#data'
+  analysis:
+    - '../upload/raw/a1.archive.yaml#data'
+  reader: json_map
+  nxdl: NXmpes
+  input_files:
+    - mpes.mapping.json
