@@ -12,7 +12,7 @@
 
 `pynxtools-mpes`-mpes is a `pynxtools` reader plugin for multidimensional photoelectron spectroscopy (MPES) data..
 
-This `pynxtools` plugin was generated with [`cookiecutter`](https://github.com/cookiecutter/cookiecutter) using the [`pynxtools-plugin-template`](https://github.com/FAIRmat-NFDI/`pynxtools-plugin-template) template.
+This `pynxtools` plugin was generated with [`cookiecutter`](https://github.com/cookiecutter/cookiecutter) using the [`pynxtools-plugin-template`](https://github.com/FAIRmat-NFDI/pynxtools-plugin-template) template.
 
 ## Installation
 

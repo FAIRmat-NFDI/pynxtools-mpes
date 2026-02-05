@@ -15,6 +15,7 @@ Pincelli
 Rettig
 Sandor
 Tommaso
+Vset
 caplog
 dataconverter
 faddr
@@ -31,4 +32,3 @@ pynxtools
 rettigl
 rgetattr
 zenodo
-Vset

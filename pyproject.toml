@@ -42,6 +42,7 @@ docs = [
     "pymdown-extensions",
     "mkdocs-click"
 ]
+nomad = ["nomad-lab[infrastructure]>=1.4.1rc2"]
 
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
@@ -62,7 +63,7 @@ where = [
 [tool.setuptools_scm]
 
 [tool.ruff]
-include = ["src/*.py", "tests/*.py"]
+include = ["src/pynxtools_mpes/**/*.py", "tests/**/*.py"]
 line-length = 88
 indent-width = 4
 

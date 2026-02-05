@@ -1,7 +1,7 @@
 site_name: Documentation
 site_description: |
   The documentation for the pynxtools-mpes plugin.
-site_author: The FAIRmat Authors
+site_author: The NOMAD Authors
 repo_url: https://github.com/FAIRmat-NFDI/pynxtools-mpes
 edit_uri: ""
 
