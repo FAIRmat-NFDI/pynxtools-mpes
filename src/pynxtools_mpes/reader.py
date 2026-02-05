@@ -31,7 +31,7 @@ logger = logging.getLogger("pynxtools")
 
 
 def recursive_parse_metadata(
-    node: Union[h5py.Group, h5py.Dataset],
+    node: h5py.Group | h5py.Dataset,
 ) -> dict:
     """Recurses through an hdf5 file, and parse it into a dictionary.
 
@@ -164,7 +164,7 @@ class MPESReader(MultiFormatReader):
     """MPES-specific reader class"""
 
     supported_nxdls = ["NXmpes", "NXmpes_arpes"]
-    config_file: Optional[str] = None
+    config_file: str | None = None
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -178,19 +178,19 @@ class MPESReader(MultiFormatReader):
             ".hdf5": self.handle_hdf5_file,
         }
 
-    def handle_hdf5_file(self, file_path: str) -> Dict[str, Any]:
+    def handle_hdf5_file(self, file_path: str) -> dict[str, Any]:
         """Handle hdf5 file"""
         self.data_xarray = h5_to_xarray(file_path)
 
         return {}
 
-    def set_config_file(self, file_path: str) -> Dict[str, Any]:
+    def set_config_file(self, file_path: str) -> dict[str, Any]:
         if self.config_file is not None:
             logger.info(f"Config file already set. Skipping the new file {file_path}.")
         self.config_file = file_path
         return {}
 
-    def handle_eln_file(self, file_path: str) -> Dict[str, Any]:
+    def handle_eln_file(self, file_path: str) -> dict[str, Any]:
         self.eln_data = parse_yml(
             file_path,
             parent_key="/ENTRY",
@@ -205,7 +205,7 @@ class MPESReader(MultiFormatReader):
 
         return self.eln_data.get(path)
 
-    def handle_objects(self, objects: Tuple[Any]) -> Dict[str, Any]:
+    def handle_objects(self, objects: tuple[Any]) -> dict[str, Any]:
         if isinstance(objects, xr.DataArray):
             # Should normally be a tuple, but in the
             # past a single xarray object was passed.
@@ -229,7 +229,7 @@ class MPESReader(MultiFormatReader):
     def get_data(self, key: str, path: str) -> Any:
         try:
             value = rgetattr(obj=self.data_xarray, attr=path)
-            if key.split("/")[-1] == "@axes":
+            if key.rsplit("/", maxsplit=1)[-1] == "@axes":
                 return list(value)
             return value
 
@@ -242,7 +242,7 @@ class MPESReader(MultiFormatReader):
                 f"contain entry corresponding to the path {path}"
             )
 
-    def get_data_dims(self, key: str, path: str) -> List[str]:
+    def get_data_dims(self, key: str, path: str) -> list[str]:
         return list(map(str, self.data_xarray.dims))
 
     def get_attr(self, key: str, path: str) -> Any:
