@@ -2,4 +2,4 @@ prune *
 exclude *
 recursive-include src/pynxtools_mpes *.py
 include pyproject.toml README.md
-graft src/pynxtools_mpes/nomad/example_uploads
+graft src/pynxtools_mpes/nomad/example_uploads/example
