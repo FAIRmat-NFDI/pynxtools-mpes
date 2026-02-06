@@ -15,53 +15,117 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""
-Basic example based test for the MPES reader
-"""
+"""Tests for the pynxtools MPES reader plugin."""
 
 from pathlib import Path
+from typing import Any
 
+import pytest
+from pynxtools.dataconverter.convert import get_reader
 from pynxtools.testing.nexus_conversion import ReaderTest
 
+READER_NAME = "mpes"
+READER_CLASS = get_reader(READER_NAME)
+NXDLS = ["NXmpes"]  # READER_CLASS.supported_nxdls
 
-def test_nexus_conversion(caplog, tmp_path):
+# Define lines/sections to be ignored in _all_ test cases
+ignore_lines_all_tests: list = []
+ignore_sections_all_tests: dict = {}
+
+data_dir_path = Path(__file__).parent / "data"
+
+# Test cases should be [("files", ignore_lines, ignore_sections, "test-id")]
+test_cases: list[tuple[list[str], list[Any], dict[Any, Any], str]] = [
+    (
+        [
+            "xarray_saved_small_calibration.h5",
+            "config_file.json",
+            "example.nxs",
+        ],
+        [],
+        {},
+        "basic-conversion",
+    ),
+    (
+        [
+            "xarray_saved_small_calibration.h5",
+            "config_file.json",
+            "eln_data.yaml",
+            "example_eln.nxs",
+        ],
+        [],
+        {},
+        "conversion-with-eln",
+    ),
+]
+
+test_params: list[Any] = []
+for test_case in test_cases:
+    for nxdl in NXDLS:
+        test_params += [
+            pytest.param(
+                nxdl,
+                test_case[0],
+                test_case[1],
+                test_case[2],
+                id=f"{test_case[3]}-{nxdl.lower()}",
+            )
+        ]
+
+
+@pytest.mark.parametrize(
+    "nxdl, files, ignore_lines, ignore_sections",
+    test_params,
+)
+def test_nexus_conversion(
+    nxdl,
+    files,
+    ignore_lines,
+    ignore_sections,
+    tmp_path,
+    caplog,
+):
     """
-    Tests the conversion into nexus.
+    Test MPES reader
+
+    Parameters
+    ----------
+    nxdl : str
+        Name of the NXDL application definition that is to be tested by
+        this reader plugin.
+    files : str
+        All files that should go into the test.
+    ignore_lines: dict[str, list[str]]
+        Lines within the log files to ignore.
+    ignore_sections: dict[str, list[str]]
+        Subsections of the log files to ignore.
+    tmp_path : pathlib.PosixPath
+        Pytest fixture variable, used to clean up the files generated during
+        the test.
+    caplog : _pytest.logging.LogCaptureFixture
+        Pytest fixture variable, used to capture the log messages during the
+        test.
+
+    Returns
+    -------
+    None.
+
     """
     caplog.clear()
-    dir_path = Path(__file__).parent / "data"
+
+    files_or_dir = [str(data_dir_path / file) for file in files]
+
+    ignore_lines: list[str] = ignore_lines_all_tests + ignore_lines
+    ignore_sections: dict[str, list[str]] = ignore_sections_all_tests | ignore_sections
+
     test = ReaderTest(
-        nxdl="NXmpes",
-        reader_name="mpes",
-        files_or_dir=[
-            str(dir_path / "xarray_saved_small_calibration.h5"),
-            str(dir_path / "config_file.json"),
-            str(dir_path / "example.nxs"),
-        ],
+        nxdl=nxdl,
+        reader_name=READER_NAME,
+        files_or_dir=files_or_dir,
         tmp_path=tmp_path,
         caplog=caplog,
     )
-    test.convert_to_nexus(caplog_level="WARNING", ignore_undocumented=False)
-    test.check_reproducibility_of_nexus()
-
-
-def test_conversion_w_eln_data(caplog, tmp_path):
-    """
-    Tests the conversion with additional ELN data
-    """
-    caplog.clear()
-    dir_path = Path(__file__).parent / "data"
-    test = ReaderTest(
-        nxdl="NXmpes",
-        reader_name="mpes",
-        files_or_dir=[
-            str(dir_path / "xarray_saved_small_calibration.h5"),
-            str(dir_path / "config_file.json"),
-            str(dir_path / "eln_data.yaml"),
-            str(dir_path / "example_eln.nxs"),
-        ],
-        tmp_path=tmp_path,
-        caplog=caplog,
+    test.convert_to_nexus(caplog_level="WARNING", ignore_undocumented=True)
+    test.check_reproducibility_of_nexus(
+        ignore_lines=ignore_lines, ignore_sections=ignore_sections
     )
-    test.convert_to_nexus(caplog_level="WARNING", ignore_undocumented=False)
-    test.check_reproducibility_of_nexus()

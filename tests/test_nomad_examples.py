@@ -15,27 +15,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Test for NOMAD examples in MPES reader plugin."""
+"""Tests for the NOMAD examples."""
 
 import os
+
 import pytest
 
 try:
-    import nomad
+    import nomad  # noqa: F401
 except ImportError:
     pytest.skip(
-        "Skipping NOMAD example tests because nomad is not installed",
+        "Skipping NOMAD example tests because nomad-lab is not installed",
         allow_module_level=True,
     )
 
 from pynxtools.testing.nomad_example import (
+    example_upload_entry_point_valid,
     get_file_parameter,
     parse_nomad_examples,
-    example_upload_entry_point_valid,
 )
 
-from pynxtools_mpes.nomad.entrypoints import mpes_example
-
+from pynxtools_mpes.nomad.example_uploads import mpes_example_upload_entry_point
 
 EXAMPLE_PATH = os.path.join(
     os.path.dirname(__file__),
@@ -43,7 +43,8 @@ EXAMPLE_PATH = os.path.join(
     "src",
     "pynxtools_mpes",
     "nomad",
-    "examples",
+    "example_uploads",
+    "example",
 )
 
 
@@ -60,9 +61,9 @@ def test_parse_nomad_examples(mainfile):
     ("entrypoint", "example_path"),
     [
         pytest.param(
-            mpes_example,
+            mpes_example_upload_entry_point,
             EXAMPLE_PATH,
-            id="mpes_example",
+            id="mpes_example_upload_entry_point",
         ),
     ],
 )

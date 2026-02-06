@@ -19,7 +19,7 @@
 
 import logging
 from functools import reduce
-from typing import Any, Dict, List, Optional, Tuple, Union
+from typing import Any
 
 import h5py
 import numpy as np

@@ -18,7 +18,7 @@
 """Entry points for mpes examples."""
 
 try:
-    from nomad.config.models.plugins import ExampleUploadEntryPoint, AppEntryPoint
+    from nomad.config.models.plugins import AppEntryPoint, ExampleUploadEntryPoint
 except ImportError as exc:
     raise ImportError(
         "Could not import nomad package. Please install the package 'nomad-lab'."
@@ -42,16 +42,16 @@ mpes_example = ExampleUploadEntryPoint(
 
 from nomad.config.models.ui import (
     App,
+    Axis,
+    AxisLimitedScale,
     Column,
+    Markers,
     Menu,
     MenuItemHistogram,
     MenuItemPeriodicTable,
     MenuItemTerms,
     MenuSizeEnum,
     SearchQuantities,
-    AxisLimitedScale,
-    Markers,
-    Axis,
 )
 
 schema = "pynxtools.nomad.schema.Root"
