@@ -45,7 +45,7 @@ docs = [
     "pymdown-extensions",
     "mkdocs-click"
 ]
-nomad = ["nomad-lab[infrastructure]>=1.4.1rc2"]
+nomad = ["nomad-lab[infrastructure]>=1.4.1"]
 
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
