@@ -35,7 +35,7 @@ $<eln-file path> \
 
 ### Examples
 
-You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline in [`src/pynxtools-mpes/nomad/examples`](https://github.com/FAIRmat-NFDI/pynxtools-mpes/tree/main/src/pynxtools_mpes/nomad/example_uploads/example). These are designed for working with [`NOMAD`](https://nomad-lab.eu/) and its [`NOMAD Remote Tools Hub (NORTH)`](https://nomad-lab.eu/prod/v1/gui/analyze/north).
+You can find exhaustive examples how to use `pynxtools-mpes` for your ARPES research data pipeline in [`src/pynxtools_mpes/nomad/example_uploads/example`](https://github.com/FAIRmat-NFDI/pynxtools-mpes/tree/main/src/pynxtools_mpes/nomad/example_uploads/example). These are designed for working with [`NOMAD`](https://nomad-lab.eu/) and its [`NOMAD Remote Tools Hub (NORTH)`](https://nomad-lab.eu/prod/v1/gui/analyze/north).
 
 There are also small example files for using the `pynxtools` dataconverter with the `mpes` reader and the `NXmpes` application definition in [`tests/data`](https://github.com/FAIRmat-NFDI/pynxtools-mpes/tree/main/tests/data).
 
