@@ -7,7 +7,7 @@ You can reach us through different channels. You can send an email directly to o
 | Name | E-mail     | Github profiles |
 |------|------------|-----------------|
 | Dr. Lukas Pielsticker | [lukas.pielsticker@physik.hu-berlin.de](mailto:lukas.pielsticker@physik.hu-berlin.de) | [@lukaspie](https://github.com/lukaspie) |
-| Prof. Dr. Laurenz Rettig | [rettig@fhi-berlin.mpg.de](mailto:rettig@fhi-berlin.mpg.de) |  [l.rettig@rptu.de](mailto:l.rettig@rptu.de) | [@rettigl](https://github.com/rettigl) |
+| Prof. Dr. Laurenz Rettig | [rettig@fhi-berlin.mpg.de](mailto:rettig@fhi-berlin.mpg.de) / [l.rettig@rptu.de](mailto:l.rettig@rptu.de) | [@rettigl](https://github.com/rettigl) |
 
 Alternatively, you can also:
 
