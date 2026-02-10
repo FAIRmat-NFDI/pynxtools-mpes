@@ -10,7 +10,7 @@ This example demonstrates how NOMAD can convert, standardize, and store multi ph
 ## Viewing uploaded data
 
 Below, you find an overview of your uploaded data.
-Click on the `> /` button to get a list of your data or select **FILES** from the top menu of this upload.
+Click on the `> /` button to get a list of your files or select **FILES** from the top menu of this upload.
 You may add your own files to the upload or experiment with the pre-existing electronic lab book example.
 The ELN follows the general structure of NOMAD ELN templates and you may refer to the [documentation](https://nomad-lab.eu/prod/v1/staging/docs/archive.html) or a [YouTube tutorial](https://youtu.be/o5ETHmGmnaI) (~1h)
 for further information.
