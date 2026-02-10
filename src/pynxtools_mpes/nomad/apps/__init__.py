@@ -15,48 +15,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Entry points for mpes examples."""
+"""Entry points for MPES apps."""
 
 try:
-    from nomad.config.models.plugins import ExampleUploadEntryPoint, AppEntryPoint
+    from nomad.config.models.plugins import AppEntryPoint
+    from nomad.config.models.ui import (
+        App,
+        Axis,
+        AxisLimitedScale,
+        Column,
+        Markers,
+        Menu,
+        MenuItemHistogram,
+        MenuItemPeriodicTable,
+        MenuItemTerms,
+        MenuSizeEnum,
+        SearchQuantities,
+    )
 except ImportError as exc:
     raise ImportError(
         "Could not import nomad package. Please install the package 'nomad-lab'."
     ) from exc
 
-mpes_example = ExampleUploadEntryPoint(
-    title="Multidimensional photoemission spectroscopy (MPES)",
-    category="NeXus Experiment Examples",
-    description="""
-        This example presents the capabilities of the NOMAD platform to store and standardize multidimensional photoemission spectroscopy (MPES) experimental data. It contains four major examples:
-
-      - Taking a pre-binned file, here stored in a h5 file, and converting it into the standardized MPES NeXus format.
-        There exists a [NeXus application definition for MPES](https://manual.nexusformat.org/classes/contributed_definitions/NXmpes.html#nxmpes) which details the internal structure of such a file.
-      - Binning of raw data (see [here](https://www.nature.com/articles/s41597-020-00769-8) for additional resources) into a h5 file and consecutively generating a NeXus file from it.
-      - An analysis example using data in the NeXus format and employing the [pyARPES](https://github.com/chstan/arpes) analysis tool to reproduce the main findings of [this paper](https://arxiv.org/pdf/2107.07158.pdf).
-      - Importing angle-resolved data stored in NXmpes_arpes, and convert these into momentum space coordinates using tools in pyARPES.
-    """,
-    plugin_package="pynxtools_mpes",
-    resources=["nomad/examples/*"],
-)
-
-from nomad.config.models.ui import (
-    App,
-    Column,
-    Menu,
-    MenuItemHistogram,
-    MenuItemPeriodicTable,
-    MenuItemTerms,
-    MenuSizeEnum,
-    SearchQuantities,
-    AxisLimitedScale,
-    Markers,
-    Axis,
-)
 
 schema = "pynxtools.nomad.schema.Root"
 
-mpes_app = AppEntryPoint(
+mpes_app_entry_point = AppEntryPoint(
     name="MpesApp",
     description="Simple NXmpes NeXus app.",
     app=App(

@@ -45,7 +45,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 
 Here you can learn which specific readers are currently implemented in `pynxtools-mpes`.
 
-- [MPES reader](reference/mpes.md) for data from the [FHI Berlin](https://www.fhi.mpg.de/de) 
+- [MPES reader](reference/mpes.md) for data from the [FHI Berlin](https://www.fhi.mpg.de/de)
 
 </div>
 </div>

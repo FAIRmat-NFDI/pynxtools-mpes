@@ -27,12 +27,15 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "mypy",
-    "ruff>=0.12.0",
+    "ruff>=0.15.0",
     "pytest",
     "pytest-cov",
+    "pytest-timeout",
     "types-pyyaml",
-    "pip-tools",
+    "types-pytz",
+    "types-requests",
     "pre-commit",
+    "cruft",
 ]
 docs = [
     "mkdocs",
@@ -42,17 +45,23 @@ docs = [
     "pymdown-extensions",
     "mkdocs-click"
 ]
+nomad = ["nomad-lab[infrastructure]>=1.4.1"]
 
 [project.urls]
 "Homepage" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes"
 "Bug Tracker" = "https://github.com/FAIRmat-NFDI/pynxtools-mpes/issues"
 
-[project.entry-points."pynxtools.reader"]
+[project.entry-points.'pynxtools.reader']
 mpes = "pynxtools_mpes.reader:MPESReader"
 
 [project.entry-points.'nomad.plugin']
-mpes_example = "pynxtools_mpes.nomad.entrypoints:mpes_example"
-mpes_app = "pynxtools_mpes.nomad.entrypoints:mpes_app"
+mpes_example_upload_entry_point = "pynxtools_mpes.nomad.example_uploads:mpes_example_upload_entry_point"
+mpes_app_entry_point = "pynxtools_mpes.nomad.apps:mpes_app_entry_point"
+
+[tool.uv]
+extra-index-url = [
+    "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple",
+]
 
 [tool.setuptools.packages.find]
 where = [
@@ -60,9 +69,11 @@ where = [
 ]
 
 [tool.setuptools_scm]
+version_scheme = "no-guess-dev"
+local_scheme = "node-and-date"
 
 [tool.ruff]
-include = ["src/*.py", "tests/*.py"]
+include = ["src/pynxtools_mpes/**/*.py", "tests/**/*.py"]
 line-length = 88
 indent-width = 4
 
@@ -71,7 +82,10 @@ select = [
     "E", # pycodestyle
     "W", # pycodestyle
     "PL", # pylint
-    "NPY201", # upgrade to numpy v2
+    "UP", # pyupgrade
+    "F401", # remove unused import
+    "I001", # sort imports
+    "NPY201", # upgrade numpy v2
 ]
 ignore = [
     "E501", # Line too long ({width} > {limit} characters)
@@ -89,6 +103,7 @@ ignore = [
     "PLR5501", # else-if-used
 ]
 fixable = ["ALL"]
+isort.split-on-trailing-comma = false
 
 [tool.ruff.format]
 quote-style = "double"
