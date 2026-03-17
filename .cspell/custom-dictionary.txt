@@ -10,6 +10,7 @@ Laurenz
 Lukas
 MPES
 Mozumder
+NFDI
 Pielsticker
 Pincelli
 Rettig
@@ -20,7 +21,9 @@ caplog
 dataconverter
 faddr
 fluence
+ipynb
 iupac
+jovyan
 lukaspie
 mainfile
 mpes
