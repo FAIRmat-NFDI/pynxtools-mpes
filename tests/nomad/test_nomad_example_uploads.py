@@ -40,6 +40,7 @@ from pynxtools_mpes.nomad.example_uploads import mpes_example_upload
 EXAMPLE_PATH = os.path.join(
     os.path.dirname(__file__),
     "..",
+    "..",
     "src",
     "pynxtools_mpes",
     "nomad",
