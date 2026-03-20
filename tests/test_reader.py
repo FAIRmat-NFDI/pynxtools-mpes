@@ -30,7 +30,7 @@ NXDLS = ["NXmpes"]  # READER_CLASS.supported_nxdls
 
 # Define lines/sections to be ignored in _all_ test cases
 ignore_lines_all_tests: list = []
-ignore_sections_all_tests: dict = {}
+ignore_sections_all_tests: dict = {"ATTRS (//@creator_version)": ["DEBUG - value:"]}
 
 data_dir_path = Path(__file__).parent / "data"
 
