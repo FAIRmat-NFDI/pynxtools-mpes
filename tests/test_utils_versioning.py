@@ -16,14 +16,24 @@
 # limitations under the License.
 #
 
-import importlib.metadata
+import re
+
+from pynxtools_mpes import get_pynxtools_mpes_version
 
 
-def get_pynxtools_mpes_version() -> str:
-    """Attempt getting the version of pynxtools at runtime with fallback."""
-    # for a discussion whether to collect at build or runtime see
-    # https://discuss.python.org/t/please-make-package-version-go-away/58501
-    try:
-        return importlib.metadata.version("pynxtools_mpes")
-    except importlib.metadata.PackageNotFoundError:
-        return f"unknown_version"
+def test_get_pynxtools_mpes_version():
+    version = get_pynxtools_mpes_version()
+    assert version != "unknown_version"
+    assert re.compile(
+        r"""
+        ^
+        (?P<major>\d+)\.
+        (?P<minor>\d+)\.
+        (?P<patch>\d+)
+        (?:\.post(?P<post>\d+))?
+        (?:\.dev(?P<dev>\d+))?
+        (?:\+(?P<local>[a-zA-Z0-9\.]+))?
+        $
+        """,
+        re.VERBOSE,
+    ).match(version)

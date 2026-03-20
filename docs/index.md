@@ -36,7 +36,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 
 ### Learn
 
-- coming soon!
+- [Note on versioning](learn/versioning.md)
 
 </div>
 <div markdown="block">

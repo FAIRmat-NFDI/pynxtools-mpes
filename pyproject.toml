@@ -55,8 +55,8 @@ nomad = ["nomad-lab[infrastructure]>=1.4.1"]
 mpes = "pynxtools_mpes.reader:MPESReader"
 
 [project.entry-points.'nomad.plugin']
-mpes_example_upload_entry_point = "pynxtools_mpes.nomad.example_uploads:mpes_example_upload_entry_point"
-mpes_app_entry_point = "pynxtools_mpes.nomad.apps:mpes_app_entry_point"
+mpes_app = "pynxtools_mpes.nomad.apps:mpes_app"
+mpes_example_upload = "pynxtools_mpes.nomad.example_uploads:mpes_example_upload"
 
 [tool.uv]
 extra-index-url = [

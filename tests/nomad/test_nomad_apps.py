@@ -30,6 +30,6 @@ except ImportError:
 
 def test_importing_app():
     # this will raise an exception if pydantic model validation fails for the app
-    from pynxtools_mpes.nomad.apps import mpes_app_entry_point  # noqa: PLC0415
+    from pynxtools_mpes.nomad.apps import mpes_app  # noqa: PLC0415
 
-    assert mpes_app_entry_point.app.label == "MPES"
+    assert mpes_app.app.label == "MPES"
