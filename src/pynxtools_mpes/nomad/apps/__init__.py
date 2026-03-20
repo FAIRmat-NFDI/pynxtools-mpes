@@ -40,7 +40,7 @@ except ImportError as exc:
 
 schema = "pynxtools.nomad.schema.Root"
 
-mpes_app_entry_point = AppEntryPoint(
+mpes_app = AppEntryPoint(
     name="MpesApp",
     description="Simple NXmpes NeXus app.",
     app=App(

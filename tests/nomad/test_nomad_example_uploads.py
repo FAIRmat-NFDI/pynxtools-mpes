@@ -35,10 +35,11 @@ from pynxtools.testing.nomad_example import (
     parse_nomad_examples,
 )
 
-from pynxtools_mpes.nomad.example_uploads import mpes_example_upload_entry_point
+from pynxtools_mpes.nomad.example_uploads import mpes_example_upload
 
 EXAMPLE_PATH = os.path.join(
     os.path.dirname(__file__),
+    "..",
     "..",
     "src",
     "pynxtools_mpes",
@@ -61,7 +62,7 @@ def test_parse_nomad_examples(mainfile):
     ("entrypoint", "example_path"),
     [
         pytest.param(
-            mpes_example_upload_entry_point,
+            mpes_example_upload,
             EXAMPLE_PATH,
             id="mpes_example_upload_entry_point",
         ),

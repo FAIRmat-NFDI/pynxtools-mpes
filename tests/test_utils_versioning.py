@@ -15,21 +15,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-"""Tests for the NOMAD app."""
 
-import pytest
+import re
 
-try:
-    import nomad  # noqa: F401
-except ImportError:
-    pytest.skip(
-        "Skipping NOMAD app tests because nomad-lab is not installed",
-        allow_module_level=True,
-    )
+from pynxtools_mpes import get_pynxtools_mpes_version
 
 
-def test_importing_app():
-    # this will raise an exception if pydantic model validation fails for the app
-    from pynxtools_mpes.nomad.apps import mpes_app_entry_point  # noqa: PLC0415
-
-    assert mpes_app_entry_point.app.label == "MPES"
+def test_get_pynxtools_mpes_version():
+    version = get_pynxtools_mpes_version()
+    assert version != "unknown_version"
+    assert re.compile(
+        r"""
+        ^
+        (?P<major>\d+)\.
+        (?P<minor>\d+)\.
+        (?P<patch>\d+)
+        (?:\.post(?P<post>\d+))?
+        (?:\.dev(?P<dev>\d+))?
+        (?:\+(?P<local>[a-zA-Z0-9\.]+))?
+        $
+        """,
+        re.VERBOSE,
+    ).match(version)

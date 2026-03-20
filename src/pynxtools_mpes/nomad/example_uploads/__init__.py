@@ -24,7 +24,7 @@ except ImportError as exc:
         "Could not import nomad package. Please install the package 'nomad-lab'."
     ) from exc
 
-mpes_example_upload_entry_point = ExampleUploadEntryPoint(
+mpes_example_upload = ExampleUploadEntryPoint(
     title="Multidimensional photoemission spectroscopy (MPES)",
     category="NeXus Experiment Examples",
     description="""

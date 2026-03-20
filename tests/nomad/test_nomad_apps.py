@@ -15,15 +15,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+"""Tests for the NOMAD app."""
 
-import importlib.metadata
+import pytest
+
+try:
+    import nomad  # noqa: F401
+except ImportError:
+    pytest.skip(
+        "Skipping NOMAD app tests because nomad-lab is not installed",
+        allow_module_level=True,
+    )
 
 
-def get_pynxtools_mpes_version() -> str:
-    """Attempt getting the version of pynxtools at runtime with fallback."""
-    # for a discussion whether to collect at build or runtime see
-    # https://discuss.python.org/t/please-make-package-version-go-away/58501
-    try:
-        return importlib.metadata.version("pynxtools_mpes")
-    except importlib.metadata.PackageNotFoundError:
-        return f"unknown_version"
+def test_importing_app():
+    # this will raise an exception if pydantic model validation fails for the app
+    from pynxtools_mpes.nomad.apps import mpes_app  # noqa: PLC0415
+
+    assert mpes_app.app.label == "MPES"
