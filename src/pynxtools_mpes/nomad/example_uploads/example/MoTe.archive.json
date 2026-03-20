@@ -1,6 +1,6 @@
 {
     "data": {
-        "m_def": "pynxtools.nomad.dataconverter.NexusDataConverter",
+        "m_def": "pynxtools.nomad.schema_packages.dataconverter.NexusDataConverter",
         "input_files": [
             "MoTe2.h5",
             "config_file.json"
