@@ -1,6 +1,6 @@
 cff-version: 1.2.0
 title: 'pynxtools-mpes: A pynxtools reader plugin for multidimensional photoemission spectroscopy (MPES) data'
-version: 0.2.7
+version: 0.2.8
 message:
   If you use this software, please cite it using the
   metadata from this file.
@@ -27,8 +27,8 @@ authors:
     family-names: Brockhauser
     orcid: 'https://orcid.org/0000-0002-9700-4803'
 repository-code: 'https://github.com/FAIRmat-NFDI/pynxtools-mpes'
-doi: 10.5281/zenodo.16684290
-url: https://zenodo.org/records/16684290
+doi: '10.5281/zenodo.16684290'
+url: 'https://zenodo.org/records/16684290'
 keywords:
   - NeXus
   - pynxtools
@@ -36,9 +36,10 @@ keywords:
   - Multidimensional Photoelectron Spectroscopy
   - ARPES
 abstract:
-  pynxtools-mpes is a reader plugin for pynxtools (https://github.com/FAIRmat-NFDI/pynxtools)
-  written in Python. pynxtools-mpes is a tool for reading, translating, and standardizing multidimensional photoemission spectroscopy (MPES)
-  data technology such that it is compliant with the NeXus application definitions NXmpes and NXmpes_arpes
+  pynxtools-mpes is a reader plugin for pynxtools (https://github.com/FAIRmat-NFDI/pynxtools) written in Python.
+
+  pynxtools-mpes is a tool for reading, translating, and standardizing multidimensional photoemission spectroscopy
+  (MPES) data technology such that it is compliant with the NeXus application definitions NXmpes and NXmpes_arpes
   (https://fairmat-nfdi.github.io/nexus_definitions/).
 
   pynxtools-mpes is developed both as a standalone reader and as a tool within NOMAD, an open-source data
@@ -46,7 +47,7 @@ abstract:
 
   The work is funded by the Deutsche Forschungsgemeinschaft (DFG, German Research Foundation) - 460197019 (FAIRmat)
   (https://gepris.dfg.de/gepris/projekt/460197019?language=en).
-license: Apache Software License 2.0
+license: Apache-2.0
 funding:
   - name: Deutsche Forschungsgemeinschaft
     award-number: 460197019
