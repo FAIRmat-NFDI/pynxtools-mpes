@@ -41,3 +41,4 @@ rgetattr
 silx
 specsanalyzer
 zenodo
+metainfo
