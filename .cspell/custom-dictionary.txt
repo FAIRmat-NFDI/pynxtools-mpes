@@ -33,3 +33,4 @@ pynxtools
 rettigl
 rgetattr
 zenodo
+metainfo
