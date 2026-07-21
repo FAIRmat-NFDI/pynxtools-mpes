@@ -347,7 +347,7 @@ mpes_app = AppEntryPoint(
                     "type": "histogram",
                     "show_input": False,
                     "autorange": True,
-                    "nbins": 30,
+                    "n_bins": 30,
                     "scale": "linear",
                     "x": Axis(
                         title="Sample Temperature",
