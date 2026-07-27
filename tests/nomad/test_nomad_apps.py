@@ -28,6 +28,8 @@ except ImportError:
     )
 
 # this will raise an exception if pydantic model validation fails for the app
+from pynxtools.nomad.metainfo.applications.mpes import Mpes  # noqa: PLC0415
+
 from pynxtools_mpes.nomad.apps import mpes_app, schema  # noqa: PLC0415
 
 
@@ -41,8 +43,13 @@ def test_mpes_app_basic_properties():
 
 
 def test_mpes_app_v2_schema():
-    """App v2 must reference the correct Mpes class."""
-    assert schema == "pynxtools.nomad.metainfo.applications.Mpes"
+    """App v2 must reference the correct Mpes class.
+
+    Checked against Mpes.m_def.qualified_name() directly (not a hardcoded
+    string) so this test catches a schema/qualified_name mismatch instead of
+    encoding whatever the app happens to say.
+    """
+    assert schema == Mpes.m_def.qualified_name()
     filters = mpes_app.app.filters_locked
     assert "section_defs.definition_qualified_name" in filters
     assert filters["section_defs.definition_qualified_name"] == [schema]
@@ -78,6 +85,25 @@ def test_mpes_app_menu_contains_probe_beam_section():
     assert any(item.title == "Probe Source" for item in elements_menu.items)
 
 
+@pytest.mark.parametrize(
+    "title, group_name",
+    [
+        ("Angular Resolution", "angular_resolution"),
+        ("Momentum Resolution", "momentum_resolution"),
+        ("Spatial Resolution", "spatial_resolution"),
+    ],
+)
+def test_mpes_app_electronanalyzer_resolution_widgets(title, group_name):
+    """angular/momentum/spatial_resolution come from NXelectronanalyzer."""
+    instrument_menu = next(
+        item for item in mpes_app.app.menu.items if item.title == "Instrument"
+    )
+    widget = next(item for item in instrument_menu.items if item.title == title)
+    assert widget.x.search_quantity == (
+        f"data.instrument.electronanalyzer.{group_name}.resolution#{schema}#float"
+    )
+
+
 def test_mpes_app_dashboard_widgets():
     """Ensure the dashboard contains a valid periodic table widget."""
     dashboard = mpes_app.app.dashboard
@@ -89,5 +115,5 @@ def test_mpes_app_dashboard_widgets():
     assert histogram.n_bins == 30
     assert (
         histogram.x.search_quantity
-        == "data.sample.temperature_env.value#pynxtools.nomad.metainfo.applications.Mpes#float"
+        == f"data.sample.temperature_env.value#{schema}#float"
     )
