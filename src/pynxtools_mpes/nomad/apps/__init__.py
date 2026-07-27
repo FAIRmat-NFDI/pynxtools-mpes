@@ -37,7 +37,7 @@ except ImportError as exc:
     ) from exc
 
 
-schema = "pynxtools.nomad.metainfo.applications.Mpes"
+schema = "pynxtools.nomad.metainfo.applications.mpes.Mpes"
 
 mpes_app = AppEntryPoint(
     name="MpesApp",
@@ -173,6 +173,29 @@ mpes_app = AppEntryPoint(
                             x=Axis(
                                 title="Energy Resolution",
                                 search_quantity=f"data.instrument.energy_resolution.resolution#{schema}#float",
+                            ),
+                        ),
+                        # angular_resolution/momentum_resolution/spatial_resolution
+                        # come from NXelectronanalyzer, not from NXmpes_arpes.
+                        MenuItemHistogram(
+                            title="Angular Resolution",
+                            x=Axis(
+                                title="Angular Resolution",
+                                search_quantity=f"data.instrument.electronanalyzer.angular_resolution.resolution#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Momentum Resolution",
+                            x=Axis(
+                                title="Momentum Resolution",
+                                search_quantity=f"data.instrument.electronanalyzer.momentum_resolution.resolution#{schema}#float",
+                            ),
+                        ),
+                        MenuItemHistogram(
+                            title="Spatial Resolution",
+                            x=Axis(
+                                title="Spatial Resolution",
+                                search_quantity=f"data.instrument.electronanalyzer.spatial_resolution.resolution#{schema}#float",
                             ),
                         ),
                     ],
