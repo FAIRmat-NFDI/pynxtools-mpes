@@ -37,7 +37,7 @@ except ImportError as exc:
     ) from exc
 
 
-schema = "pynxtools.nomad.metainfo.applications.mpes.Mpes"
+schema = "pynxtools.nomad.metainfo.applications.Mpes"
 
 mpes_app = AppEntryPoint(
     name="MpesApp",
