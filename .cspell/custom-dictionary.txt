@@ -18,11 +18,13 @@ Tommaso
 Vset
 caplog
 dataconverter
+electronanalyzer
 faddr
 fluence
 iupac
 lukaspie
 mainfile
+metainfo
 mpes
 mpesapp
 nbins

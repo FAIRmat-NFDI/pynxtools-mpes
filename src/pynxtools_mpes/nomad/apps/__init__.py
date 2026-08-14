@@ -24,7 +24,6 @@ try:
         Axis,
         AxisLimitedScale,
         Column,
-        Markers,
         Menu,
         MenuItemHistogram,
         MenuItemPeriodicTable,
@@ -38,7 +37,7 @@ except ImportError as exc:
     ) from exc
 
 
-schema = "pynxtools.nomad.schema.Root"
+schema = "pynxtools.nomad.metainfo.applications.Mpes"
 
 mpes_app = AppEntryPoint(
     name="MpesApp",
@@ -66,37 +65,37 @@ mpes_app = AppEntryPoint(
             Column(title="Entry ID", search_quantity="entry_id", selected=True),
             Column(
                 title="File Name",
-                search_quantity=f"mainfile",
+                search_quantity="mainfile",
                 selected=True,
             ),
             Column(
                 title="Start Time",
-                search_quantity=f"data.ENTRY[*].start_time#{schema}",
+                search_quantity=f"data.start_time#{schema}",
                 selected=True,
             ),
             Column(
                 title="Description",
-                search_quantity=f"data.ENTRY[*].experiment_description__field#{schema}",
+                search_quantity=f"data.experiment_description#{schema}",
                 selected=True,
             ),
             Column(
                 title="Author",
-                search_quantity=f"data.ENTRY[*].USER[*].name__field#{schema}",
+                search_quantity=f"data.user[*].name#{schema}",
                 selected=True,
             ),
             Column(
                 title="Sample",
-                search_quantity=f"data.ENTRY[*].SAMPLE[*].name__field#{schema}",
+                search_quantity=f"data.sample[*].name#{schema}",
                 selected=True,
             ),
             Column(
                 title="Sample ID",
-                search_quantity=f"data.ENTRY[*].SAMPLE[*].identifierNAME__field#{schema}",
+                search_quantity=f"data.sample[*].identifier#{schema}",
                 selected=False,
             ),
             Column(
                 title="Definition",
-                search_quantity=f"data.ENTRY[*].definition__field#{schema}",
+                search_quantity=f"data.definition#{schema}",
                 selected=True,
             ),
         ],
@@ -105,13 +104,7 @@ mpes_app = AppEntryPoint(
         # results to the wanted subset. Any available search filter can be
         # targeted here. This example makes sure that only entries that use
         # MySchema are included.
-        filters_locked={
-            f"data.ENTRY.definition__field#{schema}": [
-                "NXmpes",
-                "NXmpes_arpes",
-                "NXxps",
-            ],
-        },
+        filters_locked={"section_defs.definition_qualified_name": [schema]},
         # Controls the menu shown on the left
         menu=Menu(
             size=MenuSizeEnum.MD,
@@ -132,7 +125,7 @@ mpes_app = AppEntryPoint(
                         ),
                         MenuItemTerms(
                             title="Sample Name",
-                            quantity=f"data.ENTRY.SAMPLE.name__field#{schema}",
+                            quantity=f"data.sample.name#{schema}",
                             width=6,
                             options=10,
                         ),
@@ -147,19 +140,19 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Entry Author",
-                            search_quantity=f"data.ENTRY.USER.name__field#{schema}",
+                            search_quantity=f"data.user.name#{schema}",
                             width=12,
                             options=5,
                         ),
                         MenuItemTerms(
                             title="Upload Author",
-                            search_quantity=f"authors.name",
+                            search_quantity="authors.name",
                             width=12,
                             options=5,
                         ),
                         MenuItemTerms(
                             title="Affiliation",
-                            search_quantity=f"data.ENTRY.USER.affiliation__field#{schema}",
+                            search_quantity=f"data.user.affiliation#{schema}",
                             width=12,
                             options=5,
                         ),
@@ -171,7 +164,7 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Instrument Name",
-                            quantity=f"data.ENTRY.INSTRUMENT.name__field#{schema}",
+                            quantity=f"data.instrument.name#{schema}",
                             width=12,
                             options=10,
                         ),
@@ -179,35 +172,30 @@ mpes_app = AppEntryPoint(
                             title="Energy Resolution",
                             x=Axis(
                                 title="Energy Resolution",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.energy_resolution.resolution__field#{schema}#float",
+                                search_quantity=f"data.instrument.energy_resolution.resolution#{schema}#float",
                             ),
                         ),
+                        # angular_resolution/momentum_resolution/spatial_resolution
+                        # come from NXelectronanalyzer, not from NXmpes_arpes.
                         MenuItemHistogram(
                             title="Angular Resolution",
                             x=Axis(
                                 title="Angular Resolution",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.angular_resolution.resolution__field#{schema}#float",
+                                search_quantity=f"data.instrument.electronanalyzer.angular_resolution.resolution#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Momentum Resolution",
                             x=Axis(
                                 title="Momentum Resolution",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.momentum_resolution.resolution__field#{schema}#float",
+                                search_quantity=f"data.instrument.electronanalyzer.momentum_resolution.resolution#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Spatial Resolution",
                             x=Axis(
                                 title="Spatial Resolution",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.spatial_resolution.resolution__field#{schema}#float",
-                            ),
-                        ),
-                        MenuItemHistogram(
-                            title="Temporal Resolution",
-                            x=Axis(
-                                title="Temporal Resolution",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.temporal_resolution.resolution__field#{schema}#float",
+                                search_quantity=f"data.instrument.electronanalyzer.spatial_resolution.resolution#{schema}#float",
                             ),
                         ),
                     ],
@@ -218,7 +206,7 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Situation",
-                            quantity=f"data.ENTRY.SAMPLE.situation__field#{schema}",
+                            quantity=f"data.sample.situation#{schema}",
                             width=12,
                             options=3,
                         ),
@@ -226,21 +214,21 @@ mpes_app = AppEntryPoint(
                             title="Sample temperature",
                             x=Axis(
                                 title="Sample Temperature",
-                                search_quantity=f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#{schema}#float",
+                                search_quantity=f"data.sample.temperature_env.value#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Sample drain current",
                             x=Axis(
                                 title="Sample drain current",
-                                search_quantity=f"data.ENTRY.SAMPLE.drain_current_env.ammeter.value__field#{schema}#float",
+                                search_quantity=f"data.sample.drain_current_env.value#{schema}#float",
                             ),
                         ),
                         MenuItemHistogram(
                             title="Residual gas pressure",
                             x=Axis(
                                 title="Residual gas pressure",
-                                search_quantity=f"data.ENTRY.SAMPLE.gas_pressure_env.pressure_gauge.value__field#{schema}#float",
+                                search_quantity=f"data.sample.gas_pressure_env.value#{schema}#float",
                             ),
                         ),
                     ],
@@ -251,24 +239,18 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Probe Source",
-                            quantity=f"data.ENTRY.INSTRUMENT.source_probe.name__field#{schema}#str",
+                            quantity=f"data.instrument.source_probe.name#{schema}#str",
                             width=12,
                             options=5,
                         ),
-                        MenuItemHistogram(
-                            title="Probe beam energy",
-                            x=Axis(
-                                title="Probe beam energy",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_probe.incident_energy__field#{schema}#float",
-                            ),
-                        ),
-                        MenuItemHistogram(
-                            title="Probe beam polarization",
-                            x=Axis(
-                                title="Probe beam polarization",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_probe.incident_polarization__field#{schema}#float",
-                            ),
-                        ),
+                        # "incident_energy"/"incident_polarization" are
+                        # declared with shape=["*"]/["*", 2] (real arrays).
+                        # NOMAD's dynamic search-quantity registration
+                        # unconditionally skips any array-shaped quantity
+                        # (elasticsearch_extension.create_dynamic_quantity_annotation),
+                        # so they cannot be used as a search_quantity/quantity
+                        # target here — same constraint that made app_v2.py
+                        # comment out its "Dataset Axes" widget.
                     ],
                 ),
                 Menu(
@@ -277,30 +259,9 @@ mpes_app = AppEntryPoint(
                     items=[
                         MenuItemTerms(
                             title="Pump Source",
-                            quantity=f"data.ENTRY.INSTRUMENT.source_pump.name__field#{schema}#str",
+                            quantity=f"data.instrument.source_pump.name#{schema}#str",
                             width=12,
                             options=5,
-                        ),
-                        MenuItemHistogram(
-                            title="Pump beam energy",
-                            x=Axis(
-                                title="Pump beam energy",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.incident_energy__field#{schema}#float",
-                            ),
-                        ),
-                        MenuItemHistogram(
-                            title="Pump beam polarization",
-                            x=Axis(
-                                title="Pump beam polarization",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.incident_polarization__field#{schema}#float",
-                            ),
-                        ),
-                        MenuItemHistogram(
-                            title="Pump beam fluence",
-                            x=Axis(
-                                title="Pump beam fluence",
-                                search_quantity=f"data.ENTRY.INSTRUMENT.beam_pump.fluence__field#{schema}#float",
-                            ),
                         ),
                     ],
                 ),
@@ -308,17 +269,13 @@ mpes_app = AppEntryPoint(
                     title="Data Range",
                     size=MenuSizeEnum.LG,
                     items=[
-                        MenuItemTerms(
-                            title="Scan Axes",
-                            quantity=f"data.ENTRY.DATA.___axes#{schema}#str",
-                            width=12,
-                            options=10,
-                        ),
+                        # "Scan Axes" (data.data.axes) is also array-shaped
+                        # (shape=["*"]) and unsearchable for the same reason.
                         MenuItemHistogram(
                             title="Min. energy",
                             x=Axis(
                                 title="Min. energy",
-                                search_quantity=f"data.ENTRY.DATA.energy__min#{schema}#float",
+                                search_quantity=f"data.data.energy__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -326,7 +283,7 @@ mpes_app = AppEntryPoint(
                             title="Max. energy",
                             x=Axis(
                                 title="Max. energy",
-                                search_quantity=f"data.ENTRY.DATA.energy__max#{schema}#float",
+                                search_quantity=f"data.data.energy__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -334,7 +291,7 @@ mpes_app = AppEntryPoint(
                             title="Min. kx",
                             x=Axis(
                                 title="Min. kx",
-                                search_quantity=f"data.ENTRY.DATA.kx__min#{schema}#float",
+                                search_quantity=f"data.data.kx__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -342,7 +299,7 @@ mpes_app = AppEntryPoint(
                             title="Max. kx",
                             x=Axis(
                                 title="Max. kx",
-                                search_quantity=f"data.ENTRY.DATA.kx__max#{schema}#float",
+                                search_quantity=f"data.data.kx__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -350,7 +307,7 @@ mpes_app = AppEntryPoint(
                             title="Min. ky",
                             x=Axis(
                                 title="Min. ky",
-                                search_quantity=f"data.ENTRY.DATA.ky__min#{schema}#float",
+                                search_quantity=f"data.data.ky__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -358,7 +315,7 @@ mpes_app = AppEntryPoint(
                             title="Max. ky",
                             x=Axis(
                                 title="Max. ky",
-                                search_quantity=f"data.ENTRY.DATA.ky__max#{schema}#float",
+                                search_quantity=f"data.data.ky__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -366,7 +323,7 @@ mpes_app = AppEntryPoint(
                             title="Min. delay",
                             x=Axis(
                                 title="Min. delay",
-                                search_quantity=f"data.ENTRY.DATA.delay__min#{schema}#float",
+                                search_quantity=f"data.data.delay__min#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -374,7 +331,7 @@ mpes_app = AppEntryPoint(
                             title="Max. delay",
                             x=Axis(
                                 title="Max. delay",
-                                search_quantity=f"data.ENTRY.DATA.delay__max#{schema}#float",
+                                search_quantity=f"data.data.delay__max#{schema}#float",
                             ),
                             width=6,
                         ),
@@ -382,12 +339,12 @@ mpes_app = AppEntryPoint(
                 ),
                 MenuItemHistogram(
                     title="Start Time",
-                    x=f"data.ENTRY.start_time__field#{schema}",
+                    x=f"data.start_time#{schema}",
                     autorange=True,
                 ),
                 MenuItemHistogram(
                     title="Upload Creation Time",
-                    x=f"upload_create_time",
+                    x="upload_create_time",
                     autorange=True,
                 ),
             ],
@@ -413,11 +370,11 @@ mpes_app = AppEntryPoint(
                     "type": "histogram",
                     "show_input": False,
                     "autorange": True,
-                    "nbins": 30,
+                    "n_bins": 30,
                     "scale": "linear",
                     "x": Axis(
                         title="Sample Temperature",
-                        search_quantity=f"data.ENTRY.SAMPLE.temperature_env.temperature_sensor.value__field#{schema}#float",
+                        search_quantity=f"data.sample.temperature_env.value#{schema}#float",
                     ),
                     "title": "Sample Temperature",
                     "layout": {
@@ -428,38 +385,21 @@ mpes_app = AppEntryPoint(
                         "xxl": {"minH": 3, "minW": 3, "h": 8, "w": 7, "y": 0, "x": 7},
                     },
                 },
-                # {
-                #     "type": "terms",
-                #     "show_input": False,
-                #     "scale": "linear",
-                #     "quantity": f"data.ENTRY.data.___axes#{schema}#str",
-                #     "title": "Dataset Axes",
-                #     "layout": {
-                #         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 8},
-                #         "md": {"minH": 3, "minW": 3, "h": 7, "w": 6, "y": 0, "x": 12},
-                #         "lg": {"minH": 3, "minW": 3, "h": 5, "w": 5, "y": 0, "x": 10},
-                #         "xl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
-                #         "xxl": {"minH": 3, "minW": 3, "h": 7, "w": 4, "y": 0, "x": 8},
-                #     },
-                # },
                 {
                     "type": "scatter_plot",
                     "x": AxisLimitedScale(
                         title="# Data Points",
-                        search_quantity=f"data.ENTRY[*].DATA[*].data__size#{schema}#int",
+                        search_quantity=f"data.data[*].data_quantity__size#{schema}#int",
                         scale="log",
                     ),
                     "y": AxisLimitedScale(
                         title="Acquisition time (s)",
-                        search_quantity=f"data.ENTRY[*].collection_time__field#{schema}#int",
+                        search_quantity=f"data.collection_time#{schema}#float",
                         scale="log",
                     ),
-                    "markers": Markers(
-                        color=Axis(
-                            title="Data Axes",
-                            search_quantity=f"data.ENTRY[*].DATA[*].___axes#{schema}#str",
-                        )
-                    ),
+                    # No "markers" color axis: data.data.axes is array-shaped
+                    # (shape=["*"]) and unsearchable, see the Data Range menu
+                    # comment above.
                     "title": "Scan Quality",
                     "layout": {
                         "sm": {"minH": 3, "minW": 3, "h": 5, "w": 4, "y": 0, "x": 8},
