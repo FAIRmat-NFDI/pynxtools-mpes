@@ -28,6 +28,7 @@ mpesapp
 nbins
 nxdls
 orcid
+pynx
 pynxtools
 rettigl
 rgetattr

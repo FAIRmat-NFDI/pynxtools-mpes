@@ -24,7 +24,7 @@ See [here](./installation.md) for how to install pynxtools together with the MPE
 
 An example script to run the MPES reader in `pynxtools`:
 ```sh
- ! dataconverter \
+ ! pynx convert \
 --reader mpes \
 --nxdl NXmpes_arpes \
 $<mpes-file path> \
@@ -42,7 +42,7 @@ There are also small example files for using the `pynxtools` dataconverter with 
 For this tutorial, we will work with this data. You can run the conversion as
 
 ```shell
-dataconverter \\
+pynx convert \\
     --reader mpes \\
     --nxdl NXmpes_arpes \\
     xarray_saved_small_calibration \\

@@ -8,8 +8,7 @@ Example data for the MPES reader is available [here](https://github.com/FAIRmat-
 
 The example conversion can be run with the following command.
 ```console
-user@box:~$ 
-dataconverter xarray_saved_small_calibration.h5 eln_data.yaml -c config_file.json --reader mpes --nxdl NXmpes_arpes --output example_eln.nxs
+pynx convert xarray_saved_small_calibration.h5 eln_data.yaml -c config_file.json --reader mpes --nxdl NXmpes_arpes --output example_eln.nxs
 ```
 
 The reader is a tailored parser for research data in a common format. This particular example is able to read and map HDF5 files, as well as JSON and YAML files. Feel free to contact FAIRmat if you want to create a parser for your research data.
