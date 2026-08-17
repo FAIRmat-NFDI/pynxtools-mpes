@@ -2,7 +2,7 @@ from nomad.config.models.north import NORTHTool
 from nomad.config.models.plugins import NORTHToolEntryPoint
 
 mpes_north_tool = NORTHTool(
-    image="ghcr.io/FAIRmat-NFDI/pynxtools-mpes/jupyter:latest",
+    image="ghcr.io/fairmat-nfdi/pynxtools-mpes:main",
     description="""### **Visualization and analysis tools for MPES**
 
     The MPES container provides multiple desktop applications for analyzing and visualizing

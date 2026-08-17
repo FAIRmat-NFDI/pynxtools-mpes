@@ -49,23 +49,21 @@ nomad = ["nomad-lab[infrastructure]>=1.4.1"]
 
 [dependency-groups]
 north = [
-    # "jupyterlab_h5web[full]>=10.0.0",
-    # "ipywidgets",
-    # "ipykernel",
-    # "jupyterlab",
-    # "jupyterlab-lsp",
-    # "arpes @ git+https://github.com/FAIRmat-NFDI/arpes@allow_generic_nexus_file",
-    # "python-lsp-server[all]",
-    # "sed-processor[notebook] >= 1.2.2",
-    # "specsanalyzer[notebook] >= 1.1.1",
-    # "h5glance>=0.8",
-    # "nexpy>=0.14.1",
-    # "silx[full]>=1.0.0a",
-    # "fuller[cuda]",
-    # "mclahe",
-    # "punx>=0.2.5",
-    # "nxarray",
-    # "xrft"
+    "jupyterlab_h5web[full]>=10.0.0",
+    "ipywidgets",
+    "ipykernel",
+    "jupyterlab",
+    "jupyterlab-lsp",
+    "arpes @ git+https://github.com/FAIRmat-NFDI/arpes@allow_generic_nexus_file",
+    "python-lsp-server[all]",
+    "sed-processor[notebook] >= 1.2.2",
+    "specsanalyzer[notebook] >= 1.1.1",
+    "h5glance>=0.8",
+    "nexpy>=0.14.1",
+    "silx[full]>=1.0.0a",
+    "punx>=0.2.5",
+    "nxarray",
+    "xrft",
 ]
 
 [project.urls]

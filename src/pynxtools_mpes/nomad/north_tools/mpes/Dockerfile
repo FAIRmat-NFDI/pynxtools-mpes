@@ -7,6 +7,10 @@ FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv_stage
 
 FROM ${BASE_IMAGE}:${IMAGE_TAG}
 
+ARG PLUGIN_NAME
+
+COPY --from=uv_stage /uv /uvx /bin/
+
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 USER root
@@ -16,6 +20,10 @@ RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         vim \
         xdg-utils \
+        # needed by uv to fetch the git-sourced arpes dependency in the north group
+        git \
+        # needed to build north-group deps that ship no cp313 wheel
+        build-essential \
     # chown $HOME to workaround that the xorg installation creates a
     # /home/jovyan/.cache directory owned by root
     # Create /opt/install to ensure it's writable by pip        
@@ -23,7 +31,7 @@ RUN apt-get -y -qq update \
  && chown -R $NB_UID:$NB_GID /opt/install \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# TigerVNC block was in original (we should decide as TurboVNC ≠ TigerVNC)
+# TigerVNC block was in original (TODO: we should decide as TurboVNC ≠ TigerVNC)
 RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         tigervnc-standalone-server \
@@ -31,7 +39,7 @@ RUN apt-get -y -qq update \
         websockify \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ---- Chrome (was in original, NOT in desktop-base) ----
+# ---- Chrome ----
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
  && dpkg -i google-chrome-stable_current_amd64.deb \
  && rm google-chrome-stable_current_amd64.deb
@@ -60,29 +68,9 @@ RUN apt-get -y -qq update \
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 
-
-# RUN apt-get -y -qq update \
-#  && apt-get -y -qq install \
-#        websockify \
-#  && rm -rf /var/lib/apt/lists/*
-
-# RUN . /opt/conda/bin/activate && \
-#     mamba install -y -q "nodejs>=22"
-
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
 WORKDIR "${HOME}"
-
-COPY --chown=${NB_UID}:${NB_GID} requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt \
- && npm cache clean --force \
- && pip cache purge \
- && rm -rf "${HOME}/.cache/pip" \
- && rm -rf "${HOME}/.npm" \
- && rm -rf "${HOME}/.yarn/berry/cache" \
- && rm requirements.txt \
- && fix-permissions "${CONDA_DIR}" \
- && fix-permissions "${HOME}"
 
 # uv env
 ENV UV_PROJECT_ENVIRONMENT=${CONDA_DIR} \
@@ -99,14 +87,32 @@ WORKDIR ${HOME}/${PLUGIN_NAME}
 
 # https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 # Install dependencies
+# The build context is a git submodule checkout. Its .git file points to the
+# superproject's Git metadata, so setuptools-scm cannot determine the package
+# version from Git.
+#
+# The package-specific variable name (not the generic
+# SETUPTOOLS_SCM_PRETEND_VERSION) is required because other north-group dependencies built in the
+# same sync also use setuptools-scm; the generic variable would force the same fallback version
+# onto them too, which breaks their own version resolution. Derive a fallback version from
+# the CITATION.cff file.
+#
+# The result must clear the minimum version required by sed-processor.
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
+    export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYNXTOOLS_MPES=$(grep '^version:' CITATION.cff | cut -d' ' -f2) && \
     # Use inexact to avoid removing pre-installed packages in the environment
     # We do not use ``--no-install-project`` here, as we want to install pynxtools-mpes
     uv sync --group north --inexact
 
 WORKDIR ${HOME}
-RUN rm -rf ${HOME}/${PLUGIN_NAME}
+# Note: pynxtools-mpes is installed editable (not `--no-install-project`), so its site-packages
+# entry points back at this checkout — do not remove ${HOME}/${PLUGIN_NAME} here, that would
+# break the import.
+
+# Desktop menu entry for the silx viewer (HDF5/EDF/SPEC)
+RUN mkdir -p "${HOME}/.local/share/applications"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/.local/share/applications/silx-view.desktop"
 
 # allow lsp server to access files outside home
 RUN ln -s / .lsp_symlink \

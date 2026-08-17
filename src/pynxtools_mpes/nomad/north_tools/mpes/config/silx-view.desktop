@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=silx view
+Comment=Browse a data file with a GUI (HDF5, EDF, SPEC)
+Exec=silx view
+StartupNotify=false
+Terminal=false
+Categories=Science;
