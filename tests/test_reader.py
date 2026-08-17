@@ -77,7 +77,7 @@ for test_case in test_cases:
     "nxdl, files, ignore_lines, ignore_sections",
     test_params,
 )
-def test_nexus_conversion(
+def test_nexus_conversion(  # noqa: PLR0917
     nxdl,
     files,
     ignore_lines,
