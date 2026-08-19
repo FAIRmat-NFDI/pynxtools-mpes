@@ -68,6 +68,13 @@ RUN apt-get -y -qq update \
 RUN ln -fs /usr/share/zoneinfo/Europe/Berlin /etc/localtime \
  && dpkg-reconfigure -f noninteractive tzdata
 
+# ---- VS Code (native desktop app, not code-server) ----
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.gpg \
+ && sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list' \
+ && apt-get update -y \
+ && apt-get install -y code \
+ && apt-get clean && rm -rf /var/lib/apt/lists/*
+
 # Switch back to jovyan to avoid accidental container runs as root
 USER ${NB_UID}
 WORKDIR "${HOME}"
@@ -113,6 +120,28 @@ WORKDIR ${HOME}
 # Desktop menu entry for the silx viewer (HDF5/EDF/SPEC)
 RUN mkdir -p "${HOME}/.local/share/applications"
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/.local/share/applications/silx-view.desktop"
+
+# VS Code: extensions, desktop icon, and pre-trusting that icon so xfce doesn't prompt
+# "untrusted launcher" on first double-click.
+# DONT_PROMPT_WSL_INSTALL suppresses the `code` CLI's interactive "install inside WSL
+# anyway?" prompt, which it emits whenever the build host's kernel identifies as WSL (e.g.
+# Docker Desktop on WSL2) — a no-op on a real Linux build host, where no prompt appears.
+ENV DONT_PROMPT_WSL_INSTALL=1
+RUN /usr/bin/code --install-extension eamodio.gitlens \
+ && /usr/bin/code --install-extension h5web.vscode-h5web \
+ && /usr/bin/code --install-extension ms-toolsai.jupyter \
+ && /usr/bin/code --install-extension redhat.vscode-yaml \
+ && /usr/bin/code --install-extension ms-python.python \
+ && /usr/bin/code --install-extension ms-python.isort \
+ && /usr/bin/code --install-extension redhat.vscode-xml
+
+RUN mkdir -p "${HOME}/Desktop" "${HOME}/.config/autostart"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/code.desktop" "${HOME}/Desktop/code.desktop"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/autostart.desktop" "${HOME}/.config/autostart/autostart.desktop"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/autostart_code" "${HOME}/.config/autostart/autostart"
+RUN chmod 755 "${HOME}/Desktop/code.desktop" \
+    "${HOME}/.config/autostart/autostart.desktop" \
+    "${HOME}/.config/autostart/autostart"
 
 # allow lsp server to access files outside home
 RUN ln -s / .lsp_symlink \
