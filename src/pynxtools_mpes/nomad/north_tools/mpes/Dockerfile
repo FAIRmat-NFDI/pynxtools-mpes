@@ -121,6 +121,14 @@ WORKDIR ${HOME}
 RUN mkdir -p "${HOME}/.local/share/applications"
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/.local/share/applications/silx-view.desktop"
 
+# TurboVNC keyboard-layout workaround: without -noserverkeymap, the desktop
+# ignores the client's actual host keyboard layout (e.g. German umlauts
+# render as neighboring QWERTY keys). See config/turbovncserver.conf.
+# TODO: remove once nomad-north-desktop-base carries this fix upstream, since
+# every desktop-based NORTH tool inherits the same TurboVNC install.
+RUN mkdir -p "${HOME}/.vnc"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/turbovncserver.conf" "${HOME}/.vnc/turbovncserver.conf"
+
 # VS Code: extensions, desktop icon, and pre-trusting that icon so xfce doesn't prompt
 # "untrusted launcher" on first double-click.
 # DONT_PROMPT_WSL_INSTALL suppresses the `code` CLI's interactive "install inside WSL

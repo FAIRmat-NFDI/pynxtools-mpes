@@ -60,7 +60,22 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           push: false
-          load: true   # critical: makes image available for test job
+          load: true   # makes image available for the "Save image tarball" step below
+
+      - name: Save image tarball
+        # `needs.build.outputs.tags`/`load: true` only make the image available to *this*
+        # job's own runner - `test` and `push_image` run on separate runners with no access
+        # to it, so the image has to be handed over explicitly via an artifact.
+        run: |
+          mkdir -p /tmp/image
+          docker save ${{ steps.meta.outputs.tags }} -o /tmp/image/mpes-image.tar
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: mpes-image
+          path: /tmp/image/mpes-image.tar
+          retention-days: 1
 
   test:
     name: Test with mpes examples
@@ -69,6 +84,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mpes-image
+          path: /tmp/image
+
+      - name: Load image
+        run: docker load -i /tmp/image/mpes-image.tar
 
       - name: Install test tools
         run: pip install pytest nbmake
@@ -104,6 +128,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Download image artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: mpes-image
+          path: /tmp/image
+
+      - name: Load image
+        run: docker load -i /tmp/image/mpes-image.tar
+
       - uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY }}
