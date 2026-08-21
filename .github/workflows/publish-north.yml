@@ -94,15 +94,6 @@ jobs:
       - name: Load image
         run: docker load -i /tmp/image/mpes-image.tar
 
-      - name: Install test tools
-        run: pip install pytest nbmake
-
-      - name: Download test data
-        run: |
-          mkdir -p examples
-          wget -nc https://zenodo.org/records/7573825/files/MoTe2.h5?download=1 -O examples/MoTe2.h5 || true
-          wget -nc https://nomad-lab.eu/prod/v1/api/v1/entries/xV9yMspIyXMfia6nNw3NIbnlZ91H/raw/Scan1496.nxs -O examples/Scan1496.nxs || true
-
       - name: Get first image tag
         id: tag
         run: |
@@ -111,15 +102,23 @@ jobs:
           echo "tag=$FIRST_TAG" >> $GITHUB_OUTPUT
 
       - name: Run notebook tests inside container
+        # The example notebooks live inside the image at 
+        # src/pynxtools_mpes/nomad/example_uploads/example/.
         run: |
           docker run --rm \
-            -v ${{ github.workspace }}/examples:/examples \
             ${{ steps.tag.outputs.tag }} \
-            bash -c "
-              pip install pytest nbmake &&
-              pytest --nbmake --nbmake-timeout=3600 examples/E1* &&
-              pytest --nbmake --nbmake-timeout=3600 examples/E4*
-            "
+            bash -c '
+              set -e
+              EXAMPLE_DIR="$HOME/pynxtools-mpes/src/pynxtools_mpes/nomad/example_uploads/example"
+              mkdir -p /tmp/nb_test
+              cp "$EXAMPLE_DIR/E1 Convert to NeXus.ipynb" "$EXAMPLE_DIR/config_file.json" /tmp/nb_test/
+              cp "$EXAMPLE_DIR/E4 Convert to k-space.ipynb" /tmp/nb_test/
+              cd /tmp/nb_test
+              curl -sSL -o MoTe2.h5 "https://zenodo.org/records/15717171/files/MoTe2.h5?download=1"
+              uv pip install --system pytest nbmake
+              pytest --nbmake --nbmake-timeout=3600 "E1 Convert to NeXus.ipynb"
+              pytest --nbmake --nbmake-timeout=3600 "E4 Convert to k-space.ipynb"
+            '
 
   push_image:
     name: Publish image
