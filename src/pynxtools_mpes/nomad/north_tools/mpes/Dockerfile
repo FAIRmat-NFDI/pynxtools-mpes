@@ -5,6 +5,14 @@ ARG IMAGE_TAG=main
 
 FROM ghcr.io/astral-sh/uv:${UV_VERSION} AS uv_stage
 
+# Standalone H5Web app (see config/h5web-view): reads HDF5/NeXus files
+# client-side via WebAssembly, no backend needed. Built once here so the final
+# image only carries the static output, not a Node toolchain.
+FROM node:22-slim AS h5web_build_stage
+WORKDIR /build
+COPY src/pynxtools_mpes/nomad/north_tools/mpes/h5web-standalone .
+RUN npm install && npm run build
+
 FROM ${BASE_IMAGE}:${IMAGE_TAG}
 
 ARG PLUGIN_NAME
@@ -20,6 +28,8 @@ RUN apt-get -y -qq update \
  && apt-get -y -qq install \
         vim \
         xdg-utils \
+        # needed by E2's own notebook cell to extract the downloaded WSe2.zip
+        unzip \
         # needed by uv to fetch the git-sourced arpes dependency in the north group
         git \
         # needed to build north-group deps that ship no cp313 wheel
@@ -44,6 +54,21 @@ RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.d
  && rm google-chrome-stable_current_amd64.deb \
  && sed -i 's/google-chrome-stable/google-chrome-stable --no-sandbox --disable-dev-shm-usage --password-store=basic/' \
         /usr/share/applications/google-chrome.desktop
+
+# h5web-view: serves the standalone H5Web app (built above) locally and opens
+# it in Chrome, so a file can be explored/plotted with real H5Web, not just a
+# structure browser. Icon is H5Web's own favicon; there's no icon-theme name
+# for it, so it's placed by hand like silx's icon below.
+COPY --from=h5web_build_stage /build/dist /opt/h5web-standalone
+COPY "src/pynxtools_mpes/nomad/north_tools/mpes/config/h5web-view" /usr/local/bin/h5web-view
+RUN chmod 755 /usr/local/bin/h5web-view \
+ && mkdir -p /usr/share/icons/hicolor/192x192/apps \
+ && wget -q -O /usr/share/icons/hicolor/192x192/apps/h5web.png \
+        https://raw.githubusercontent.com/silx-kit/h5web/main/apps/demo/public/favicon192.png \
+    # earlier package installs already generated hicolor's icon-theme.cache;
+    # GTK/xfce prefer that cache over scanning the directory, so it has to be
+    # regenerated or the new icon is silently ignored.
+ && gtk-update-icon-cache -f /usr/share/icons/hicolor/
 
 # ---- GUI env variables not defined in desktop-base ----
 ENV DISPLAY=:1.0
@@ -139,6 +164,11 @@ RUN chmod 755 "${HOME}/Desktop/silx-view.desktop"
 RUN cp /usr/share/applications/google-chrome.desktop "${HOME}/Desktop/google-chrome.desktop" \
  && chown ${NB_UID}:${NB_GID} "${HOME}/Desktop/google-chrome.desktop" \
  && chmod 755 "${HOME}/Desktop/google-chrome.desktop"
+
+# Menu entry and desktop icon for h5web-view (see its own install above).
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/h5web-view.desktop" "${HOME}/.local/share/applications/h5web-view.desktop"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/h5web-view.desktop" "${HOME}/Desktop/h5web-view.desktop"
+RUN chmod 755 "${HOME}/Desktop/h5web-view.desktop"
 
 # TurboVNC keyboard-layout workaround: without -noserverkeymap, the desktop
 # ignores the client's actual host keyboard layout (e.g. German umlauts

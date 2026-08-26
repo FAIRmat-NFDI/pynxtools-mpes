@@ -17,16 +17,15 @@ Notebook/library side (the `north` dependency group in `pyproject.toml`):
 - `specsanalyzer` - processing for SPECS hemispherical analyzer data
 - `arpes` (pyARPES, FAIRmat-NFDI fork) - loading, k-space conversion, and analysis of ARPES data, including its Qt-based `qt_tool` viewer
 - `jupyterlab_h5web` - interactive HDF5/NeXus visualization inline in JupyterLab (also available as a VS Code extension)
-- `h5glance` - lightweight HDF5/NeXus structure browser (terminal or static HTML)
 - `punx` - NeXus file validation and visualization
 - `nexpy`, `silx` - Qt-based standalone NeXus/HDF5 viewers (see below)
 
 On the Desktop side, there are multiple options as well (apps with a menu entry and/or Desktop icon):
 
-- **silx view** - browse HDF5/EDF/SPEC files
-- **h5glance view** - pick a file and browse its structure as static HTML in Chrome (no interactive H5Web-style plotting; that lives in JupyterLab/VS Code instead)
-- **Google Chrome** - view rendered outputs, documentation, or the h5glance-view output (beside its typical browser features)
+- **Google Chrome** - view rendered outputs, documentation, or the H5Web app (beside its typical browser features)
 - **VS Code** - edit notebooks/scripts/config, with the Python, Jupyter, YAML, XML, GitLens, and H5Web extensions preinstalled
+- **silx view** - browse HDF5/EDF/SPEC files
+- **H5Web** - a standalone build of the same interactive H5Web viewer used in JupyterLab/VS Code, reading the file locally via WebAssembly and opening in Google Chrome
 - **nexpy** - launch from a terminal (no desktop icon yet)
 
 ## Typical ways of working
