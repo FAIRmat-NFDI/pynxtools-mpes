@@ -31,23 +31,27 @@ RUN apt-get -y -qq update \
  && chown -R $NB_UID:$NB_GID /opt/install \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# TigerVNC block was in original (TODO: we should decide as TurboVNC ≠ TigerVNC)
-RUN apt-get -y -qq update \
- && apt-get -y -qq install \
-        tigervnc-standalone-server \
-        tigervnc-xorg-extension \
-        websockify \
- && apt-get clean && rm -rf /var/lib/apt/lists/*
-
 # ---- Chrome ----
+# google-chrome-stable's own desktop entry launches without --no-sandbox, which
+# crashes under this container's user namespace (no permission to set up
+# Chromium's setuid sandbox); --disable-dev-shm-usage avoids the small default
+# /dev/shm size causing renderer crashes; --password-store=basic stops Chrome
+# from prompting to create a system keyring, since none runs in this minimal
+# xfce container. Patch the entry the package installs rather than shipping
+# our own, so it stays in sync with the package.
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
  && dpkg -i google-chrome-stable_current_amd64.deb \
- && rm google-chrome-stable_current_amd64.deb
+ && rm google-chrome-stable_current_amd64.deb \
+ && sed -i 's/google-chrome-stable/google-chrome-stable --no-sandbox --disable-dev-shm-usage --password-store=basic/' \
+        /usr/share/applications/google-chrome.desktop
 
 # ---- GUI env variables not defined in desktop-base ----
 ENV DISPLAY=:1.0
 ENV XDG_RUNTIME_DIR=/tmp/runtime-jovyan/
 ENV LIBGL_ALWAYS_SOFTWARE=1
+# TurboVNC's Xvnc has incomplete X MIT-SHM support, which crashes Qt
+# applications (silx, nexpy, punx, ...) that default to using it for pixmaps.
+ENV QT_X11_NO_MITSHM=1
 
 RUN apt-get -y -qq update \
  && apt-get -y -qq install --no-install-recommends \
@@ -108,18 +112,33 @@ WORKDIR ${HOME}/${PLUGIN_NAME}
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     export SETUPTOOLS_SCM_PRETEND_VERSION_FOR_PYNXTOOLS_MPES=$(grep '^version:' CITATION.cff | cut -d' ' -f2) && \
-    # Use inexact to avoid removing pre-installed packages in the environment
-    # We do not use ``--no-install-project`` here, as we want to install pynxtools-mpes
-    uv sync --group north --inexact
+    # Use inexact to avoid removing pre-installed packages in the environment.
+    # --no-editable installs pynxtools-mpes as a regular site-packages copy, not
+    # a link back to this checkout, so the image doesn't depend on the source
+    # tree surviving in its current form.
+    uv sync --group north --inexact --no-editable
 
 WORKDIR ${HOME}
-# Note: pynxtools-mpes is installed editable (not `--no-install-project`), so its site-packages
-# entry points back at this checkout — do not remove ${HOME}/${PLUGIN_NAME} here, that would
-# break the import.
+# ${HOME}/${PLUGIN_NAME} is kept (not removed) because the example notebooks the
+# CI test step runs live under its src/ tree - the package install itself no
+# longer depends on it (--no-editable above).
 
-# Desktop menu entry for the silx viewer (HDF5/EDF/SPEC)
-RUN mkdir -p "${HOME}/.local/share/applications"
+# Menu entry and desktop icon for the silx viewer (HDF5/EDF/SPEC). silx ships
+# its own icon in its installed package data but doesn't register it with the
+# icon theme, so the launcher entry can't find it by name unless it's copied
+# there.
+RUN mkdir -p "${HOME}/.local/share/applications" "${HOME}/.local/share/icons/hicolor/32x32/apps" "${HOME}/Desktop" \
+ && cp "$(python3 -c 'import os, silx; print(os.path.dirname(silx.__file__))')/resources/gui/icons/silx.png" \
+       "${HOME}/.local/share/icons/hicolor/32x32/apps/silx.png"
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/.local/share/applications/silx-view.desktop"
+COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/Desktop/silx-view.desktop"
+RUN chmod 755 "${HOME}/Desktop/silx-view.desktop"
+
+# Desktop icon for Chrome, reusing its own (already-patched, see above)
+# desktop entry instead of maintaining a second copy of it.
+RUN cp /usr/share/applications/google-chrome.desktop "${HOME}/Desktop/google-chrome.desktop" \
+ && chown ${NB_UID}:${NB_GID} "${HOME}/Desktop/google-chrome.desktop" \
+ && chmod 755 "${HOME}/Desktop/google-chrome.desktop"
 
 # TurboVNC keyboard-layout workaround: without -noserverkeymap, the desktop
 # ignores the client's actual host keyboard layout (e.g. German umlauts

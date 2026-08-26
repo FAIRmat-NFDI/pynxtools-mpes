@@ -1,5 +1,6 @@
 #!/bin/bash
-# Pre-mark the VS Code desktop shortcut as trusted, so double-clicking it doesn't
+# Pre-mark every Desktop shortcut as trusted, so double-clicking one doesn't
 # trigger xfce's "untrusted launcher" prompt.
-f=/home/jovyan/Desktop/code.desktop
-gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')"
+for f in /home/jovyan/Desktop/*.desktop; do
+  gio set -t string "$f" metadata::xfce-exe-checksum "$(sha256sum "$f" | awk '{print $1}')"
+done

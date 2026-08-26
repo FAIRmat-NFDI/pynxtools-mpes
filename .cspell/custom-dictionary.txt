@@ -30,10 +30,14 @@ mainfile
 mpes
 mpesapp
 nbins
+nexpy
 nxdls
 orcid
+punx
 pynx
 pynxtools
 rettigl
 rgetattr
+silx
+specsanalyzer
 zenodo

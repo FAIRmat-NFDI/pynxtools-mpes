@@ -60,7 +60,7 @@ north = [
     "specsanalyzer[notebook] >= 1.1.1",
     "h5glance>=0.8",
     "nexpy>=0.14.1",
-    "silx[full]>=1.0.0a",
+    "silx[full]>=1.0.0a,<3.0",
     "punx>=0.2.5",
     "nxarray",
     "xrft",

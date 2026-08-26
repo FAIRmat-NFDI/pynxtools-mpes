@@ -2,31 +2,12 @@
 
 This directory contains the NORTH tool configuration and Dockerfile for programmatic creation of a Jupyter-based NOMAD NORTH tool.
 
-## Quick start
+## Docs
 
-The mpes NORTH tool provides a containerized environment for interactive analysis with the pynxtools-mpes plugin.
+- [Explanation > The mpes NORTH tool](https://fairmat-nfdi.github.io/pynxtools-mpes/learn/north-tool.html) - what's installed and typical ways of working with it.
+- [How-To Guides > How to build and run the mpes NORTH tool](https://fairmat-nfdi.github.io/pynxtools-mpes/how-tos/run-the-north-tool.html) - getting an image, running it, and the difference between `/lab` and `/desktop`.
 
-## Building and testing
-
-Build the Docker image locally from package root:
-
-```bash
-docker build -f src/pynxtools_mpes/north_tools/mpes/Dockerfile \
-	-t ghcr.io/FAIRmat-NFDI/pynxtools-mpes:latest .
-```
-
-Test the image:
-
-```bash
-docker run -p 8888:8888 ghcr.io/FAIRmat-NFDI/pynxtools-mpes:latest
-```
-
-Access JupyterLab at `http://localhost:8888`.
-
-## Documentation
-
-For comprehensive guidance, you can find information about the `NORTHTool` and `NorthToolEntryPoint` classes in
-the [main NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/). These resources cover entry point configuration, image structure, and dependency management.
+For the `NORTHTool`/`NorthToolEntryPoint` classes themselves (entry point configuration, image structure, dependency management), see the [main NOMAD documentation](https://nomad-lab.eu/prod/v1/docs/):
 
 - [How-to > ... > How to create a NORTH tool](https://fairmat-nfdi.github.io/nomad-docs/howto/plugins/types/north_tools.html)
 - [Reference > ... > NorthToolEntryPoint](https://fairmat-nfdi.github.io/nomad-docs/reference/plugins.html#northtoolentrypoint)

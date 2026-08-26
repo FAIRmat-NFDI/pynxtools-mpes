@@ -3,6 +3,7 @@ Type=Application
 Name=silx view
 Comment=Browse a data file with a GUI (HDF5, EDF, SPEC)
 Exec=silx view
+Icon=silx
 StartupNotify=false
 Terminal=false
 Categories=Science;
