@@ -42,18 +42,27 @@ RUN apt-get -y -qq update \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # ---- Chrome ----
-# google-chrome-stable's own desktop entry launches without --no-sandbox, which
-# crashes under this container's user namespace (no permission to set up
-# Chromium's setuid sandbox); --disable-dev-shm-usage avoids the small default
-# /dev/shm size causing renderer crashes; --password-store=basic stops Chrome
-# from prompting to create a system keyring, since none runs in this minimal
-# xfce container. Patch the entry the package installs rather than shipping
-# our own, so it stays in sync with the package.
+# --no-sandbox: this container's user namespace can't set up Chromium's setuid
+# sandbox, so Chrome fails to start without it; --disable-dev-shm-usage avoids
+# the small default /dev/shm size causing renderer crashes; --password-store=basic
+# stops Chrome from prompting to create a system keyring, since none runs in
+# this minimal xfce container; --disable-gpu-sandbox/--use-gl=angle/
+# --use-angle=swiftshader/--enable-unsafe-swiftshader make WebGL (used by
+# H5Web's plotting) fall back to software rendering instead of failing outright
+# with no real GPU in the container.
+#
+# Patched into google-chrome-stable's own wrapper script (the last line of
+# /opt/google/chrome/google-chrome, which /usr/bin/google-chrome-stable
+# symlinks to), not just its .desktop file's Exec line - google-chrome-stable
+# also registers itself as the system's x-www-browser alternative, which is
+# what xfce's panel "web browser" launcher and exo's WebBrowser helper resolve
+# to; patching only the .desktop file leaves those other paths launching
+# Chrome unflagged.
 RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
  && dpkg -i google-chrome-stable_current_amd64.deb \
  && rm google-chrome-stable_current_amd64.deb \
- && sed -i 's/google-chrome-stable/google-chrome-stable --no-sandbox --disable-dev-shm-usage --password-store=basic/' \
-        /usr/share/applications/google-chrome.desktop
+ && sed -i 's|exec -a "\$0" "\$HERE/chrome" "\$@"|exec -a "$0" "$HERE/chrome" --no-sandbox --disable-dev-shm-usage --password-store=basic --disable-gpu-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader "$@"|' \
+        /opt/google/chrome/google-chrome
 
 # h5web-view: serves the standalone H5Web app (built above) locally and opens
 # it in Chrome, so a file can be explored/plotted with real H5Web, not just a
@@ -117,9 +126,12 @@ ENV UV_PROJECT_ENVIRONMENT=${CONDA_DIR} \
     # If needed one can create another venv with 'uv venv'
     UV_SYSTEM_PYTHON=1
 
-COPY --chown=${NB_USER}:${NB_GID} . ${HOME}/${PLUGIN_NAME}
+# Copied to /opt, not ${HOME}, so the full source checkout (tests/, docs/, CI
+# config, etc. - not just the example notebooks users actually want) doesn't
+# clutter the home directory users see in JupyterLab/VS Code/the file manager.
+COPY --chown=${NB_USER}:${NB_GID} . /opt/${PLUGIN_NAME}
 
-WORKDIR ${HOME}/${PLUGIN_NAME}
+WORKDIR /opt/${PLUGIN_NAME}
 
 # https://docs.astral.sh/uv/guides/integration/docker/#intermediate-layers
 # Install dependencies
@@ -144,9 +156,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --group north --inexact --no-editable
 
 WORKDIR ${HOME}
-# ${HOME}/${PLUGIN_NAME} is kept (not removed) because the example notebooks the
+# /opt/${PLUGIN_NAME} is kept (not removed) because the example notebooks the
 # CI test step runs live under its src/ tree - the package install itself no
-# longer depends on it (--no-editable above).
+# longer depends on it (--no-editable above). It stays out of ${HOME}, so users
+# browsing the home directory don't see the whole source checkout.
 
 # Menu entry and desktop icon for the silx viewer (HDF5/EDF/SPEC). silx ships
 # its own icon in its installed package data but doesn't register it with the

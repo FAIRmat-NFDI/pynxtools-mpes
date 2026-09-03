@@ -109,7 +109,7 @@ jobs:
             ${{ steps.tag.outputs.tag }} \
             bash -c '
               set -e
-              EXAMPLE_DIR="$HOME/pynxtools-mpes/src/pynxtools_mpes/nomad/example_uploads/example"
+              EXAMPLE_DIR="/opt/pynxtools-mpes/src/pynxtools_mpes/nomad/example_uploads/example"
               mkdir -p /tmp/nb_test
               cp "$EXAMPLE_DIR/E1 Convert to NeXus.ipynb" "$EXAMPLE_DIR/config_file.json" /tmp/nb_test/
               cp "$EXAMPLE_DIR/E4 Convert to k-space.ipynb" /tmp/nb_test/
