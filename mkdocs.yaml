@@ -13,8 +13,10 @@ nav:
     - tutorial/contributing.md
   - How-To Guides:
       - how-tos/build-a-reader.md
+      - how-tos/run-the-north-tool.md
   - Explanation:
     - learn/versioning.md
+    - learn/north-tool.md
   - Reference:
       - reference/mpes.md
 

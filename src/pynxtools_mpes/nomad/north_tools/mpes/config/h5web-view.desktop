@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=H5Web
+Comment=Explore and visualize an HDF5/NeXus file's structure and data
+Exec=h5web-view
+Icon=h5web
+StartupNotify=false
+Terminal=false
+Categories=Science;
