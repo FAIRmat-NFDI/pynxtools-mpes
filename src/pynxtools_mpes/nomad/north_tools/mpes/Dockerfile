@@ -41,29 +41,6 @@ RUN apt-get -y -qq update \
  && chown -R $NB_UID:$NB_GID /opt/install \
  && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# ---- Chrome ----
-# --no-sandbox: this container's user namespace can't set up Chromium's setuid
-# sandbox, so Chrome fails to start without it; --disable-dev-shm-usage avoids
-# the small default /dev/shm size causing renderer crashes; --password-store=basic
-# stops Chrome from prompting to create a system keyring, since none runs in
-# this minimal xfce container; --disable-gpu-sandbox/--use-gl=angle/
-# --use-angle=swiftshader/--enable-unsafe-swiftshader make WebGL (used by
-# H5Web's plotting) fall back to software rendering instead of failing outright
-# with no real GPU in the container.
-#
-# Patched into google-chrome-stable's own wrapper script (the last line of
-# /opt/google/chrome/google-chrome, which /usr/bin/google-chrome-stable
-# symlinks to), not just its .desktop file's Exec line - google-chrome-stable
-# also registers itself as the system's x-www-browser alternative, which is
-# what xfce's panel "web browser" launcher and exo's WebBrowser helper resolve
-# to; patching only the .desktop file leaves those other paths launching
-# Chrome unflagged.
-RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
- && dpkg -i google-chrome-stable_current_amd64.deb \
- && rm google-chrome-stable_current_amd64.deb \
- && sed -i 's|exec -a "\$0" "\$HERE/chrome" "\$@"|exec -a "$0" "$HERE/chrome" --no-sandbox --disable-dev-shm-usage --password-store=basic --disable-gpu-sandbox --use-gl=angle --use-angle=swiftshader --enable-unsafe-swiftshader "$@"|' \
-        /opt/google/chrome/google-chrome
-
 # h5web-view: serves the standalone H5Web app (built above) locally and opens
 # it in Chrome, so a file can be explored/plotted with real H5Web, not just a
 # structure browser. Icon is H5Web's own favicon; there's no icon-theme name
@@ -172,27 +149,13 @@ COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/conf
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/silx-view.desktop" "${HOME}/Desktop/silx-view.desktop"
 RUN chmod 755 "${HOME}/Desktop/silx-view.desktop"
 
-# Desktop icon for Chrome, reusing its own (already-patched, see above)
-# desktop entry instead of maintaining a second copy of it.
-RUN cp /usr/share/applications/google-chrome.desktop "${HOME}/Desktop/google-chrome.desktop" \
- && chown ${NB_UID}:${NB_GID} "${HOME}/Desktop/google-chrome.desktop" \
- && chmod 755 "${HOME}/Desktop/google-chrome.desktop"
-
 # Menu entry and desktop icon for h5web-view (see its own install above).
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/h5web-view.desktop" "${HOME}/.local/share/applications/h5web-view.desktop"
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/h5web-view.desktop" "${HOME}/Desktop/h5web-view.desktop"
 RUN chmod 755 "${HOME}/Desktop/h5web-view.desktop"
 
-# TurboVNC keyboard-layout workaround: without -noserverkeymap, the desktop
-# ignores the client's actual host keyboard layout (e.g. German umlauts
-# render as neighboring QWERTY keys). See config/turbovncserver.conf.
-# TODO: remove once nomad-north-desktop-base carries this fix upstream, since
-# every desktop-based NORTH tool inherits the same TurboVNC install.
-RUN mkdir -p "${HOME}/.vnc"
-COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/turbovncserver.conf" "${HOME}/.vnc/turbovncserver.conf"
-
-# VS Code: extensions, desktop icon, and pre-trusting that icon so xfce doesn't prompt
-# "untrusted launcher" on first double-click.
+# VS Code: extensions and a desktop icon (nomad-north-desktop-base provides
+# the generic Desktop-icon trust-marking autostart that covers this icon too).
 # DONT_PROMPT_WSL_INSTALL suppresses the `code` CLI's interactive "install inside WSL
 # anyway?" prompt, which it emits whenever the build host's kernel identifies as WSL (e.g.
 # Docker Desktop on WSL2) — a no-op on a real Linux build host, where no prompt appears.
@@ -205,13 +168,8 @@ RUN /usr/bin/code --install-extension eamodio.gitlens \
  && /usr/bin/code --install-extension ms-python.isort \
  && /usr/bin/code --install-extension redhat.vscode-xml
 
-RUN mkdir -p "${HOME}/Desktop" "${HOME}/.config/autostart"
 COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/code.desktop" "${HOME}/Desktop/code.desktop"
-COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/autostart.desktop" "${HOME}/.config/autostart/autostart.desktop"
-COPY --chown=${NB_UID}:${NB_GID} "src/pynxtools_mpes/nomad/north_tools/mpes/config/autostart_code" "${HOME}/.config/autostart/autostart"
-RUN chmod 755 "${HOME}/Desktop/code.desktop" \
-    "${HOME}/.config/autostart/autostart.desktop" \
-    "${HOME}/.config/autostart/autostart"
+RUN chmod 755 "${HOME}/Desktop/code.desktop"
 
 # allow lsp server to access files outside home
 RUN ln -s / .lsp_symlink \
