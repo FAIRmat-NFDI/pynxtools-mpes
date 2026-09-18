@@ -1,6 +1,6 @@
 {
   "template": "git@github.com:FAIRmat-NFDI/pynxtools-plugin-template.git",
-  "commit": "b3269e98da0738d74ce586f373ea1fd7ddf2a59e",
+  "commit": "5beb3a70ec3f1fda67e13de05ebb74cf9237f59d",
   "checkout": null,
   "context": {
     "cookiecutter": {
@@ -18,7 +18,7 @@
       "vscode_settings": true,
       "include_nomad_app": true,
       "include_nomad_example_upload": true,
-      "include_north_tools": false,
+      "include_north_tools": true,
       "north_tool_name": "mpes",
       "__package_name": "pynxtools-mpes",
       "__module_name": "pynxtools_mpes",
@@ -29,7 +29,7 @@
         "*.html"
       ],
       "_template": "git@github.com:FAIRmat-NFDI/pynxtools-plugin-template.git",
-      "_commit": "b3269e98da0738d74ce586f373ea1fd7ddf2a59e"
+      "_commit": "5beb3a70ec3f1fda67e13de05ebb74cf9237f59d"
     }
   },
   "directory": null

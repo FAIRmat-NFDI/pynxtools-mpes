@@ -29,6 +29,7 @@ A series of tutorials giving you an overview on how to store or convert your XPS
 How-to guides provide step-by-step instructions for a wide range of tasks, with the overarching topics:
 
 - [How to build a new MPES reader](how-tos/build-a-reader.md)
+- [How to build and run the mpes NORTH tool](how-tos/run-the-north-tool.md)
 
 </div>
 
@@ -37,6 +38,7 @@ How-to guides provide step-by-step instructions for a wide range of tasks, with 
 ### Learn
 
 - [Note on versioning](learn/versioning.md)
+- [The mpes NORTH tool](learn/north-tool.md)
 
 </div>
 <div markdown="block">

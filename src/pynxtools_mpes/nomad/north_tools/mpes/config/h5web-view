@@ -1,0 +1,11 @@
+#!/bin/bash
+# Serve the standalone H5Web app (built at image-build time, see h5web-standalone/)
+# over a local HTTP server and open it in Chrome. It reads whatever HDF5/NeXus
+# file you pick entirely client-side via WebAssembly - no upload, no backend.
+set -e
+PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()")
+(cd /opt/h5web-standalone && python3 -m http.server "$PORT" --bind 127.0.0.1) &
+SERVER_PID=$!
+trap 'kill "$SERVER_PID" 2>/dev/null' EXIT
+sleep 1
+google-chrome-stable "http://127.0.0.1:$PORT/"
