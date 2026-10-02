@@ -6,13 +6,13 @@ on:
       - main
     paths:
       - "CITATION.cff"
-      - ".github/workflows/cff-validation.yml"
+      - ".github/workflows/cff_validation.yml"
   pull_request:
     branches:
       - main
     paths:
       - "CITATION.cff"
-      - ".github/workflows/cff-validation.yml"
+      - ".github/workflows/cff_validation.yml"
 
 env:
   PYTHON_VERSION: 3.12
@@ -34,4 +34,4 @@ jobs:
           # Remove the funding section to avoid validation issues with Zenodo
           sed -i '/^funding:/,$d' CITATION.cff
 
-          uv run --with cffconvert cffconvert --validate --format zenodo || exit 1
+          uvx cffconvert --validate --format zenodo || exit 1

@@ -66,9 +66,13 @@ jobs:
         # `needs.build.outputs.tags`/`load: true` only make the image available to *this*
         # job's own runner - `test` and `push_image` run on separate runners with no access
         # to it, so the image has to be handed over explicitly via an artifact.
+        # TAGS is newline-separated (tag events add `latest`); the unquoted expansion passes
+        # each tag as a separate argument.
+        env:
+          TAGS: ${{ steps.meta.outputs.tags }}
         run: |
           mkdir -p /tmp/image
-          docker save ${{ steps.meta.outputs.tags }} -o /tmp/image/mpes-image.tar
+          docker save $TAGS -o /tmp/image/mpes-image.tar
 
       - name: Upload image artifact
         uses: actions/upload-artifact@v4
