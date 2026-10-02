@@ -19,6 +19,7 @@ Tommaso
 Vset
 caplog
 dataconverter
+electronanalyzer
 faddr
 fairmat
 fluence
@@ -27,6 +28,7 @@ iupac
 jovyan
 lukaspie
 mainfile
+metainfo
 mpes
 mpesapp
 nbins
