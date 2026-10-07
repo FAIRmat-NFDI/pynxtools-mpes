@@ -124,7 +124,7 @@ jobs:
         run: |
           # un zip the built package and check the image tag in the entry point
           tar -xzf dist/*.tar.gz -C dist/
-          IMAGE_TAG=$(grep -oP "${{ env.IMAGE }}:\K[^'\",]+" dist/pynxtools-mpes-*/src/pynxtools_mpes/nomad/north_tools/__init__.py)
+          IMAGE_TAG=$(grep -oP "${{ env.IMAGE }}:\K[^'\",]+" dist/pynxtools_mpes-*/src/pynxtools_mpes/nomad/north_tools/__init__.py)
 
           if [[ "${IMAGE_TAG}" == "${GITHUB_REF_NAME}" ]]; then
             echo "Before building the Python package, image ${{ env.IMAGE }}:${GITHUB_REF_NAME} is updated for NORTH tool."
@@ -134,7 +134,7 @@ jobs:
           fi
 
           # Remove the unzipped package after checking
-          rm -rf dist/pynxtools-mpes-*/
+          rm -rf dist/pynxtools_mpes-*/
       - name: Upload dist artifacts
         uses: actions/upload-artifact@v4
         with:
