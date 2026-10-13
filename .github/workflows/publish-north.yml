@@ -8,6 +8,13 @@ on:
   pull_request:
     branches:
       - main
+      - develop
+      - "release/**"
+    paths:
+      - "pyproject.toml"
+      - ".github/workflows/publish-north.yml"
+      - ".dockerignore"
+      - "src/pynxtools_mpes/nomad/north_tools/**"
 
 env:
   REGISTRY: ghcr.io
