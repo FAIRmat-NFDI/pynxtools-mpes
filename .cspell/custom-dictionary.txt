@@ -42,5 +42,4 @@ rettigl
 rgetattr
 silx
 specsanalyzer
-ureg
 zenodo

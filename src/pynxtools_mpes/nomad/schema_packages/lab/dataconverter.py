@@ -1,15 +1,6 @@
-import os.path
-import re
-from typing import Optional
-
-import numpy as np
-import yaml
-import shutil
-
 try:
-    from nomad.datamodel.data import ArchiveSection, EntryData
-    from nomad.metainfo import MEnum, Package, Quantity
-    from nomad.units import ureg
+    from nomad.datamodel.data import EntryData
+    from nomad.metainfo import Package, Quantity
 except ImportError as exc:
     raise ImportError(
         "Could not import nomad package. Please install the package 'nomad-lab'."
@@ -36,7 +27,7 @@ class MpesElnExporter(EntryData):
     )
 
     def normalize(self, archive, logger):
-        super(MpesElnExporter, self).normalize(archive, logger)
+        super().normalize(archive, logger)
         if self.export:
             self.output = (
                 f"{archive.metadata.mainfile.replace('.archive.json', '')}.yaml"

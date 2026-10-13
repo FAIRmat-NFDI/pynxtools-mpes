@@ -76,8 +76,7 @@ mpes = "pynxtools_mpes.reader:MPESReader"
 mpes_app = "pynxtools_mpes.nomad.apps:mpes_app"
 mpes_example_upload = "pynxtools_mpes.nomad.example_uploads:mpes_example_upload"
 mpes_north_tool = "pynxtools_mpes.nomad.north_tools:mpes"
-mpes_data_converter = "pynxtools_mpes.nomad.entrypoints:mpes_data_converter"
-mpes_eln_exporter = "pynxtools_mpes.nomad.entrypoints:mpes_eln_exporter"
+mpes_eln_exporter = "pynxtools_mpes.nomad.schema_packages:mpes_eln_exporter"
 
 [tool.uv]
 extra-index-url = [
@@ -109,10 +108,12 @@ select = [
     "NPY201", # upgrade numpy v2
 ]
 ignore = [
+    "E402", # Module level import not at top of file
     "E501", # Line too long ({width} > {limit} characters)
     "E701", # Multiple statements on one line (colon)
     "E731", # Do not assign a lambda expression, use a def
     "E402",  # Module level import not at top of file
+    "PLC0415", # `import` should be at the top-level of a file
     "PLR0911", # Too many return statements
     "PLR0912", # Too many branches
     "PLR0913", # Too many arguments in function definition
