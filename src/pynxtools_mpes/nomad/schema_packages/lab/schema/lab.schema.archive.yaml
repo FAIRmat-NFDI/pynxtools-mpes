@@ -1,0 +1,410 @@
+definitions:
+  name: "ELN for MPES Lab"
+  sections:
+    Project:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        nexus_view:
+          type: pynxtools.nomad.schema.Root
+          m_annotations:
+            eln:
+              overview: true
+        title:
+          type: str
+          description: Short Title for the Project
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        summary:
+          type: str
+          description: Free text description of a set of measurements belonging together.
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        users:
+          type: Member
+          shape: ['*']
+          description: link to project users
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        
+        instrument_status:
+          type: InstrumentStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        
+        laser_status:
+          type: LaserStatus
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        
+        samples:
+          type: Sample
+          shape: ['*']
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
+
+    InstrumentStatus:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        summary:
+          type: str
+          description: Free text description of the Instrument status
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        entrance_slit_type:
+          type: str
+          description: Type of the Phoibos entrance slit
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        entrance_slit_size:
+          type: np.float64
+          unit: meter
+          description: Size of the Phoibos entrance slit
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "mm"
+        exit_slit_type:
+          type: str
+          description: Type of the Phoibos exit slit
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        energy_resolution:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "meV"
+        angular_resolution:
+          type: np.float64
+          unit: radians
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "degree"
+        momentum_resolution:
+          type: np.float64
+          unit: 1/meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "1/angstrom"
+        temporal_resolution:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "fs"
+      sub_sections:
+        Manipulator:
+          section:
+            quantities:
+              sample_temperature:
+                type: np.float64
+                unit: celsius
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "kelvin"
+        Analyzer:
+          section:
+            quantities:
+              spatial_resolution:
+                type: np.float64
+                unit: meter
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "micrometer"
+              energy_resolution:
+                type: np.float64
+                unit: joule
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "eV"
+              momentum_resolution:
+                type: np.float64
+                unit: 1/meter
+                m_annotations:
+                  eln:
+                    component: NumberEditQuantity
+                    defaultDisplayUnit: "1/angstrom"
+
+
+    LaserStatus:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        summary:
+          type: str
+          description: Free text description of the Laser status
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        probe_photon_energy:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        probe_photon_energy_spread:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        probe_pulse_duration:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "fs"
+        probe_profile:
+          type: np.float64
+          shape: ["2"]
+          unit: meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "micrometer"
+        probe_repetition_rate:
+          type: np.float64
+          unit: hertz
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "kilohertz"
+        pump_photon_energy:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        pump_photon_energy_spread:
+          type: np.float64
+          unit: joule
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "eV"
+        pump_pulse_duration:
+          type: np.float64
+          unit: second
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              minValue: 0
+              defaultDisplayUnit: "fs"
+        pump_profile:
+          type: np.float64
+          shape: ["2"]
+          unit: meter
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "micrometer"
+        pump_repetition_rate:
+          type: np.float64
+          unit: hertz
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "kilohertz"
+
+
+    Member:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        summary:
+          type: str
+          description: Free text description of the User
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        name:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        role:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        affiliation:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        address:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        email:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+
+
+    Sample:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        name:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        summary:
+          type: str
+          description: Free text description of the sample
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        preparation_date:
+          type: Datetime
+          m_annotations:
+            eln:
+              component: DateTimeEditQuantity
+        sample_history:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        chemical_formula:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+
+
+    Analysis:
+      base_sections:
+        - "nomad.datamodel.data.EntryData"
+      quantities:
+        summary:
+          type: str
+          description: Free text description of the analysis
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        software:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        inputs:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+              
+
+    Measurement:
+      base_sections:
+        - "pynxtools_mpes.nomad.lab.dataconverter.MpesElnExporter"
+        - "nomad.datamodel.data.EntryData"
+      m_annotations:
+        template:
+          reader: json_map
+          nxdl: NXmpes
+        eln:
+          hide: ['output', 'filter']
+      quantities:
+        title:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        summary:
+          type: str
+          description: Free text description of the analysis
+          m_annotations:
+            eln:
+              component: RichTextEditQuantity
+        scanned_axes:
+          type: str
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        probe_polarization:
+          type: str
+          description: Polarization state of the probe beam
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        pump_status:
+          type: str
+          description: Selection if pump was applied
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        pump_fluence:
+          type: np.float64
+          unit: joule / meter ** 2
+          m_annotations:
+            eln:
+              component: NumberEditQuantity
+              defaultDisplayUnit: "millijoule / centimeter**2"
+        pump_polarization:
+          type: str
+          description: Polarization state of the probe beam
+          m_annotations:
+            eln:
+              component: StringEditQuantity
+        project:
+          type: Project
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        instrument:
+          type: InstrumentStatus
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        laser:
+          type: LaserStatus
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+        sample:
+          type: Sample
+          m_annotations:
+            eln:
+              component: ReferenceEditQuantity
+
+
+
+
+
+
+
+
