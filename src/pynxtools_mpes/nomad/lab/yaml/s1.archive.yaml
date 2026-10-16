@@ -1,0 +1,7 @@
+data:
+  m_def: '../upload/raw/lab.schema.archive.yaml#Sample'
+  preparation_date: 2020.01.01 01:01
+  sample_history: 'prepared'
+  name: sample
+  chemical_formula: Es
+
