@@ -51,7 +51,7 @@ nomad = ["nomad-lab[infrastructure]>=1.4.1"]
 north = [
     "jupyterlab_h5web[full]>=10.0.0",
     "ipywidgets",
-    "ipykernel",
+    "ipykernel<7.0.0",
     "jupyterlab",
     "jupyterlab-lsp",
     "arpes @ git+https://github.com/FAIRmat-NFDI/arpes@allow_generic_nexus_file",
